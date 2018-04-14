@@ -2,7 +2,7 @@
 
 ```clojure
 {:framework   "Generated using Luminus version 2.9.11.14"
- :description "A voting tool built for participatory budget"
+ :description "A voting tool built for participatory budgeting"
  :url         "http://www.mmmanyfold.com/"}
 ```
 
