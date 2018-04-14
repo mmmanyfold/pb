@@ -126,7 +126,7 @@
 
 
                   :doo {:build "test"}
-                  :source-paths ["env/dev/clj test/clj test/cljs"]
+                  :source-paths ["env/dev/clj" "test/clj" "test/cljs"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
                   :injections [(require 'pjstadig.humane-test-output)
