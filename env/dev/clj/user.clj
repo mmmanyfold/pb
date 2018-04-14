@@ -3,7 +3,8 @@
             [mount.core :as mount]
             [pb.figwheel :refer [start-fw stop-fw cljs]]
             [pb.core :refer [start-app]]
-            [luminus-migrations.core :as migrations]))
+            [luminus-migrations.core :as migrations]
+            [pb.test.db.core]))
 
 (defn start []
   (mount/start-without #'pb.core/repl-server))
@@ -26,3 +27,5 @@
 
 (defn create-migration [name]
   (migrations/create name (select-keys env [:database-url])))
+
+
