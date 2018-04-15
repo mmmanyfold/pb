@@ -3,7 +3,7 @@
 ```clojure
 {:framework   "Generated using Luminus version 2.9.11.14"
  :description "A voting tool built for participatory budgeting"
- :url         "http://www.mmmanyfold.com/"}
+ :url         "http://vote.thismachinehasasoul.com/"}
 ```
 
 ## Prerequisites
@@ -28,8 +28,8 @@ Add these connection details to profiles.clj
  :profiles/test {:env {:database-url "jdbc:postgresql://localhost/pb_test?user=postgres&password=postgres"}}
  :profiles/prod {:env {:database-url "jdbc:postgresql://localhost/pb_prod?user=postgres&password=postgres"}}}
 ```   
-    
-    
+
+
 
 **Note:** set a strong password for your production database
 
@@ -41,9 +41,9 @@ To start a web server for the application, run:
     lein figwheel
     lein auto sassc once
 
-visit [http://localhost:4000/](http://localhost:4000/) 
-    
+visit [http://localhost:4000/](http://localhost:4000/)
+
 ## Testing
-    
+
     lein test
     lein auto test

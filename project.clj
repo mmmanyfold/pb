@@ -11,6 +11,7 @@
                  [compojure "1.6.0"]
                  [conman "0.7.8"]
                  [cprop "0.1.11"]
+                 [day8.re-frame/http-fx "0.1.6"]
                  [funcool/struct "1.2.0"]
                  [luminus-http-kit "0.1.5"]
                  [luminus-migrations "0.5.0"]
@@ -29,7 +30,9 @@
                  [org.webjars.bower/tether "1.4.3"]
                  [org.webjars/bootstrap "4.0.0-2"]
                  [org.webjars/font-awesome "5.0.9"]
+                 [re-com "2.1.0"]
                  [re-frame "0.10.5"]
+                 [re-frisk "0.5.3"]
                  [reagent "0.7.0"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.6.3"]
@@ -111,7 +114,7 @@
                   {:builds
                    {:app
                     {:source-paths ["src/cljs" "src/cljc" "env/dev/cljs"]
-                     :figwheel {:on-jsload "pb.core/mount-components"}
+                     :figwheel {:on-jsload "pb.core/mount-root"}
                      :compiler
                      {:main "pb.app"
                       :asset-path "/js/out"
@@ -120,7 +123,8 @@
                       :source-map true
                       :optimizations :none
                       :pretty-print true
-                      :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}
+                      :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
+                                        goog.DEBUG false}
                       :preloads [day8.re-frame-10x.preload]}}}}
 
 

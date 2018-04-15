@@ -1,4 +1,4 @@
 (ns pb.db)
 
 (def default-db
-  {:page :home})
+  {:active-view :home-view})
