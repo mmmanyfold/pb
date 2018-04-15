@@ -29,8 +29,6 @@ Add these connection details to profiles.clj
  :profiles/test {:env {:database-url "jdbc:postgresql://localhost/pb_test?user=postgres&password=postgres"}}
  :profiles/prod {:env {:database-url "jdbc:postgresql://localhost/pb_prod?user=postgres&password=postgres"}}}
 ```
-```   
-
 
 
 **Note:** set a strong password for your production database

@@ -13,3 +13,5 @@ profiles.clj
 .nrepl-port
 /log
 figwheel_server.log
+pb.iml
+pg/
