@@ -17,14 +17,30 @@ You will need [Leiningen][1] 2.0 or above installed.
 	createdb -U postgres pb_dev -W
 	createdb -U postgres pb_test -W
 	createdb -U postgres pb_prod -W
+	touch profiles.clj
 
-- set password as _postgres_ for all databases
+Add these connection details to profiles.clj
+
+```
+{:profiles/dev  {:env {:database-url "jdbc:postgresql://localhost/pb_dev?user=postgres&password=postgres"}}
+ :profiles/test {:env {:database-url "jdbc:postgresql://localhost/pb_test?user=postgres&password=postgres"}}
+ :profiles/prod {:env {:database-url "jdbc:postgresql://localhost/pb_prod?user=postgres&password=postgres"}}}
+```   
+    
+    
+**Note:** set password as _postgres_ for all databases during development
+
+**Note:** set a strong password for your production database
 
 ## Running
 
 To start a web server for the application, run:
 
     lein run
+    lein figwheel
+    lein auto sassc once
+
+visit [http://localhost:4000/](http://localhost:4000/) 
     
 ## Testing
     
