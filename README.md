@@ -8,9 +8,10 @@
 
 ## Prerequisites
 
-You will need [Leiningen][1] 2.0 or above installed.
+- You will need [Leiningen][1] 2.0 or above installed.
 
 [1]: https://github.com/technomancy/leiningen
+- `brew install rlwrap` (optional)
 
 ## Setup
 
@@ -58,3 +59,25 @@ visit [http://localhost:4000/](http://localhost:4000/)
 
     lein test
     lein auto test
+
+## Migrations
+
+```
+rlwrap lein repl # boots into clojure repl
+
+*ns* ;; confirm you are in the user namespace
+
+(mount.core/start  #'<app>.db.core/*db*) 
+;; or (restart)
+
+(create-migration "adds-foobar-table")
+
+;; edit newly created migrations 
+;; files: 
+;; - resources/migrations/20180415183127-adds-foobar-table.up.sql
+;; - resources/migrations/20180415183127-adds-foobar-table.down.sql
+
+(migrate)
+
+;; see /pb/env/dev/clj/user.clj for usage
+```
