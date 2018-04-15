@@ -19,6 +19,8 @@ You will need [Leiningen][1] 2.0 or above installed.
 	createdb -U postgres pb_prod -W
 	touch profiles.clj
 
+**Note:** set password as _postgres_ for all databases during development
+
 Add these connection details to profiles.clj
 
 ```
@@ -28,7 +30,6 @@ Add these connection details to profiles.clj
 ```   
     
     
-**Note:** set password as _postgres_ for all databases during development
 
 **Note:** set a strong password for your production database
 
