@@ -13,5 +13,6 @@
 
 (rf/reg-event-db
   :set-active-view
-  (fn [db [_ active-view]]
-    (assoc db :active-view active-view)))
+  (fn [db [_ active-view & [election]]]
+    (assoc db :active-view active-view
+              :election-in-view election)))
