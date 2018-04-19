@@ -12,3 +12,8 @@
  :election-in-view
  (fn [db _]
    (:election-in-view db)))
+
+(rf/reg-sub
+ :selected-proposals
+ (fn [db _]
+   (:selected-proposals db)))

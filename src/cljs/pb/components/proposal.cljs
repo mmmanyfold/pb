@@ -1,5 +1,6 @@
 (ns pb.components.proposal
-  (:require [reagent.core :as rg]))
+  (:require [reagent.core :as rg]
+            [re-frame.core :as rf]))
 
 (defn proposal-component []
   (let [show-impact? (rg/atom false)
@@ -13,11 +14,15 @@
        [:h2.fw7 "Walking Art Gallery"]
        [:p.f4 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."]
        [:div.tc.mt2.mb3
-          [:button.mv2 {:on-click #(swap! selected? not)
+          [:button.mv2 {:on-click (fn []
+                                    (swap! selected? not)
+                                    (rf/dispatch [:set-selected-proposals "Title" :add]))
                         :class (if @selected? "selected" "select")}
              (if @selected? "Selected" "Select")]
           (when @selected?
-             [:button.remove.mv2.ml3 {:on-click #(swap! selected? not)}
+             [:button.remove.mv2.ml3 {:on-click (fn []
+                                                  (swap! selected? not)
+                                                  (rf/dispatch [:set-selected-proposals "Title" :remove]))}
                 "Remove"])]
 
        [:h5 {:on-click #(swap! show-impact? not)

@@ -18,3 +18,10 @@
       (assoc db :election-in-view election
                 :active-view active-view)
       (assoc db :active-view active-view))))
+
+(rf/reg-event-db
+  :set-selected-proposals
+  (fn [db [_ proposal set]]
+    (case set
+      :add (update db :selected-proposals conj proposal)
+      :remove (update db :selected-proposals #(remove #{proposal} %)))))

@@ -1,6 +1,7 @@
 (ns pb.main
   (:require [re-frame.core :as rf]
             [re-com.core :as rc]
+            [reagent.core :as rg]
             [pb.views.home :refer [home-view]]
             [pb.views.voting-code :refer [voting-code-view]]
             [pb.views.proposals :refer [proposals-view]]
@@ -10,16 +11,17 @@
   (case view-name
         :home-view [home-view]
         :voting-code-view [voting-code-view election]
-        :proposals-view [proposals-view election]
+        :proposals-view [proposals-view]
         :404 [:div "404"]
         [:div]))
 
 (defn view []
   (let [active-view (rf/subscribe [:active-view])
-        election (rf/subscribe [:election-in-view])]
+        election (rf/subscribe [:election-in-view])
+        selected-proposals (rf/subscribe [:selected-proposals])]
     (fn []
       [rc/v-box
        :class "w-100 h-100 mb0"
-       :children [[header-component @active-view @election]
+       :children [[header-component @active-view @election (count @selected-proposals)]
                   [:div {:class "content-panel mh3 mh4-ns mv5 pt3 pt4-ns"}
                    [show-view @active-view @election]]]])))

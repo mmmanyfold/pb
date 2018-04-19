@@ -2,4 +2,5 @@
 
 (def default-db
   {:active-view :home-view
-   :election-in-view nil})
+   :election-in-view nil
+   :selected-proposals []})
