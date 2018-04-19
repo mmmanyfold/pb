@@ -46,9 +46,8 @@ header {
   @media screen and (min-width: 1199px) {
     header {
       font-size: 1.4rem; } }
-
-.count-component {
-  background-color: #F2F2F2; }
+  header .count-component {
+    background-color: #F2F2F2; }
 
 .election-component {
   border-color: #739F3E; }

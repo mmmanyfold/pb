@@ -15,4 +15,5 @@
   :set-active-view
   (fn [db [_ active-view & [election]]]
     (assoc db :active-view active-view
-              :election-in-view election)))
+              (when (nil? (:election-in-view db))
+                :election-in-view election))))

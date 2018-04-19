@@ -28,7 +28,7 @@
             (rf/dispatch [:set-active-view :voting-code-view (:election params)]))
 
   (defroute "/:election/proposals" {:as params}
-            (rf/dispatch [:set-active-view :proposals-view (:election params)]))
+            (rf/dispatch [:set-active-view :proposals-view]))
 
   (defroute "/404" []
             (rf/dispatch [:set-active-view :404]))
