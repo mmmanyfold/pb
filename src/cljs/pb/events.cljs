@@ -13,7 +13,8 @@
 
 (rf/reg-event-db
   :set-active-view
-  (fn [db [_ active-view & [election]]]
-    (assoc db :active-view active-view
-              (when (nil? (:election-in-view db))
-                :election-in-view election))))
+  (fn [db [_ active-view election]]
+    (if (nil? (:election-in-view db))
+      (assoc db :election-in-view election
+                :active-view active-view)
+      (assoc db :active-view active-view))))
