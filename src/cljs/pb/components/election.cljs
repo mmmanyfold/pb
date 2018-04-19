@@ -1,7 +1,7 @@
 (ns pb.components.election)
 
-(defn election-component []
-  [:div.election.flexrow-wrap.ba.bw1.mb4
+(defn election-component [election]
+  [:div.election-component.flexrow-wrap.ba.bw1.mb4
    [:div.links.flexcolumn-wrap.w-20-ns.f3.f2-l
     [:div
      [:a.pa3 {:href "/#/cole"}

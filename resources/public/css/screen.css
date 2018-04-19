@@ -7,8 +7,18 @@ h1 {
   color: #8e4f78;
   font-weight: 700; }
 
-a, a:focus, a:hover, a:active, input {
+a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0; }
+
+input[type="submit"], button {
+  font-size: 1.5em;
+  font-family: 'Roboto Condensed';
+  border-radius: 0.25rem;
+  color: white;
+  padding: 0.5em 0.6em;
+  cursor: pointer; }
+  input[type="submit"]:active, button:active {
+    border: none; }
 
 .flexrow-wrap {
   display: -webkit-flex;
@@ -36,28 +46,28 @@ header {
   @media screen and (min-width: 1199px) {
     header {
       font-size: 1.4rem; } }
-  @media screen and (max-width: 830px) {
-    header {
-      font-size: 1rem; } }
 
-.election {
+.count-component {
+  background-color: #F2F2F2; }
+
+.election-component {
   border-color: #739F3E; }
-  .election h2 {
+  .election-component h2 {
     font-size: 1.9em; }
-  .election h3 {
+  .election-component h3 {
     font-size: 1.2em; }
-  .election h4 {
+  .election-component h4 {
     font-size: 1.1em;
     color: #8e4f78; }
-  .election .links {
+  .election-component .links {
     border-top: 0;
     border-right: 1px solid #739F3E;
     border-bottom: 0;
     border-left: 0; }
-    .election .links div:first-child {
+    .election-component .links div:first-child {
       border-bottom: 1px solid #739F3E; }
     @media screen and (max-width: 700px) {
-      .election .links {
+      .election-component .links {
         width: 100%;
         display: -webkit-flex;
         display: flex;
@@ -69,13 +79,13 @@ header {
         justify-content: center;
         border-top: 1px solid #739F3E;
         border-right: 0; }
-        .election .links div:first-child {
+        .election-component .links div:first-child {
           border-bottom: 0;
           border-right: 1px solid #739F3E; } }
-    .election .links div {
+    .election-component .links div {
       flex: 1;
       border-color: #739F3E; }
-    .election .links a {
+    .election-component .links a {
       width: 100%;
       height: 100%;
       text-decoration: none;
@@ -88,33 +98,55 @@ header {
       align-items: center;
       -webkit-justify-content: center;
       justify-content: center; }
-      .election .links a:hover {
+      .election-component .links a:hover {
         color: white;
         background-color: #739F3E; }
 
-.voting-code {
+.voting-code-view {
   text-align: center; }
-  .voting-code .input-group {
+  .voting-code-view .input-group {
     margin-top: 2em; }
-  .voting-code .form-control:focus {
+  .voting-code-view .form-control:focus {
     box-shadow: 0; }
-  .voting-code input[type="number"]::-webkit-outer-spin-button, .voting-code input[type="number"]::-webkit-inner-spin-button {
+  .voting-code-view input[type="number"]::-webkit-outer-spin-button, .voting-code-view input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0; }
-  .voting-code input[type="number"] {
+  .voting-code-view input[type="number"] {
     -moz-appearance: textfield;
     font-size: 2em;
     border-color: #739F3E;
     margin-right: 0.25em; }
-  .voting-code input[type="submit"] {
-    font-size: 1.5em;
-    font-family: 'Roboto Condensed';
+  .voting-code-view input[type="submit"] {
     background-color: #739F3E;
     border-color: #739F3E;
-    border-radius: 0.25rem;
-    letter-spacing: 1px;
-    color: white;
-    padding: 0.5em;
-    cursor: pointer; }
-    .voting-code input[type="submit"]:active {
-      border: none; }
+    letter-spacing: 1px; }
+
+.proposals-view button.submit {
+  background-color: #8e4f78;
+  border-color: #8e4f78;
+  font-size: 1.5em; }
+
+.proposals-view .proposals {
+  margin: 0 auto;
+  margin-top: 2em;
+  padding: 0;
+  border-top: 1px solid black;
+  border-left: 1px solid black; }
+  .proposals-view .proposals .proposal-component {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black; }
+    .proposals-view .proposals .proposal-component h5 {
+      letter-spacing: 1px;
+      color: #8e4f78;
+      cursor: pointer; }
+    .proposals-view .proposals .proposal-component button.select {
+      color: #739F3E;
+      border: 1px solid #739F3E;
+      padding-bottom: 0.4em; }
+      .proposals-view .proposals .proposal-component button.select:hover {
+        color: white;
+        background-color: #739F3E; }
+    .proposals-view .proposals .proposal-component .hide {
+      display: none; }
+    .proposals-view .proposals .proposal-component .expand {
+      display: block; }

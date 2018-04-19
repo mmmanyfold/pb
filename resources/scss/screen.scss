@@ -12,8 +12,20 @@ h1 {
   font-weight: 700;
 }
 
-a, a:focus, a:hover, a:active, input {
+a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0;
+}
+
+input[type="submit"], button {
+  font-size: 1.5em;
+  font-family: 'Roboto Condensed';
+  border-radius: 0.25rem;
+  color: white;
+  padding: 0.5em 0.6em;
+  cursor: pointer;
+  &:active {
+    border: none;
+  }
 }
 
 .flexrow-wrap {
@@ -46,12 +58,13 @@ header {
   @media screen and (min-width: 1199px) {
     font-size: 1.4rem;
   }
-  @media screen and (max-width: 830px) {
-    font-size: 1rem;
-  }
 }
 
-.election {
+.count-component {
+  background-color: #F2F2F2;
+}
+
+.election-component {
   border-color: $green;
   h2 {
     font-size: 1.9em;
@@ -113,7 +126,7 @@ header {
   }
 }
 
-.voting-code {
+.voting-code-view {
   text-align: center;
   .input-group {
     margin-top: 2em;
@@ -132,17 +145,47 @@ header {
     margin-right: 0.25em;
   }
   input[type="submit"] {
-    font-size: 1.5em;
-    font-family: 'Roboto Condensed';
     background-color: $green;
     border-color: $green;
-    border-radius: 0.25rem;
     letter-spacing: 1px;
-    color: white;
-    padding: 0.5em;
-    cursor: pointer;
-    &:active {
-      border: none;
+  }
+}
+
+.proposals-view {
+  button.submit {
+    background-color: $purple;
+    border-color: $purple;
+    font-size: 1.5em;
+  }
+  .proposals {
+    margin: 0 auto;
+    margin-top: 2em;
+    padding: 0;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    .proposal-component {
+      border-right: 1px solid black;
+      border-bottom: 1px solid black;
+      h5 {
+        letter-spacing: 1px;
+        color: $purple;
+        cursor: pointer;
+      }
+      button.select {
+        color: $green;
+        border: 1px solid $green;
+        padding-bottom: 0.4em;
+        &:hover {
+          color: white;
+          background-color: $green;
+        }
+      }
+      .hide {
+        display: none;
+      }
+      .expand {
+        display: block;
+      }
     }
   }
 }
