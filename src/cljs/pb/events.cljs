@@ -14,7 +14,7 @@
 (rf/reg-event-db
   :set-active-view
   (fn [db [_ active-view election]]
-    (if (nil? (:election-in-view db))
+    (if (or (nil? (:election-in-view db)) (= active-view :home-view))
       (assoc db :election-in-view election
                 :active-view active-view)
       (assoc db :active-view active-view))))

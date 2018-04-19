@@ -1,27 +1,27 @@
 (ns pb.components.header
   (:require [re-com.core :as rc]))
 
-(defn nav-link [label to]
-  [rc/hyperlink-href
-   :label label
-   :class "nav-link pl0 pr2 pr3-ns pb1"
-   :href (str "#" to)])
-
-(defn nav-item [label]
-  [:div {:class "nav-link pl0 pr2 pr3-ns pb1"} label])
-
 (defn header-component [active-view election count]
-  (let [max-count 3]
-    [:header {:class "fixed w-100 pt3 ttu tracked bg-white"}
+  (let [max-count 3
+        nav-item-classes "nav-item pl0 pr2 pr3-ns pb1"]
+    [:header {:class "fixed w-100 pt2 pt3-ns tracked bg-white"}
      [rc/h-box
-      :class "nav-wrapper mh3 mh4-ns bb bw1 pb3"
+      :class "nav-wrapper mh3 mh4-ns bb bw1 pb2 pb3-ns ttu"
       :justify :between
       :children [[:div {:class "flex"}
-                  [nav-link "Vote" "/"]
+                  [:a {:href "/#/"
+                       :class nav-item-classes}
+                   "PB Vote"]
                   (when election
-                    [nav-item ">"])
+                    [:div {:class nav-item-classes} ">"])
                   (when election
-                    [nav-item election])]]]
+                    [:div {:class nav-item-classes} election])]
+                 [:div {:class "nav-right flex items-center"}
+                  [:div {:class "subtitle f7 tr mr3"} "Participatory Budgeting"
+                   [:br] "in Denver, CO"]
+                  [:a {:href "http://thismachinehasasoul.com"
+                       :target "_blank"}
+                   [:img {:src "img/TMHAS_Logo_600.jpg"}]]]]]
      (when (= active-view :proposals-view)
        [:div.count-component.tc.mh3.mh4-ns.pa2
         [:span (str count " / " max-count " selected")]])]))

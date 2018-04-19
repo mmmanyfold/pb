@@ -40,14 +40,24 @@ header {
   z-index: 20; }
   header .nav-wrapper {
     border-color: #739F3E; }
-  header a.nav-link {
+  header .nav-item {
+    padding-top: 0.3em;
+    border-color: transparent;
     text-decoration: none;
+    font-weight: 700;
     color: inherit; }
-  @media screen and (min-width: 1199px) {
+  header .nav-right img {
+    height: 31px; }
+  @media screen and (min-width: 550px) {
     header {
       font-size: 1.4rem; } }
+  @media screen and (max-width: 550px) {
+    header .nav-right .subtitle {
+      display: none; } }
   header .count-component {
-    background-color: #F2F2F2; }
+    background-color: #F2F2F2;
+    font-weight: 700;
+    font-size: 1.2em; }
 
 .election-component {
   border-color: #739F3E; }

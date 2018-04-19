@@ -53,15 +53,28 @@ header {
   .nav-wrapper {
     border-color: $green;
   }
-  a.nav-link {
+  .nav-item {
+    padding-top: 0.3em;
+    border-color: rgba(0,0,0,0);
     text-decoration: none;
+    font-weight: 700;
     color: inherit;
   }
-  @media screen and (min-width: 1199px) {
+  .nav-right img {
+    height: 31px;
+  }
+  @media screen and (min-width: 550px) {
     font-size: 1.4rem;
+  }
+  @media screen and (max-width: 550px) {
+    .nav-right .subtitle {
+      display: none;
+    }
   }
   .count-component {
     background-color: $lightgray;
+    font-weight: 700;
+    font-size: 1.2em;
   }
 }
 
