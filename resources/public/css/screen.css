@@ -138,6 +138,8 @@ header {
       letter-spacing: 1px;
       color: #8e4f78;
       cursor: pointer; }
+    .proposals-view .proposals .proposal-component button.select, .proposals-view .proposals .proposal-component button.remove, .proposals-view .proposals .proposal-component button.selected {
+      padding-bottom: 0.4em; }
     .proposals-view .proposals .proposal-component button.select {
       color: #739F3E;
       border: 1px solid #739F3E;
@@ -145,7 +147,12 @@ header {
       .proposals-view .proposals .proposal-component button.select:hover {
         color: white;
         background-color: #739F3E; }
-    .proposals-view .proposals .proposal-component .hide {
-      display: none; }
-    .proposals-view .proposals .proposal-component .expand {
-      display: block; }
+    .proposals-view .proposals .proposal-component button.selected {
+      color: white;
+      border: 1px solid #739F3E;
+      background-color: #739F3E; }
+    .proposals-view .proposals .proposal-component button.remove {
+      color: #959991;
+      border: 1px solid #959991; }
+      .proposals-view .proposals .proposal-component button.remove:hover {
+        background-color: #F2F2F2; }

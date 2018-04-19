@@ -1,5 +1,7 @@
 $purple: #8e4f78;
 $green: #739F3E;
+$gray: #959991;
+$lightgray: #F2F2F2;
 
 body {
   font-family: 'Roboto Condensed';
@@ -59,7 +61,7 @@ header {
     font-size: 1.4rem;
   }
   .count-component {
-    background-color: #F2F2F2;
+    background-color: $lightgray;
   }
 }
 
@@ -170,6 +172,9 @@ header {
         color: $purple;
         cursor: pointer;
       }
+      button.select, button.remove, button.selected {
+        padding-bottom: 0.4em;
+      }
       button.select {
         color: $green;
         border: 1px solid $green;
@@ -179,11 +184,17 @@ header {
           background-color: $green;
         }
       }
-      .hide {
-        display: none;
+      button.selected {
+        color: white;
+        border: 1px solid $green;
+        background-color: $green;
       }
-      .expand {
-        display: block;
+      button.remove {
+        color: $gray;
+        border: 1px solid $gray;
+        &:hover {
+          background-color: $lightgray;
+        }
       }
     }
   }
