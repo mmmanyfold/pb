@@ -5,7 +5,7 @@
 
 (defn voting-code-view [election]
   [:div.voting-code-view
-   [:h1 "Text ‘hi’ to 1234567890 to get your voting code"]
+   [:h1 "Text " [:span#text-keyword election] " to 1234567890 to get your voting code"]
    [:p "Your phone number will NEVER be shared and will automatically get deleted after the election."
     [:br]
     "Your voting code is specific to this election and won’t be used for anything else."]
