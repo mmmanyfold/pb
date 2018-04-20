@@ -23,5 +23,10 @@
   :set-selected-proposals
   (fn [db [_ proposal set]]
     (case set
-      :add (update db :selected-proposals conj proposal)
-      :remove (update db :selected-proposals #(remove #{proposal} %)))))
+        :add (update db :selected-proposals conj proposal)
+        :remove (update db :selected-proposals #(remove #{proposal} %)))))
+
+(rf/reg-event-db
+  :clear-selected-proposals
+  (fn [db _]
+    (assoc db :selected-proposals nil)))
