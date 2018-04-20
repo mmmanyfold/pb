@@ -5,6 +5,7 @@
 (def query
   "{ elections {
      title
+     shortTitle
      startOnline
      endOnline
      startInPerson
