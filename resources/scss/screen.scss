@@ -2,6 +2,7 @@ $purple: #8e4f78;
 $green: #739F3E;
 $gray: #959991;
 $lightgray: #F2F2F2;
+$yellow: #FCB733;
 
 body {
   font-family: 'Roboto Condensed';
@@ -142,6 +143,9 @@ header {
 
 .voting-code-view {
   text-align: center;
+  #text-keyword {
+    color: $yellow;
+  }
   .input-group {
     margin-top: 2em;
   }

@@ -113,6 +113,8 @@ header {
 
 .voting-code-view {
   text-align: center; }
+  .voting-code-view #text-keyword {
+    color: #FCB733; }
   .voting-code-view .input-group {
     margin-top: 2em; }
   .voting-code-view .form-control:focus {
