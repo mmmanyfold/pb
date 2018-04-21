@@ -7,6 +7,8 @@
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clj-time "0.14.3"]
                  [cljs-ajax "0.7.3"]
+                 [cljsjs/moment "2.22.0-0"]
+                 [cljsjs/showdown "1.4.2-0"]
                  [com.walmartlabs/lacinia "0.25.0"]
                  [compojure "1.6.0"]
                  [conman "0.7.8"]
@@ -38,8 +40,7 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
                  [secretary "1.2.3"]
-                 [selmer "1.11.7"]
-                 [cljsjs/showdown "1.4.2-0"]]
+                 [selmer "1.11.7"]]
 
   :min-lein-version "2.0.0"
 

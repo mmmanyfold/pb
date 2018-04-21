@@ -14,6 +14,11 @@
    (:election-slug db)))
 
 (rf/reg-sub
+ :election-in-view
+ (fn [db _]
+   (first (:election-in-view db))))
+
+(rf/reg-sub
  :selected-proposals
  (fn [db _]
    (:selected-proposals db)))
