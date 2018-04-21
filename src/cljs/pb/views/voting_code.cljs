@@ -13,7 +13,7 @@
                      startOnline
                      endOnline
                      maxSelection
-                     proposals {
+                     proposalRefs {
                        sys { id }}
                    }}")]
     (rf/dispatch [:get-contentful-data db-key query :election])
