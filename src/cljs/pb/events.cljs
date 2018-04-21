@@ -25,7 +25,7 @@
                       :response-format (ajax/json-response-format {:keywords? true})
                       :on-failure      [:get-contentful-data-failed]
                       :on-success      [:get-contentful-data-success db-key]}}))))
-                      
+
 (rf/reg-event-db
   :get-contentful-data-failed
   (fn [db _]
@@ -35,14 +35,14 @@
 (rf/reg-event-db
   :get-contentful-data-success
   (fn [db [_ db-key & [{data :data}]]]
-    (assoc db db-key data)))
+    (assoc db db-key (:elections data))))
 
 
 (rf/reg-event-db
   :set-active-view
-  (fn [db [_ active-view election]]
-    (if (or (nil? (:election-in-view db)) (= active-view :home-view))
-      (assoc db :election-in-view election
+  (fn [db [_ active-view election-slug]]
+    (if (or (nil? (:election-slug db)) (= active-view :home-view))
+      (assoc db :election-slug election-slug
                 :active-view active-view)
       (assoc db :active-view active-view))))
 

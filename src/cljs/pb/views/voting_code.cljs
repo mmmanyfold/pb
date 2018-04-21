@@ -3,9 +3,9 @@
 
 (def code (rg/atom nil))
 
-(defn voting-code-view [election]
+(defn voting-code-view [election-slug]
   [:div.voting-code-view
-   [:h1 "Text " [:span#text-keyword election] " to 1234567890 to get your voting code"]
+   [:h1 "Text " [:span#text-keyword election-slug] " to 1234567890 to get your voting code"]
    [:p "Your phone number will NEVER be shared and will automatically get deleted after the election."
     [:br]
     "Your voting code is specific to this election and won’t be used for anything else."]
@@ -20,7 +20,7 @@
        :on-change (fn [e]
                     (let [input (-> e .-target .-value)]
                       (reset! code input)))}]]
-    [:a {:href (str "/#/" election "/proposals")}
+    [:a {:href (str "/#/" election-slug "/proposals")}
      [:input
       {:type "submit"
        :value "VOTE"}]]]])

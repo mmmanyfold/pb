@@ -21,7 +21,7 @@
   (let [db-key :elections]
     (rf/reg-sub db-key #(db-key %))
     (rf/dispatch [:get-contentful-data db-key query :election])
-    (let [elections (:elections @(rf/subscribe [db-key]))]
+    (let [elections @(rf/subscribe [db-key])]
       [:div
        [:h1 "Find Your Election:"]
        (for [election elections]
