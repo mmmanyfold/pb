@@ -1,6 +1,6 @@
 (ns pb.db)
 
 (def default-db
-  {:active-view :home-view
-   :election-in-view nil
+  {:active-view nil
+   :election-slug nil
    :selected-proposals []})

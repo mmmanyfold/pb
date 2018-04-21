@@ -64,10 +64,12 @@ header {
   .election-component h2 {
     font-size: 1.9em; }
   .election-component h3 {
-    font-size: 1.2em; }
-  .election-component h4 {
-    font-size: 1.1em;
-    color: #8e4f78; }
+    font-size: 1.1em; }
+  .election-component ul {
+    -webkit-padding-start: 20px; }
+  @media screen and (max-width: 700px) {
+    .election-component div:nth-child(2) {
+      width: 100%; } }
   .election-component .links {
     border-top: 0;
     border-right: 1px solid #739F3E;

@@ -1,19 +1,42 @@
-(ns pb.components.election)
+(ns pb.components.election
+  (:require [pb.helpers :refer [showdown]]
+            [cljsjs.moment]))
 
 (defn election-component [election]
-  [:div.election-component.flexrow-wrap.ba.bw1.mb4
-   [:div.links.flexcolumn-wrap.w-20-ns.f3.f2-l
-    [:div
-     [:a.pa3 {:href "/#/cole"}
-      "online"]]
-    [:div
-     [:a.pa3 {:href "/#/cole/in-person"}
-      "in person"]]]
-   [:div.w-80-ns.pv3.ph4
-    [:h2.mt2.fw7 "Cole & surrounding areas"]
-    [:h3.fw7 "May 3, 2018 - May 15, 2018"]
-    [:h4.mt3.fw7 "Eligibility:"]
-    [:ul
-     [:li "13+"]
-     [:li "Anyone who lives, works, or has kids in school in:"]]
-    [:p "Globeville, Elyria-Swansea, Five Points, Cole, Clayton, Whittier, Skyland, City Park West, City Park, North Park Hill, Northeast Park Hill, Stapleton, Montbello"]]])
+  (let [{:keys [title
+                shortTitle
+                startOnline
+                endOnline
+                startInPerson
+                endInPerson
+                eligibility
+                votingInPerson]} election]
+    [:div.election-component.flexrow-wrap.ba.bw1.mb4
+     [:div.links.flexcolumn-wrap.w-30-m.w-20-l.f3.f2-ns
+      [:div
+       [:a.pa3 {:href (str "/#/" shortTitle)}
+        [:span.tc
+         "online"
+         [:br]
+         [:h5.f5.f4-ns
+          (let [startDay (.format (js/moment startOnline) "M/D/YY")
+                endDay (.format (js/moment endOnline) "M/D/YY")]
+            (if (= startDay endDay)
+              (str startDay)
+              (str startDay " – " endDay)))]]]]
+      [:div
+       [:a.pa3 {:href (str "/#/" shortTitle "/in-person")}
+        [:span.tc
+         "in person"
+         [:br]
+         [:h5.f5.f4-ns
+          (let [startDay (.format (js/moment startInPerson) "M/D/YY")
+                endDay (.format (js/moment endInPerson) "M/D/YY")]
+            (if (= startDay endDay)
+              (str startDay)
+              (str startDay " – " endDay)))]]]]]
+     [:div.w-70-m.w-80-l.pv3.ph4
+      [:h2.mt2.fw7 title]
+      [:h3.fw7.mt3 "Eligibility:"]
+      [:div {"dangerouslySetInnerHTML"
+             #js{:__html (.makeHtml showdown eligibility)}}]]]))

@@ -9,9 +9,14 @@
    (:active-view db)))
 
 (rf/reg-sub
+ :election-slug
+ (fn [db _]
+   (:election-slug db)))
+
+(rf/reg-sub
  :election-in-view
  (fn [db _]
-   (:election-in-view db)))
+   (first (:election-in-view db))))
 
 (rf/reg-sub
  :selected-proposals
