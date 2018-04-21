@@ -3,8 +3,7 @@
             [re-frame.core :as rf]))
 
 (defn header-component [active-view election-slug count]
-  (let [max-count 3
-        nav-item-classes "nav-item pl0 pr2 pr3-ns pb1"]
+  (let [nav-item-classes "nav-item pl0 pr2 pr3-ns pb1"]
     (fn [active-view election-slug count]
       [:header {:class "fixed w-100 pt2 pt3-ns tracked bg-white"}
        [rc/h-box
@@ -25,5 +24,6 @@
                          :target "_blank"}
                      [:img {:src "img/TMHAS_Logo_600.jpg"}]]]]]
        (when (= active-view :proposals-view)
-         [:div.count-component.tc.mh3.mh4-ns.pa2
-          [:span (str count " / " max-count " selected")]])])))
+         (when-let [{:keys [maxSelection]} @(rf/subscribe [:election-in-view])]
+           [:div.count-component.tc.mh3.mh4-ns.pa2
+            [:span (str count " / " maxSelection " selected")]]))])))

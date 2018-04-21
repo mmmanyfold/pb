@@ -12,12 +12,13 @@
                      title
                      startOnline
                      endOnline
+                     maxSelection
                      proposals {
                        sys { id }}
                    }}")]
     (rf/dispatch [:get-contentful-data db-key query :election])
     (fn [election-slug]
-      (when-let [{:keys [startOnline endOnline]} @(rf/subscribe [:election-in-view])]
+      (if-let [{:keys [startOnline endOnline]} @(rf/subscribe [:election-in-view])]
         (if (> (js/Date. endOnline) (js/Date.))
           (if (> (js/Date. startOnline) (js/Date.))
             ;; if online voting hasn't started
@@ -48,4 +49,5 @@
           ;; if online voting has ended
           [:div.voting-code-view
            [:h1 (str "Voting ended on "
-                     (.format (js/moment endOnline) "dddd, MMMM Do YYYY [at] h:mm a."))]])))))
+                     (.format (js/moment endOnline) "dddd, MMMM Do YYYY [at] h:mm a."))]])
+        [:div "Loading"]))))

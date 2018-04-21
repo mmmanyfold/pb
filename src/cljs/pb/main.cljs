@@ -11,7 +11,7 @@
   (case view-name
         :home-view [home-view]
         :voting-code-view [voting-code-view election-slug]
-        :proposals-view [proposals-view]
+        :proposals-view [proposals-view election-slug]
         :404 [:div "404"]
         [:div]))
 
