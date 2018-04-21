@@ -6,7 +6,8 @@
 (def code (rg/atom nil))
 
 (defn voting-code-view [election-slug]
-  (let [db-key :election-in-view
+  (let [now (js/Date.)
+        db-key :election-in-view
         query (str "{ elections(q: \"fields.shortTitle=" election-slug
                    "\") {
                      title
@@ -19,8 +20,8 @@
     (rf/dispatch [:get-contentful-data db-key query :election])
     (fn [election-slug]
       (if-let [{:keys [startOnline endOnline]} @(rf/subscribe [:election-in-view])]
-        (if (> (js/Date. endOnline) (js/Date.))
-          (if (> (js/Date. startOnline) (js/Date.))
+        (if (> (js/Date. endOnline) now)
+          (if (> (js/Date. startOnline) now)
             ;; if online voting hasn't started
             [:div.voting-code-view
              [:h1 (str "Voting opens on "
