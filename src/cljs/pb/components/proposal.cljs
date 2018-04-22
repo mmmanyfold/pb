@@ -29,7 +29,6 @@
     (fn []
       [:div.proposal-component.pa4.col-xs-12.col-md-6.col-lg-4
        {:style {:background-color (if @selected? "rgba(115,159,62,0.15)" "white")}}
-
        [:h2.fw7 title]
        [:p.f4 objective]
 
@@ -59,7 +58,7 @@
         (when (< 1 (count images))
           [:i.more-images-icon {:class "far fa-images"}])]
 
-       ;; expanded image modal
+       ;; expanded image gallery modal
        (when @expand-image?
          [rc/modal-panel
           :backdrop-on-click #(reset! expand-image? false)
@@ -75,10 +74,10 @@
              [:h2 {:class "mt0 mb3 mh1 f3 f2-ns"}
                   title]
              (if (= 1 (count images))
-               ;; single image
+               ;; if single image
                [:img {:class "mb1 w-100"
                       :src thumbnail-image}]
-               ;; image gallery
+               ;; if multiple images
                [:div {:id "image-gallery" :class "carousel slide" :data-ride "carousel" :data-interval false}
                 ; indicators
                 [:ol.carousel-indicators
