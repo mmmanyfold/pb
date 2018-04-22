@@ -26,7 +26,8 @@ input[type="submit"], button {
   -webkit-flex-flow: row wrap-reverse;
   flex-flow: row wrap-reverse;
   -webkit-justify-content: center;
-  justify-content: center; }
+  justify-content: center;
+  align-items: center; }
 
 .flexcolumn-wrap {
   display: -webkit-flex;
@@ -174,8 +175,9 @@ header {
       .proposals-view .proposals .proposal-component button.remove:hover {
         background-color: #F2F2F2; }
     .proposals-view .proposals .proposal-component .thumbnail-wrapper {
-      position: relative;
-      cursor: pointer; }
+      position: relative; }
+      .proposals-view .proposals .proposal-component .thumbnail-wrapper img {
+        cursor: pointer; }
       .proposals-view .proposals .proposal-component .thumbnail-wrapper .more-images-icon {
         position: absolute;
         right: 0.3em;
