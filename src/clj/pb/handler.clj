@@ -3,6 +3,7 @@
             [pb.layout :refer [error-page]]
             [pb.routes.home :refer [home-routes]]
             [pb.routes.services :refer [service-routes]]
+            [pb.routes.api :refer [api-routes]]
             [compojure.route :as route]
             [pb.env :refer [defaults]]
             [mount.core :as mount]
@@ -19,6 +20,7 @@
       (-> #'home-routes
           (wrap-routes middleware/wrap-csrf)
           (wrap-routes middleware/wrap-formats))
+      #'api-routes
       #'service-routes
       (route/not-found
         (:body
