@@ -220,7 +220,7 @@ header {
       }
       .thumbnail-wrapper {
         position: relative;
-        img { cursor: pointer }
+        cursor: pointer;
         .more-images-icon {
           position: absolute;
           right: 0.3em;

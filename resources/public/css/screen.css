@@ -174,9 +174,8 @@ header {
       .proposals-view .proposals .proposal-component button.remove:hover {
         background-color: #F2F2F2; }
     .proposals-view .proposals .proposal-component .thumbnail-wrapper {
-      position: relative; }
-      .proposals-view .proposals .proposal-component .thumbnail-wrapper img {
-        cursor: pointer; }
+      position: relative;
+      cursor: pointer; }
       .proposals-view .proposals .proposal-component .thumbnail-wrapper .more-images-icon {
         position: absolute;
         right: 0.3em;

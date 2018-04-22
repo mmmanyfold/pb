@@ -52,9 +52,9 @@
        [detail show-timeline? timeline "Timeline"]
 
        ;; thumbnail image
-       [:div.thumbnail-wrapper
-        [:img.w-100.mt2 {:src thumbnail-image
-                         :on-click #(reset! expand-image? true)}]
+       [:div.thumbnail-wrapper 
+        {:on-click #(reset! expand-image? true)}
+        [:img.w-100.mt2 {:src thumbnail-image}]
         (when (< 1 (count images))
           [:i.more-images-icon {:class "far fa-images"}])]
 
