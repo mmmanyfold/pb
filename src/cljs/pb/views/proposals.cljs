@@ -15,9 +15,8 @@
                          budget
                          timeline
                          images { url }
-                       }"))
-        combined-query (str "{" (string/join queries) "}")]
-      combined-query))
+                       }"))]
+      (str "{" (string/join queries) "}")))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]

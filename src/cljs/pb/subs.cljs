@@ -15,8 +15,8 @@
 
 (rf/reg-sub
  :elections
- (fn [db _]
-   (:elections (:elections db))))
+ (fn [{elections :elections} _]
+   (:elections elections)))
 
 (rf/reg-sub
  :election-in-view
