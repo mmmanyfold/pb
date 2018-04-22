@@ -20,7 +20,7 @@
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs]} @(rf/subscribe [:election-in-view])
+    (let [{:keys [proposalRefs maxSelection]} @(rf/subscribe [:election-in-view])
           ids (map #(get-in % [:sys :id]) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
@@ -29,7 +29,9 @@
          [:h2 "Instructions:"]
          [:ol
           [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
-          [:li "You can vote for up to 3 projects."]
+          [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
+                                                        " projects."
+                                                        " project.")]
           [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
          [:div.tc
           [:button.submit.mt3 "Submit My Vote"]]
