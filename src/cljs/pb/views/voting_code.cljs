@@ -1,13 +1,13 @@
 (ns pb.views.voting-code
   (:require [reagent.core :as rg]
             [re-frame.core :as rf]
-            [cljsjs.moment]))
+            [cljsjs.moment]
+            [pb.components.loading :refer [loading-component]]))
 
 (def code (rg/atom nil))
 
 (defn voting-code-view [election-slug]
   (let [now (js/Date.)
-        db-key :election-in-view
         query (str "{ elections(q: \"fields.shortTitle=" election-slug
                    "\") {
                      title
@@ -17,7 +17,7 @@
                      proposalRefs {
                        sys { id }}
                    }}")]
-    (rf/dispatch [:get-contentful-data db-key query :election])
+    (rf/dispatch [:get-contentful-data :election-in-view query :election])
     (fn [election-slug]
       (if-let [{:keys [startOnline endOnline]} @(rf/subscribe [:election-in-view])]
         (if (> (js/Date. endOnline) now)
@@ -51,4 +51,4 @@
           [:div.voting-code-view
            [:h1 (str "Voting ended on "
                      (.format (js/moment endOnline) "dddd, MMMM Do YYYY [at] h:mm a."))]])
-        [:div "Loading"]))))
+        [loading-component]))))

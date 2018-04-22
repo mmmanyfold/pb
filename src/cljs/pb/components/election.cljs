@@ -1,5 +1,5 @@
 (ns pb.components.election
-  (:require [pb.helpers :refer [showdown]]
+  (:require [pb.helpers :refer [render-markdown]]
             [cljsjs.moment]))
 
 (defn election-component [election]
@@ -38,5 +38,4 @@
      [:div.w-70-m.w-80-l.pv3.ph4
       [:h2.mt2.fw7 title]
       [:h3.fw7.mt3 "Eligibility:"]
-      [:div {"dangerouslySetInnerHTML"
-             #js{:__html (.makeHtml showdown eligibility)}}]]]))
+      [render-markdown eligibility]]]))
