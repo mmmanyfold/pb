@@ -19,7 +19,6 @@
   ;; 1. register subscriber db-key
   ;; 2. retrieve contentful data & pass key for assoc in db
   (let [db-key :elections]
-    (rf/reg-sub db-key #(db-key %))
     (rf/dispatch [:get-contentful-data db-key query :election])
     (let [elections @(rf/subscribe [db-key])]
       [:div

@@ -34,8 +34,8 @@
 
 (rf/reg-event-db
   :get-contentful-data-success
-  (fn [db [_ db-key & [{data :data}]]]
-    (assoc db db-key (:elections data))))
+  (fn [db [_ db-key & [data]]]
+    (assoc db db-key (:data data))))
 
 
 (rf/reg-event-db

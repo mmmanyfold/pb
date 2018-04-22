@@ -7,7 +7,6 @@
 
 (defn voting-code-view [election-slug]
   (let [now (js/Date.)
-        db-key :election-in-view
         query (str "{ elections(q: \"fields.shortTitle=" election-slug
                    "\") {
                      title
@@ -17,7 +16,7 @@
                      proposalRefs {
                        sys { id }}
                    }}")]
-    (rf/dispatch [:get-contentful-data db-key query :election])
+    (rf/dispatch [:get-contentful-data :election-in-view query :election])
     (fn [election-slug]
       (if-let [{:keys [startOnline endOnline]} @(rf/subscribe [:election-in-view])]
         (if (> (js/Date. endOnline) now)
