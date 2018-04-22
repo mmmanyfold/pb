@@ -28,16 +28,17 @@
        [:h2.fw7 title]
        [:p.f4 objective]
        [:div.tc.mt2.mb3
-          [:button.mv2 {:on-click (fn []
-                                    (swap! selected? not)
-                                    (rf/dispatch [:set-selected-proposals title :add]))
-                        :class (if @selected? "selected" "select")}
-             (if @selected? "Selected" "Select")]
-          (when @selected?
-             [:button.remove.mv2.ml3 {:on-click (fn []
-                                                  (swap! selected? not)
-                                                  (rf/dispatch [:set-selected-proposals title :remove]))}
-                "Remove"])]
+        [:button.mv2 {:on-click (fn []
+                                  (swap! selected? not)
+                                  (rf/dispatch [:set-selected-proposals title :add]))
+                      :class (if @selected? "selected" "select")}
+         (if @selected? "Selected" "Select")]
+        (when @selected?
+          [:button.remove.mv2.ml3
+           {:on-click (fn []
+                        (swap! selected? not)
+                        (rf/dispatch [:set-selected-proposals title :remove]))}
+           "Remove"])]
 
        [detail show-impact? impact "Community Impact & Supporting Statistics"]
        [detail show-budget? budget "Budget Breakdown"]
