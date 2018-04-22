@@ -1,6 +1,7 @@
 (ns pb.views.proposals
   (:require [re-frame.core :as rf]
             [pb.components.proposal :refer [proposal-component]]
+            [pb.components.loading :refer [loading-component]]
             [clojure.string :as string]))
 
 (defn query [ids]
@@ -24,7 +25,7 @@
           ids (map #(get-in % [:sys :id]) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
-      (when-let [proposals @(rf/subscribe [:proposals-in-view])]
+      (if-let [proposals @(rf/subscribe [:proposals-in-view])]
         [:div.proposals-view.mt5
          [:h2 "Instructions:"]
          [:ol
@@ -36,7 +37,8 @@
          [:div.proposals.row
           (for [proposal proposals]
             ^{:key (gensym "p-")}
-            [proposal-component (first (val proposal))])]]))
+            [proposal-component (first (val proposal))])]]
+        [loading-component]))
     (do
       (set! (-> js/window .-location .-href) (str "/#/" election-slug))
       [:div.proposals-view "Redirecting..."])))

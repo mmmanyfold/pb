@@ -1,7 +1,8 @@
 (ns pb.views.voting-code
   (:require [reagent.core :as rg]
             [re-frame.core :as rf]
-            [cljsjs.moment]))
+            [cljsjs.moment]
+            [pb.components.loading :refer [loading-component]]))
 
 (def code (rg/atom nil))
 
@@ -50,4 +51,4 @@
           [:div.voting-code-view
            [:h1 (str "Voting ended on "
                      (.format (js/moment endOnline) "dddd, MMMM Do YYYY [at] h:mm a."))]])
-        [:div "Loading"]))))
+        [loading-component]))))
