@@ -134,6 +134,9 @@ header {
     border-color: #739F3E;
     letter-spacing: 1px; }
 
+.proposals-view p {
+  line-height: 1.4em; }
+
 .proposals-view button.submit {
   background-color: #8e4f78;
   border-color: #8e4f78;

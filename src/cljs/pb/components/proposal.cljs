@@ -1,7 +1,14 @@
 (ns pb.components.proposal
   (:require [reagent.core :as rg]
             [re-frame.core :as rf]
-            [pb.helpers :refer [showdown]]))
+            [pb.helpers :refer [render-markdown]]))
+
+(defn detail [show? field title]
+  [:div
+   [:h5 {:on-click #(swap! show? not)
+         :class (when @show? "b")}
+    (str "+ " title)]
+   (when @show? [render-markdown field])])
 
 (defn proposal-component [proposal]
   (let [{:keys [title
@@ -32,24 +39,8 @@
                                                   (rf/dispatch [:set-selected-proposals title :remove]))}
                 "Remove"])]
 
-       [:h5 {:on-click #(swap! show-impact? not)
-             :class (when @show-impact? "b")}
-          "+ Community Impact & Supporting Statistics"]
-       (when @show-impact?
-         [:div {"dangerouslySetInnerHTML"
-                #js{:__html (.makeHtml showdown impact)}}])
+       [detail show-impact? impact "Community Impact & Supporting Statistics"]
+       [detail show-budget? budget "Budget Breakdown"]
+       [detail show-timeline? timeline "Timeline"]
 
-       [:h5 {:on-click #(swap! show-budget? not)
-             :class (when @show-budget? "b")}
-          "+ Budget Breakdown"]
-       (when @show-budget?
-          [:div {"dangerouslySetInnerHTML"
-                 #js{:__html (.makeHtml showdown budget)}}])
-
-       [:h5 {:on-click #(swap! show-timeline? not)
-             :class (when @show-timeline? "b")}
-          "+ Timeline"]
-       (when @show-timeline?
-          [:div {"dangerouslySetInnerHTML"
-                 #js{:__html (.makeHtml showdown timeline)}}])
        [:img.w-100.mt2 {:src "img/temp.jpg"}]])))
