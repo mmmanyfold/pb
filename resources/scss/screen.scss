@@ -38,6 +38,7 @@ input[type="submit"], button {
   flex-flow: row wrap-reverse;
   -webkit-justify-content: center;
   justify-content: center;
+  align-items: center;
 }
 
 .flexcolumn-wrap {
@@ -220,7 +221,7 @@ header {
       }
       .thumbnail-wrapper {
         position: relative;
-        cursor: pointer;
+        img { cursor: pointer }
         .more-images-icon {
           position: absolute;
           right: 0.3em;
