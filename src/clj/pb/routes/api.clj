@@ -16,18 +16,14 @@
   "Creates voter ID for a new phone number, or returns existing voter ID"
   [req]
   (let [phone-number (get-in req [:params :phone-number])]
-    (if-let [voter (jdbc/with-db-transaction [t-conn *db*]
-                     (jdbc/db-set-rollback-only! t-conn)
-                     (db/get-voter {:phone phone-number}))]
+    (if-let [voter (db-tx db/get-voter {:phone phone-number})]
       (let [code (:code voter)])
         ;return pre-existing code via twilio)
       (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})]
-        (jdbc/with-db-transaction [t-conn *db*]
-          (jdbc/db-set-rollback-only! t-conn)
-          (db/create-voter! {:phone phone-number
-                             :admin false
-                             :is_active true
-                             :code code}))))))
+        (db-tx db/create-voter! {:phone phone-number
+                                 :admin false
+                                 :is_active true
+                                 :code code})))))
         ;return new code via twilio
 
 (defroutes api-routes
