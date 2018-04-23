@@ -10,10 +10,6 @@ UPDATE voters
 SET first_name = :first_name, last_name = :last_name, email = :email
 WHERE id = :id
 
--- :name all-voters :? :*
--- :doc foo
-SELECT * FROM voters
-
 -- :name get-voter :? :1
 -- :doc retrieves a voter record given the id
 SELECT * FROM voters
