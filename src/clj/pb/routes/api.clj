@@ -19,16 +19,16 @@
     (if-let [voter (jdbc/with-db-transaction [t-conn *db*]
                      (jdbc/db-set-rollback-only! t-conn)
                      (db/get-voter {:phone phone-number}))]
-      (let [code (:code voter)]
-        (prn voter)) ;return pre-existing code via twilio)
+      (let [code (:code voter)])
+        ;return pre-existing code via twilio)
       (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})]
         (jdbc/with-db-transaction [t-conn *db*]
           (jdbc/db-set-rollback-only! t-conn)
           (db/create-voter! {:phone phone-number
                              :admin false
                              :is_active true
-                             :code code}))
-        (prn code))))) ;return new code via twilio
+                             :code code}))))))
+        ;return new code via twilio
 
 (defroutes api-routes
   (context "/api" []
