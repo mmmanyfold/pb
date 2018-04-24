@@ -10,7 +10,7 @@
             [twilio.core :as twilio]))
 
 (defonce PB_TWILIO_AUTH_TOKEN (System/getenv "PB_TWILIO_AUTH_TOKEN"))
-(defonce PB_TWILIO_SERVICE_SID (System/getenv "PB_TWILIO_SERVICE_SID"))
+(defonce PB_TWILIO_ACCOUNT_SID (System/getenv "PB_TWILIO_ACCOUNT_SID"))
 (defonce PB_TWILIO_PHONE_NUMBER (System/getenv "PB_TWILIO_PHONE_NUMBER"))
 
 (defn db-tx [f & [args]]
@@ -25,7 +25,7 @@
     (if-let [voter (db-tx db/get-voter {:phone phone-number})]
       (let [code (:code voter)
             voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-        (twilio/with-auth PB_TWILIO_SERVICE_SID PB_TWILIO_AUTH_TOKEN
+        (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
           @(twilio/send-sms
              {:From PB_TWILIO_PHONE_NUMBER
               :To phone-number
@@ -36,7 +36,7 @@
                                  :admin false
                                  :is_active true
                                  :code code})
-        (twilio/with-auth PB_TWILIO_SERVICE_SID PB_TWILIO_AUTH_TOKEN
+        (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
           @(twilio/send-sms
              {:From PB_TWILIO_PHONE_NUMBER
               :To phone-number
