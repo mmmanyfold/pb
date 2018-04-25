@@ -18,30 +18,40 @@
     (jdbc/db-set-rollback-only! t-conn)
     (f args)))
 
+(defn send-code [phone-number voting-code]
+  (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
+    @(twilio/send-sms
+       {:From PB_TWILIO_PHONE_NUMBER
+        :To phone-number
+        :Body voting-code})))
+
 (defn handle-voter-id
   "Creates voter ID for a new phone number, or returns existing voter ID"
+  [phone-number & [body]]
+  (if-let [voter (db-tx db/get-voter {:phone phone-number})]
+    (let [code (:code voter)
+          voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
+      {:ok (send-code phone-number voting-code)})
+    (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
+          voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
+      (db-tx db/create-voter! {:phone phone-number
+                               :admin false
+                               :is_active true
+                               :code code})
+      {:ok (send-code phone-number voting-code)})))
+
+(defn handle-voter-id-from-ui
   [req]
   (let [phone-number (get-in req [:params :phone-number])]
-    (if-let [voter (db-tx db/get-voter {:phone phone-number})]
-      (let [code (:code voter)
-            voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-        (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
-          @(twilio/send-sms
-             {:From PB_TWILIO_PHONE_NUMBER
-              :To phone-number
-              :Body voting-code})))
-      (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
-            voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-        (db-tx db/create-voter! {:phone phone-number
-                                 :admin false
-                                 :is_active true
-                                 :code code})
-        (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
-          @(twilio/send-sms
-             {:From PB_TWILIO_PHONE_NUMBER
-              :To phone-number
-              :Body voting-code}))))))
+    (handle-voter-id phone-number)))
+
+(defn handle-voter-id-from-sms
+  [req]
+  (let [{:keys [From Body]} (:params req)]
+    ;TODO: use election name from Body ?
+    (handle-voter-id From)))
 
 (defroutes api-routes
   (context "/api" []
-    (GET "/voterid/:phone-number" [] handle-voter-id)))
+    (GET "/voterid/:phone-number" [] handle-voter-id-from-ui)
+    (POST "/voterid" [] handle-voter-id-from-sms)))
