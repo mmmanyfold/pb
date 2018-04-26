@@ -26,3 +26,9 @@
 
 (defn create-migration [name]
   (migrations/create name (select-keys env [:database-url])))
+
+;; TODO: figure out how to call this function from test env
+(defn reset-test-db []
+  (migrations/migrate
+    ["reset"]
+    {:database-url "jdbc:postgresql://localhost/pb_test?user=postgres&password=postgres"}))
