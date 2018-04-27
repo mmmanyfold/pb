@@ -59,7 +59,7 @@
               [:a {:on-click #(check-code @code)}
                [:input#submit-code
                 {:type "submit"
-                 :value "VOTE"
+                 :value "CONTINUE"
                  :disabled (< (count @code) 8)}]]]
              (when-not (nil? @error-code)
                (if (= @error-code 404)
