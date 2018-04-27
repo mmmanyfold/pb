@@ -20,6 +20,11 @@ WHERE phone = :phone
 SELECT * FROM voters
 WHERE code LIKE :code
 
+-- :name get-voter-by-id :? :1
+-- :doc retrieves a voter record given the id
+SELECT * FROM voters
+WHERE id = :id
+
 -- :name delete-voter! :! :n
 -- :doc deletes a voter record given the id
 DELETE FROM voters

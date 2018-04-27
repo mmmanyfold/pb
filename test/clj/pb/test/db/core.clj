@@ -31,4 +31,6 @@
         (is (= "1234567890"
                (:phone (db/get-voter-by-code {:code (str "pbkdf2+sha3_256$" (subs (str/replace code "pbkdf2+sha3_256$" "") 0 8) "%")}))))
         (is (= "1234567890"
-               (:phone (db/get-voter-by-phone {:phone "1234567890"})))))))
+               (:phone (db/get-voter-by-phone {:phone "1234567890"}))))
+        (is (= "1234567890"
+               (:phone (db/get-voter-by-id {:id 1})))))))
