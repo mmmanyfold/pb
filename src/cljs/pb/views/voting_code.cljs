@@ -11,8 +11,8 @@
   (prn response))
 
 (defn check-code [code]
-  (GET (str "http://localhost:4000/api/checkcode/" code) {:handler code-response
-                                                           :response-format (ajax/json-response-format {:keywords? true})}))
+  (GET (str "/api/checkcode/" code) {:handler code-response
+                                     :response-format (ajax/json-response-format {:keywords? true})}))
 
 (defn voting-code-view [election-slug]
   (let [now (js/Date.)
