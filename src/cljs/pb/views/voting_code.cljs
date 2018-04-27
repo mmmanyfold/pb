@@ -13,7 +13,8 @@
 
 (defn success-handler [response]
   (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals"))
-  (reset! error-code nil))
+  (reset! error-code nil)
+  (rf/dispatch [:set-voter-id (:id response)]))
 
 (defn check-code [code]
   (GET (str "/api/checkcode/" code) {:handler success-handler

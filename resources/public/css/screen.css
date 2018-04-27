@@ -164,7 +164,7 @@ header {
       background-color: #AAA;
       border-color: #AAA; }
     .voting-code-view input[type="submit"]:active {
-      margin: 1px; }
+      margin: 1px 1px 11px; }
 
 .proposals-view p {
   line-height: 1.4em; }

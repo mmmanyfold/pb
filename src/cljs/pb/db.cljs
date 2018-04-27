@@ -6,4 +6,5 @@
    :elections nil
    :election-in-view nil
    :proposals-in-view nil
-   :selected-proposals []})
+   :selected-proposals []
+   :voter-id nil})

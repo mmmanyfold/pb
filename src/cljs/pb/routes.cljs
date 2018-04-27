@@ -22,11 +22,15 @@
   (secretary/set-config! :prefix "#")
 
   (defroute "/" []
-            (rf/dispatch [:set-active-view :home-view]))
+            (rf/dispatch [:set-active-view :home-view])
+            (rf/dispatch [:clear :election-in-view])
+            (rf/dispatch [:clear :proposals-in-view])
+            (rf/dispatch [:clear :voter-code]))
 
   (defroute "/:election" {:as params}
             (rf/dispatch [:set-active-view :voting-code-view (:election params)])
-            (rf/dispatch [:clear-selected-proposals]))
+            (rf/dispatch [:clear :selected-proposals])
+            (rf/dispatch [:clear :voter-id]))
 
   (defroute "/:election/proposals" {:as params}
             (rf/dispatch [:set-active-view :proposals-view (:election params)]))

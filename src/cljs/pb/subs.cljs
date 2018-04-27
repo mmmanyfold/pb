@@ -32,3 +32,8 @@
  :selected-proposals
  (fn [db _]
    (:selected-proposals db)))
+
+(rf/reg-sub
+  :voter-id
+  (fn [db _]
+    (:voter-id db)))
