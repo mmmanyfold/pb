@@ -28,7 +28,6 @@
                   :admin      false
                   :is_active  true
                   :code code})))
-      (prn (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8))
       (is (= "1234567890"
              (:phone (db/get-voter-by-code {:code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)}))))
       (is (= "1234567890"
