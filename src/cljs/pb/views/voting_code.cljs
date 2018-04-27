@@ -3,6 +3,7 @@
             [re-frame.core :as rf]
             [cljsjs.moment]
             [pb.components.loading :refer [loading-component]]
+            [pb.components.captcha :refer [captcha-component]]
             [ajax.core :as ajax :refer [GET POST PUT]]))
 
 (def code (rg/atom nil))
@@ -61,7 +62,10 @@
                [:input#submit-code
                 {:type "submit"
                  :value "CONTINUE"
-                 :disabled (< (count @code) 8)}]]]
+                 :disabled (or (< (count @code) 8)
+                               (nil? @(rf/subscribe [:captcha-passed])))}]]]
+             [captcha-component]
+             [:div]
              (when-not (nil? @error-code)
                (if (= @error-code 404)
                  [:div.error.not-found

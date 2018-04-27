@@ -128,6 +128,8 @@ header {
 
 .voting-code-view {
   text-align: center; }
+  .voting-code-view #g-recaptcha {
+    display: inline-block; }
   .voting-code-view .error {
     width: 300px;
     text-align: center;

@@ -64,3 +64,8 @@
   :set-voter-id
   (fn [db [_ code]]
     (assoc db :voter-id code)))
+
+(rf/reg-event-db
+  :set-captcha-passed
+  (fn [db [_ code]]
+    (assoc db :captcha-passed true)))

@@ -162,6 +162,9 @@ header {
 
 .voting-code-view {
   text-align: center;
+  #g-recaptcha {
+    display: inline-block;
+  }
   .error {
     width: 300px;
     text-align: center;

@@ -9,6 +9,11 @@
    (:active-view db)))
 
 (rf/reg-sub
+  :captcha-passed
+  (fn [db _]
+    (:captcha-passed db)))
+
+(rf/reg-sub
  :election-slug
  (fn [db _]
    (:election-slug db)))

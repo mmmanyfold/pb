@@ -25,7 +25,8 @@
             (rf/dispatch [:set-active-view :home-view])
             (rf/dispatch [:clear :election-in-view])
             (rf/dispatch [:clear :proposals-in-view])
-            (rf/dispatch [:clear :voter-code]))
+            (rf/dispatch [:clear :voter-code])
+            (rf/dispatch [:clear :captcha-passed]))
 
   (defroute "/:election" {:as params}
             (rf/dispatch [:set-active-view :voting-code-view (:election params)])
@@ -33,7 +34,8 @@
             (rf/dispatch [:clear :voter-id]))
 
   (defroute "/:election/proposals" {:as params}
-            (rf/dispatch [:set-active-view :proposals-view (:election params)]))
+            (rf/dispatch [:set-active-view :proposals-view (:election params)])
+            (rf/dispatch [:clear :captcha-passed]))
 
   (defroute "/404" []
             (rf/dispatch [:set-active-view :404]))
