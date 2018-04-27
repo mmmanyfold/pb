@@ -26,6 +26,15 @@ input[type="submit"], button {
 .flexrow-wrap {
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  align-items: center; }
+
+.flexrow-reverse-wrap {
+  display: -webkit-flex;
+  display: flex;
   -webkit-flex-flow: row wrap-reverse;
   flex-flow: row wrap-reverse;
   -webkit-justify-content: center;
@@ -119,6 +128,18 @@ header {
 
 .voting-code-view {
   text-align: center; }
+  .voting-code-view .error {
+    width: 300px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block; }
+    .voting-code-view .error.not-found {
+      background-color: #FF7C7C;
+      border: 1px solid #FF6666; }
+    .voting-code-view .error.already-voted {
+      background-color: #FD7;
+      border: 1px solid #FFD863; }
   .voting-code-view #text-keyword {
     color: #FCB733; }
   .voting-code-view .input-group {
@@ -132,11 +153,13 @@ header {
     -moz-appearance: textfield;
     font-size: 2em;
     border-color: #739F3E;
-    margin-right: 0.25em; }
+    margin-right: 0.25em;
+    margin-bottom: 10px; }
   .voting-code-view input[type="submit"] {
     background-color: #739F3E;
     border-color: #739F3E;
-    letter-spacing: 1px; }
+    letter-spacing: 1px;
+    margin-bottom: 10px; }
     .voting-code-view input[type="submit"]:disabled {
       background-color: #AAA;
       border-color: #AAA; }

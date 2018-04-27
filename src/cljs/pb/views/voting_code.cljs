@@ -6,12 +6,18 @@
             [ajax.core :as ajax :refer [GET POST PUT]]))
 
 (def code (rg/atom nil))
+(def error-code (rg/atom nil))
 
-(defn code-response [response]
-  (prn response))
+(defn error-handler [response]
+  (reset! error-code (:status response)))
+
+(defn success-handler [response]
+  (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals"))
+  (reset! error-code nil))
 
 (defn check-code [code]
-  (GET (str "/api/checkcode/" code) {:handler code-response
+  (GET (str "/api/checkcode/" code) {:handler success-handler
+                                     :error-handler error-handler
                                      :response-format (ajax/json-response-format {:keywords? true})}))
 
 (defn voting-code-view [election-slug]
@@ -54,7 +60,13 @@
                [:input#submit-code
                 {:type "submit"
                  :value "VOTE"
-                 :disabled (< (count @code) 8)}]]]])
+                 :disabled (< (count @code) 8)}]]]
+             (when-not (nil? @error-code)
+               (if (= @error-code 404)
+                 [:div.error.not-found
+                  "The voting code you entered is not valid. Please ensure the code is entered correctly, or follow the steps above to get your unique code."]
+                 [:div.error.already-voted
+                  "We already got your vote!"]))])
           ;; if online voting has ended
           [:div.voting-code-view
            [:h1 (str "Voting ended on "

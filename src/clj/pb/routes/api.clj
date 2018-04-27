@@ -31,7 +31,7 @@
   (let [{:keys [voter-code]} (:params req)]
     (if-let [voter (db-tx db/get-voter-by-code {:code (str "pbkdf2+sha3_256$" voter-code "%")})]
       (response/ok {:id (:id voter)})
-      (response/not-found {:id nil}))))
+      (response/not-found))))
 
 (defn handle-voter-code
   "Creates voter code for a new phone number, or returns existing voter ID"
