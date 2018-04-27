@@ -2,9 +2,17 @@
   (:require [reagent.core :as rg]
             [re-frame.core :as rf]
             [cljsjs.moment]
-            [pb.components.loading :refer [loading-component]]))
+            [pb.components.loading :refer [loading-component]]
+            [ajax.core :as ajax :refer [GET POST PUT]]))
 
 (def code (rg/atom nil))
+
+(defn code-response [response]
+  (prn response))
+
+(defn check-code [code]
+  (GET (str "/api/checkcode/" code) {:handler code-response
+                                     :response-format (ajax/json-response-format {:keywords? true})}))
 
 (defn voting-code-view [election-slug]
   (let [now (js/Date.)
@@ -35,18 +43,18 @@
              [:div.input-group.flexrow-wrap
               [:div.input-group-prepend
                [:input.form-control
-                {:type "number"
-                 :placeholder "000000"
-                 :min 1
-                 :max 999999
+                {:type "text"
+                 :placeholder "00000000"
+                 :maxLength 8
                  :value @code
                  :on-change (fn [e]
                               (let [input (-> e .-target .-value)]
                                 (reset! code input)))}]]
-              [:a {:href (str "/#/" election-slug "/proposals")}
-               [:input
+              [:a {:on-click #(check-code @code)}
+               [:input#submit-code
                 {:type "submit"
-                 :value "VOTE"}]]]])
+                 :value "VOTE"
+                 :disabled (< (count @code) 8)}]]]])
           ;; if online voting has ended
           [:div.voting-code-view
            [:h1 (str "Voting ended on "

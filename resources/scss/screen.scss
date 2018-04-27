@@ -26,6 +26,10 @@ input[type="submit"], button {
   color: white;
   padding: 0.5em 0.6em;
   cursor: pointer;
+  &:disabled {
+    background-color: #AAA;
+    border-color: #AAA;
+  }
   &:active {
     border: none;
   }
@@ -157,11 +161,11 @@ header {
   .form-control:focus {
     box-shadow: 0;
   }
-  input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+  input[type="text"]::-webkit-outer-spin-button, input[type="text"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  input[type="number"] {
+  input[type="text"] {
     -moz-appearance: textfield;
     font-size: 2em;
     border-color: $green;
@@ -171,6 +175,13 @@ header {
     background-color: $green;
     border-color: $green;
     letter-spacing: 1px;
+    &:disabled {
+      background-color: #AAA;
+      border-color: #AAA;
+    }
+    &:active {
+      margin: 1px;
+    }
   }
 }
 
@@ -180,6 +191,9 @@ header {
     background-color: $purple;
     border-color: $purple;
     font-size: 1.5em;
+    &:active {
+      margin-bottom: 2px;
+    }
   }
   .proposals {
     margin: 0 auto;

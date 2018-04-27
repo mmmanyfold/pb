@@ -36,6 +36,7 @@
                  [re-frame "0.10.5"]
                  [re-frisk "0.5.3"]
                  [reagent "0.7.0"]
+                 [ring/ring-json "0.4.0"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]

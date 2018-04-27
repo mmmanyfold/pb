@@ -19,6 +19,7 @@
                 budget
                 timeline
                 images]} proposal
+        maxSelection (:maxSelection @(rf/subscribe [:election-in-view]))
         images (map #(:url %) images)
         thumbnail-image (first images)
         show-impact? (rg/atom false)
@@ -35,8 +36,9 @@
        ;; select/remove buttons
        [:div.tc.mt2.mb3
         [:button.mv2 {:on-click (fn []
-                                  (swap! selected? not)
-                                  (rf/dispatch [:set-selected-proposals title :add]))
+                                  (when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
+                                    (swap! selected? not)
+                                    (rf/dispatch [:set-selected-proposals title :add])))
                       :class (if @selected? "selected" "select")}
          (if @selected? "Selected" "Select")]
         (when @selected?
@@ -52,7 +54,7 @@
        [detail show-timeline? timeline "Timeline"]
 
        ;; thumbnail image
-       [:div.thumbnail-wrapper 
+       [:div.thumbnail-wrapper
         {:on-click #(reset! expand-image? true)}
         [:img.w-100.mt2 {:src thumbnail-image}]
         (when (< 1 (count images))
