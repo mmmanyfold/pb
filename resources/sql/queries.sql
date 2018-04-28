@@ -16,7 +16,7 @@ SELECT * FROM voters
 WHERE phone = :phone
 
 -- :name get-voter-by-code :? :1
--- :doc retrives a voter record given their voter code
+-- :doc retrives a voter record given the voter code
 SELECT * FROM voters
 WHERE code LIKE :code
 
@@ -29,3 +29,25 @@ WHERE id = :id
 -- :doc deletes a voter record given the id
 DELETE FROM voters
 WHERE id = :id
+
+-- :name create-vote! :<! :1
+-- :doc creates a new vote record
+INSERT INTO votes
+(vote)
+VALUES (:vote)
+RETURNING *
+
+-- :name get-votes :? :1
+-- :doc retrieves all votes
+SELECT * FROM votes
+
+-- :name create-voter-vote! :! :n
+-- :doc creates new voter-vote record
+INSERT INTO voter_votes
+(voter_id, vote_id)
+VALUES (:voter_id, :vote_id)
+
+-- :name get-voter-vote :? :1
+-- :doc gets voter-vote given the voter id
+SELECT * FROM voter_votes
+WHERE voter_id = :id

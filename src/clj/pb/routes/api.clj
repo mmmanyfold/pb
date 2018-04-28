@@ -2,6 +2,7 @@
   (:require [pb.db.core :refer [*db*] :as db])
   (:require [pb.layout :as layout]
             [compojure.core :refer [context defroutes GET POST]]
+            [compojure.coercions :refer [as-int]]
             [ring.util.http-response :as response]
             [clojure.java.io :as io]
             [buddy.hashers :as hashers]
@@ -18,7 +19,7 @@
     (jdbc/with-db-transaction [t-conn *db*]
       (jdbc/db-set-rollback-only! t-conn)
       (f args))
-    (catch Exception e (str "caught exception: " (.getMessage e)))))
+    (catch Exception e (str "caught exception: " (.getMessage e) "\ncaused by: " (.getCause e)))))
 
 (defn send-code [phone-number voting-code]
   (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
@@ -61,8 +62,19 @@
     ;TODO: use election name from Body ?
     (handle-voter-code From)))
 
+(defn handle-voter-vote
+  "Creates voter-vote from voter id and selection"
+  [req]
+  (let [{:keys [voter-id vote]} (:params req)
+        vote-id (:id (db-tx db/create-vote! {:vote vote}))]
+    (db-tx db/create-voter-vote! {:voter_id (int (as-int voter-id))
+                                  :vote_id vote-id})
+    (response/ok)))
+
+
 (defroutes api-routes
   (context "/api" []
     (GET "/checkcode/:voter-code" [] check-voter-code)
-    (GET "/votercode/:phone-number" [] handle-voter-code-from-ui)
-    (POST "/votercode" [] handle-voter-code-from-sms)))
+    (POST "/votercode/:phone-number" [] handle-voter-code-from-ui)
+    (POST "/votercode" [] handle-voter-code-from-sms)
+    (POST "/registervote/:voter-id/:vote" [] handle-voter-vote)))
