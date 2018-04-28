@@ -68,10 +68,9 @@
   "Creates voter-vote from voter id and selection"
   [req]
   (let [{:keys [voter-id vote]} (:params req)
-        vote-id (:id (db-tx db/create-vote! {:vote vote}))
         voter-id (int (as-int voter-id))]
     (if (nil? (db-tx db/get-voter-vote {:id voter-id}))
-      (fn []
+      (let [vote-id (:id (db-tx db/create-vote! {:vote vote}))]
         (db-tx db/create-voter-vote! {:voter_id voter-id
                                       :vote_id vote-id})
         (response/ok))

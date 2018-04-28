@@ -19,7 +19,8 @@ input[type="submit"], button {
   cursor: pointer; }
   input[type="submit"]:disabled, button:disabled {
     background-color: #AAA;
-    border-color: #AAA; }
+    border-color: #AAA;
+    cursor: not-allowed; }
   input[type="submit"]:active, button:active {
     border: none; }
 
@@ -165,7 +166,8 @@ header {
     margin-bottom: 10px; }
     .voting-code-view input[type="submit"]:disabled {
       background-color: #AAA;
-      border-color: #AAA; }
+      border-color: #AAA;
+      cursor: not-allowed; }
     .voting-code-view input[type="submit"]:active {
       margin: 1px 1px 11px; }
 
