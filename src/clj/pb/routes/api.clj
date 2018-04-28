@@ -33,7 +33,9 @@
   [req]
   (let [{:keys [voter-code]} (:params req)]
     (if-let [voter (db-tx db/get-voter-by-code {:code (str/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))})]
-      (response/ok {:id (:id voter)})
+      (if (nil? (db-tx db/get-voter-vote {:id (:id voter)}))
+        (response/ok {:id (:id voter)})
+        (response/conflict))
       (response/not-found))))
 
 (defn handle-voter-code
@@ -42,14 +44,14 @@
   (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number})]
     (let [code (:code voter)
           voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-      {:ok (send-code phone-number voting-code)})
+      (response/ok :ok (send-code phone-number voting-code)))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:phone phone-number
                                :admin false
                                :is_active true
                                :code code})
-      {:ok (send-code phone-number voting-code)})))
+      (response/ok (send-code phone-number voting-code)))))
 
 (defn handle-voter-code-from-ui
   [req]
@@ -66,10 +68,14 @@
   "Creates voter-vote from voter id and selection"
   [req]
   (let [{:keys [voter-id vote]} (:params req)
-        vote-id (:id (db-tx db/create-vote! {:vote vote}))]
-    (db-tx db/create-voter-vote! {:voter_id (int (as-int voter-id))
-                                  :vote_id vote-id})
-    (response/ok)))
+        vote-id (:id (db-tx db/create-vote! {:vote vote}))
+        voter-id (int (as-int voter-id))]
+    (if (nil? (db-tx db/get-voter-vote {:id voter-id}))
+      (fn []
+        (db-tx db/create-voter-vote! {:voter_id voter-id
+                                      :vote_id vote-id})
+        (response/ok))
+      (response/conflict))))
 
 
 (defroutes api-routes
