@@ -37,6 +37,12 @@
   (fn [db [_ db-key & [{data :data}]]]
     (assoc db db-key data)))
 
+(rf/reg-event-db
+  :clear
+  (fn [db [_ db-key]]
+    (cond
+      (instance? Keyword db-key) (assoc db db-key nil)
+      (instance? PersistentVector db-key) (assoc-in db db-key nil))))
 
 (rf/reg-event-db
   :set-active-view
@@ -55,6 +61,11 @@
         :remove (update db :selected-proposals #(remove #{proposal} %)))))
 
 (rf/reg-event-db
-  :clear-selected-proposals
-  (fn [db _]
-    (assoc db :selected-proposals nil)))
+  :set-voter-id
+  (fn [db [_ code]]
+    (assoc db :voter-id code)))
+
+(rf/reg-event-db
+  :set-captcha-passed
+  (fn [db [_ code]]
+    (assoc db :captcha-passed true)))

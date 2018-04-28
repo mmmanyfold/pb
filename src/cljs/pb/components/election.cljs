@@ -11,7 +11,7 @@
                 endInPerson
                 eligibility
                 votingInPerson]} election]
-    [:div.election-component.flexrow-wrap.ba.bw1.mb4
+    [:div.election-component.flexrow-reverse-wrap.ba.bw1.mb4
      [:div.links.flexcolumn-wrap.w-30-m.w-20-l.f3.f2-ns
       [:div
        [:a.pa3 {:href (str "/#/" shortTitle)}

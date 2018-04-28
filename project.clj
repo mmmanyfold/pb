@@ -36,11 +36,13 @@
                  [re-frame "0.10.5"]
                  [re-frisk "0.5.3"]
                  [reagent "0.7.0"]
+                 [ring/ring-json "0.4.0"]
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
                  [secretary "1.2.3"]
-                 [selmer "1.11.7"]]
+                 [selmer "1.11.7"]
+                 [twilio-api "1.0.1"]]
 
   :min-lein-version "2.0.0"
 

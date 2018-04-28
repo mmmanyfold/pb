@@ -2,9 +2,25 @@
   (:require [reagent.core :as rg]
             [re-frame.core :as rf]
             [cljsjs.moment]
-            [pb.components.loading :refer [loading-component]]))
+            [pb.components.loading :refer [loading-component]]
+            [pb.components.captcha :refer [captcha-component]]
+            [ajax.core :as ajax :refer [GET POST PUT]]))
 
 (def code (rg/atom nil))
+(def error-code (rg/atom nil))
+
+(defn error-handler [response]
+  (reset! error-code (:status response)))
+
+(defn success-handler [response]
+  (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals"))
+  (reset! error-code nil)
+  (rf/dispatch [:set-voter-id (:id response)]))
+
+(defn check-code [code]
+  (GET (str "/api/checkcode/" code) {:handler success-handler
+                                     :error-handler error-handler
+                                     :response-format (ajax/json-response-format {:keywords? true})}))
 
 (defn voting-code-view [election-slug]
   (let [now (js/Date.)
@@ -35,18 +51,27 @@
              [:div.input-group.flexrow-wrap
               [:div.input-group-prepend
                [:input.form-control
-                {:type "number"
-                 :placeholder "000000"
-                 :min 1
-                 :max 999999
+                {:type "text"
+                 :placeholder "00000000"
+                 :maxLength 8
                  :value @code
                  :on-change (fn [e]
                               (let [input (-> e .-target .-value)]
                                 (reset! code input)))}]]
-              [:a {:href (str "/#/" election-slug "/proposals")}
-               [:input
+              [:a {:on-click #(check-code @code)}
+               [:input#submit-code
                 {:type "submit"
-                 :value "VOTE"}]]]])
+                 :value "CONTINUE"
+                 :disabled (or (< (count @code) 8)
+                               (nil? @(rf/subscribe [:captcha-passed])))}]]]
+             [captcha-component]
+             [:div]
+             (when-not (nil? @error-code)
+               (if (= @error-code 404)
+                 [:div.error.not-found
+                  "The voting code you entered is not valid. Please ensure the code is entered correctly, or follow the steps above to get your unique code."]
+                 [:div.error.already-voted
+                  "We already got your vote!"]))])
           ;; if online voting has ended
           [:div.voting-code-view
            [:h1 (str "Voting ended on "

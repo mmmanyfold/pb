@@ -17,16 +17,29 @@ input[type="submit"], button {
   color: white;
   padding: 0.5em 0.6em;
   cursor: pointer; }
+  input[type="submit"]:disabled, button:disabled {
+    background-color: #AAA;
+    border-color: #AAA; }
   input[type="submit"]:active, button:active {
     border: none; }
 
 .flexrow-wrap {
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-justify-content: center;
+  justify-content: center;
+  align-items: center; }
+
+.flexrow-reverse-wrap {
+  display: -webkit-flex;
+  display: flex;
   -webkit-flex-flow: row wrap-reverse;
   flex-flow: row wrap-reverse;
   -webkit-justify-content: center;
-  justify-content: center; }
+  justify-content: center;
+  align-items: center; }
 
 .flexcolumn-wrap {
   display: -webkit-flex;
@@ -34,7 +47,8 @@ input[type="submit"], button {
   -webkit-flex-flow: column wrap;
   flex-flow: column wrap;
   -webkit-justify-content: center;
-  justify-content: center; }
+  justify-content: center;
+  align-self: stretch; }
 
 header {
   z-index: 20; }
@@ -115,24 +129,45 @@ header {
 
 .voting-code-view {
   text-align: center; }
+  .voting-code-view #g-recaptcha {
+    display: inline-block; }
+  .voting-code-view .error {
+    width: 300px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block; }
+    .voting-code-view .error.not-found {
+      background-color: #FF7C7C;
+      border: 1px solid #FF6666; }
+    .voting-code-view .error.already-voted {
+      background-color: #FD7;
+      border: 1px solid #FFD863; }
   .voting-code-view #text-keyword {
     color: #FCB733; }
   .voting-code-view .input-group {
     margin-top: 2em; }
   .voting-code-view .form-control:focus {
     box-shadow: 0; }
-  .voting-code-view input[type="number"]::-webkit-outer-spin-button, .voting-code-view input[type="number"]::-webkit-inner-spin-button {
+  .voting-code-view input[type="text"]::-webkit-outer-spin-button, .voting-code-view input[type="text"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0; }
-  .voting-code-view input[type="number"] {
+  .voting-code-view input[type="text"] {
     -moz-appearance: textfield;
     font-size: 2em;
     border-color: #739F3E;
-    margin-right: 0.25em; }
+    margin-right: 0.25em;
+    margin-bottom: 10px; }
   .voting-code-view input[type="submit"] {
     background-color: #739F3E;
     border-color: #739F3E;
-    letter-spacing: 1px; }
+    letter-spacing: 1px;
+    margin-bottom: 10px; }
+    .voting-code-view input[type="submit"]:disabled {
+      background-color: #AAA;
+      border-color: #AAA; }
+    .voting-code-view input[type="submit"]:active {
+      margin: 1px 1px 11px; }
 
 .proposals-view p {
   line-height: 1.4em; }
@@ -141,6 +176,8 @@ header {
   background-color: #8e4f78;
   border-color: #8e4f78;
   font-size: 1.5em; }
+  .proposals-view button.submit:active {
+    margin-bottom: 2px; }
 
 .proposals-view .proposals {
   margin: 0 auto;
@@ -174,8 +211,9 @@ header {
       .proposals-view .proposals .proposal-component button.remove:hover {
         background-color: #F2F2F2; }
     .proposals-view .proposals .proposal-component .thumbnail-wrapper {
-      position: relative;
-      cursor: pointer; }
+      position: relative; }
+      .proposals-view .proposals .proposal-component .thumbnail-wrapper img {
+        cursor: pointer; }
       .proposals-view .proposals .proposal-component .thumbnail-wrapper .more-images-icon {
         position: absolute;
         right: 0.3em;

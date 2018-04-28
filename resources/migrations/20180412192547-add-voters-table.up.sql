@@ -1,6 +1,6 @@
 CREATE TABLE voters
 (id SERIAL PRIMARY KEY,
- phone VARCHAR(15),
+ phone VARCHAR(15) UNIQUE,
  admin BOOLEAN,
  is_active BOOLEAN,
- code VARCHAR(64));
+ code VARCHAR(110));
