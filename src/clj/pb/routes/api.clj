@@ -14,9 +14,11 @@
 (defonce PB_TWILIO_PHONE_NUMBER (System/getenv "PB_TWILIO_PHONE_NUMBER"))
 
 (defn db-tx [f & [args]]
-  (jdbc/with-db-transaction [t-conn *db*]
-    (jdbc/db-set-rollback-only! t-conn)
-    (f args)))
+  (try
+    (jdbc/with-db-transaction [t-conn *db*]
+      (jdbc/db-set-rollback-only! t-conn)
+      (f args))
+    (catch Exception e (str "caught exception: " (.getMessage e)))))
 
 (defn send-code [phone-number voting-code]
   (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
