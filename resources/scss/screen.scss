@@ -31,7 +31,7 @@ input[type="submit"], button {
     border-color: #AAA;
   }
   &:active {
-    border: none;
+    border: 0;
   }
 }
 
@@ -110,9 +110,14 @@ header {
       width: 100%;
     }
   }
+  .description {
+    border-left: 1px solid $green;
+    @media screen and (max-width: 700px) {
+      border-left: 0;
+    }
+  }
   .links {
     border-top: 0;
-    border-right: 1px solid $green;
     border-bottom: 0;
     border-left: 0;
     div:first-child {

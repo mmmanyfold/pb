@@ -21,7 +21,7 @@ input[type="submit"], button {
     background-color: #AAA;
     border-color: #AAA; }
   input[type="submit"]:active, button:active {
-    border: none; }
+    border: 0; }
 
 .flexrow-wrap {
   display: -webkit-flex;
@@ -83,9 +83,13 @@ header {
   @media screen and (max-width: 700px) {
     .election-component div:nth-child(2) {
       width: 100%; } }
+  .election-component .description {
+    border-left: 1px solid #739F3E; }
+    @media screen and (max-width: 700px) {
+      .election-component .description {
+        border-left: 0; } }
   .election-component .links {
     border-top: 0;
-    border-right: 1px solid #739F3E;
     border-bottom: 0;
     border-left: 0; }
     .election-component .links div:first-child {
