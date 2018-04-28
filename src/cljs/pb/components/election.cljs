@@ -35,7 +35,7 @@
             (if (= startDay endDay)
               (str startDay)
               (str startDay " – " endDay)))]]]]]
-     [:div.w-70-m.w-80-l.pv3.ph4.description
+     [:div.w-70-m.w-80-l.pv3.ph4
       [:h2.mt2.fw7 title]
       [:h3.fw7.mt3 "Eligibility:"]
       [render-markdown eligibility]]]))
