@@ -4,7 +4,7 @@
             [cljsjs.moment]
             [pb.components.loading :refer [loading-component]]
             [pb.components.captcha :refer [captcha-component]]
-            [ajax.core :as ajax :refer [GET POST PUT]]))
+            [ajax.core :as ajax :refer [GET]]))
 
 (def code (rg/atom nil))
 (def error-code (rg/atom nil))
