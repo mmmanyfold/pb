@@ -20,8 +20,8 @@
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs maxSelection]} @(rf/subscribe [:election-in-view])
-          ids (map #(get-in % [:sys :id]) proposalRefs)
+    (let [{:keys [proposalRefs maxSelection]} election-in-view
+          ids (map #(-> % :sys :id) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
