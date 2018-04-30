@@ -20,7 +20,9 @@
       (str "{" (string/join queries) "}")))
 
 (defn submit-vote []
-  (POST (str "/api/registervote/" @(rf/subscribe [:voter-id]) "/" @(rf/subscribe [:selected-proposals]))))
+  (POST "/api/vote" {:format :raw
+                     :params {:voter-id @(rf/subscribe [:voter-id])
+                              :vote @(rf/subscribe [:selected-proposals])}}))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]

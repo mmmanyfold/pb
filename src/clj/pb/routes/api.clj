@@ -82,4 +82,4 @@
     (GET "/checkcode/:voter-code" [] check-voter-code)
     (POST "/votercode/:phone-number" [] handle-voter-code-from-ui)
     (POST "/votercode" [] handle-voter-code-from-sms)
-    (POST "/registervote/:voter-id/:vote" [] handle-vote)))
+    (POST "/vote" [] handle-vote)))
