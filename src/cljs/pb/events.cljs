@@ -41,7 +41,7 @@
   :clear
   (fn [db [_ db-key]]
     (cond
-      (instance? Keyword db-key) (assoc db db-key nil)
+      (instance? Keyword db-key) (dissoc db db-key)
       (instance? PersistentVector db-key) (assoc-in db db-key nil))))
 
 (rf/reg-event-db
