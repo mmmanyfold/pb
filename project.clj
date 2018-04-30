@@ -42,7 +42,8 @@
                  [ring/ring-defaults "0.3.1"]
                  [secretary "1.2.3"]
                  [selmer "1.11.7"]
-                 [twilio-api "1.0.1"]]
+                 [twilio-api "1.0.1"]
+                 [pandect "0.6.1"]]
 
   :min-lein-version "2.0.0"
 
