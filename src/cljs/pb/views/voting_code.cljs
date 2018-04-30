@@ -7,6 +7,7 @@
             [ajax.core :as ajax :refer [GET POST PUT]]))
 
 (def code (rg/atom nil))
+
 (def error-code (rg/atom nil))
 
 (defn error-handler [response]
@@ -18,9 +19,10 @@
   (rf/dispatch [:set-voter-id (:id response)]))
 
 (defn check-code [code]
-  (GET (str "/api/checkcode/" code) {:handler success-handler
-                                     :error-handler error-handler
-                                     :response-format (ajax/json-response-format {:keywords? true})}))
+  (GET (str "/api/voter/code/validate/" code)
+       {:handler success-handler
+        :error-handler error-handler
+        :response-format (ajax/json-response-format {:keywords? true})}))
 
 (defn voting-code-view [election-slug]
   (let [now (js/Date.)
