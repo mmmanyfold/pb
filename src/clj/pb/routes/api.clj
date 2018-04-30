@@ -64,7 +64,7 @@
     ;TODO: use election name from Body ?
     (handle-voter-code From)))
 
-(defn handle-voter-vote
+(defn handle-vote
   "Creates voter-vote from voter id and selection"
   [req]
   (let [{:keys [voter-id vote]} (:params req)
@@ -82,4 +82,4 @@
     (GET "/checkcode/:voter-code" [] check-voter-code)
     (POST "/votercode/:phone-number" [] handle-voter-code-from-ui)
     (POST "/votercode" [] handle-voter-code-from-sms)
-    (POST "/registervote/:voter-id/:vote" [] handle-voter-vote)))
+    (POST "/registervote/:voter-id/:vote" [] handle-vote)))
