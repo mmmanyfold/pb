@@ -79,7 +79,7 @@
 
 (defroutes api-routes
   (context "/api" []
-    (GET "/checkcode/:voter-code" [] check-voter-code)
+    (GET "/checkcode" [] check-voter-code)
     (POST "/votercode/:phone-number" [] handle-voter-code-from-ui)
     (POST "/votercode" [] handle-voter-code-from-sms)
     (POST "/vote" [] handle-vote)))

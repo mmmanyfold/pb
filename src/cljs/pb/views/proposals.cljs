@@ -20,7 +20,8 @@
       (str "{" (string/join queries) "}")))
 
 (defn submit-vote []
-  (POST "/api/vote" {:format :raw
+  (POST "/api/vote" {:response-format (ajax/json-response-format {:keywords? true})
+                     :format :raw
                      :params {:voter-id @(rf/subscribe [:voter-id])
                               :vote @(rf/subscribe [:selected-proposals])}}))
 

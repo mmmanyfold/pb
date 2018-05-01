@@ -17,9 +17,13 @@
   (rf/dispatch [:set-voter-id (:id response)]))
 
 (defn check-code [code]
-  (GET (str "/api/checkcode/" code) {:handler success-handler
-                                     :error-handler error-handler
-                                     :response-format (ajax/json-response-format {:keywords? true})}))
+  (GET (str "/api/checkcode") {:handler success-handler
+                               :error-handler error-handler
+                               :response-format (ajax/json-response-format {:keywords? true})
+                               :format :raw
+                               :params {:voter-code code}}))
+
+
 
 (defn voting-code-view [election-slug]
   (rg/create-class
