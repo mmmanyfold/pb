@@ -44,14 +44,14 @@
   (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number})]
     (let [code (:code voter)
           voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-      (response/ok :ok (send-code phone-number voting-code)))
+      (response/ok {:ok (send-code phone-number voting-code)}))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:phone phone-number
                                :admin false
                                :is_active true
                                :code code})
-      (response/ok (send-code phone-number voting-code)))))
+      (response/ok {:ok (send-code phone-number voting-code)}))))
 
 (defn handle-voter-code-from-ui
   [req]
