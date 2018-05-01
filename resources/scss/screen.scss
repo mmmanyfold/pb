@@ -220,12 +220,17 @@ header {
 
 .proposals-view {
   p { line-height: 1.4em; }
-  button.submit {
+  input.submit {
     background-color: $purple;
     border-color: $purple;
     font-size: 1.5em;
     &:active {
       margin-bottom: 2px;
+    }
+    &:disabled {
+      background-color: #AAA;
+      border-color: #AAA;
+      cursor: not-allowed;
     }
   }
   .proposals {

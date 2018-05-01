@@ -40,8 +40,11 @@
                                                         " projects."
                                                         " project.")]
           [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
-         [:div.tc {:on-click #(submit-vote)}
-          [:button.submit.mt3 "Submit My Vote"]]
+         [:div.tc
+          [:input.submit.mt3 {:on-click #(submit-vote)
+                              :disabled (nil? @(rf/subscribe [:selected-proposals]))
+                              :type "submit"
+                              :value "Submit My Vote"}]]
          [:div.proposals.row
           (for [proposal proposals]
             ^{:key (gensym "p-")}

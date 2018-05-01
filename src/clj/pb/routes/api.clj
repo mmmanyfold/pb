@@ -73,7 +73,7 @@
       (let [vote-id (:id (db-tx db/create-vote! {:vote vote}))]
         (db-tx db/create-voter-vote! {:voter_id voter-id
                                       :vote_id vote-id})
-        (response/ok))
+        (response/ok {:vote vote}))
       (response/conflict))))
 
 
