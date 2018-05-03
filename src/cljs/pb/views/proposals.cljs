@@ -2,7 +2,8 @@
   (:require [re-frame.core :as rf]
             [pb.components.proposal :refer [proposal-component]]
             [pb.components.loading :refer [loading-component]]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [ajax.core :as ajax :refer [POST]]))
 
 (defn query [ids]
   (let [queries (for [id ids]
@@ -17,6 +18,12 @@
                          images { url }
                        }"))]
       (str "{" (string/join queries) "}")))
+
+(defn submit-vote []
+  (POST "/api/vote" {:response-format (ajax/json-response-format {:keywords? true})
+                     :format :raw
+                     :params {:voter-id @(rf/subscribe [:voter-id])
+                              :vote @(rf/subscribe [:selected-proposals])}}))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
@@ -34,11 +41,14 @@
                                                         " project.")]
           [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
          [:div.tc
-          [:button.submit.mt3 "Submit My Vote"]]
+          [:input.submit.mt3 {:on-click #(submit-vote)
+                              :disabled (nil? @(rf/subscribe [:selected-proposals]))
+                              :type "submit"
+                              :value "Submit My Vote"}]]
          [:div.proposals.row
           (for [proposal proposals]
             ^{:key (gensym "p-")}
-            [proposal-component (first (val proposal))])]]
+            [proposal-component proposal])]]
         [loading-component]))
     (do
       (set! (-> js/window .-location .-href) (str "/#/" election-slug))

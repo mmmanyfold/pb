@@ -29,6 +29,7 @@ input[type="submit"], button {
   &:disabled {
     background-color: #AAA;
     border-color: #AAA;
+    cursor: not-allowed;
   }
   &:active {
     border: none;
@@ -209,6 +210,7 @@ header {
     &:disabled {
       background-color: #AAA;
       border-color: #AAA;
+      cursor: not-allowed;
     }
     &:active {
       margin: 1px 1px 11px;
@@ -218,12 +220,17 @@ header {
 
 .proposals-view {
   p { line-height: 1.4em; }
-  button.submit {
+  input.submit {
     background-color: $purple;
     border-color: $purple;
     font-size: 1.5em;
     &:active {
       margin-bottom: 2px;
+    }
+    &:disabled {
+      background-color: #AAA;
+      border-color: #AAA;
+      cursor: not-allowed;
     }
   }
   .proposals {

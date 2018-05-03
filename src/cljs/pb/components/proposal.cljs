@@ -18,14 +18,15 @@
                 impact
                 budget
                 timeline
-                images]} proposal
+                images]} (first (val proposal))
+        id (name (first proposal))
         maxSelection (:maxSelection @(rf/subscribe [:election-in-view]))
         images (map #(:url %) images)
         thumbnail-image (first images)
         show-impact? (rg/atom false)
         show-budget? (rg/atom false)
         show-timeline? (rg/atom false)
-        selected? (rg/atom false)
+        selected? (rg/atom (some #(= id %) @(rf/subscribe [:selected-proposals])))
         expand-image? (rg/atom false)]
     (fn []
       [:div.proposal-component.pa4.col-xs-12.col-md-6.col-lg-4
@@ -37,15 +38,13 @@
        [:div.tc.mt2.mb3
         [:button.mv2 {:on-click (fn []
                                   (when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
-                                    (swap! selected? not)
-                                    (rf/dispatch [:set-selected-proposals title :add])))
+                                    (rf/dispatch [:set-selected-proposals id :add])))
                       :class (if @selected? "selected" "select")}
          (if @selected? "Selected" "Select")]
         (when @selected?
           [:button.remove.mv2.ml3
            {:on-click (fn []
-                        (swap! selected? not)
-                        (rf/dispatch [:set-selected-proposals title :remove]))}
+                        (rf/dispatch [:set-selected-proposals id :remove]))}
            "Remove"])]
 
        ;; expandable details
