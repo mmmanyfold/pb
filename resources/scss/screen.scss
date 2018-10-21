@@ -192,16 +192,19 @@ header {
     line-height: 1em;
   }
   #voter-auth-form {
-    width: 350px;
+    width: 292px;
     margin: 0 auto;
   }
   select#campus {
     margin-right: 0.5em;
     margin-bottom: 10px;
     width: 140px;
+    height: inherit;
+    border-color: $green;
+    border-width: 1.5px;
   }
   .form-control {
-    width: inherit;
+    width: 100%;
   }
   .form-control:focus {
     box-shadow: 0;
@@ -212,8 +215,9 @@ header {
   }
   input[type="text"] {
     -moz-appearance: textfield;
-    font-size: 2em;
+    font-size: 1.5em;
     border-color: $green;
+    border-width: 1.5px;
     margin-bottom: 10px;
   }
   input[type="submit"] {

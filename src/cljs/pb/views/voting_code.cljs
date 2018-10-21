@@ -4,7 +4,7 @@
             [cljsjs.moment]
             [pb.components.loading :refer [loading-component]]
             [pb.components.captcha :refer [captcha-component]]
-            [ajax.core :as ajax :refer [GET]]))
+            [ajax.core :as ajax :refer [GET POST]]))
 
 (def phone-number (rg/atom nil))
 
@@ -17,18 +17,27 @@
 (defn error-handler [response]
   (reset! error-code (:status response)))
 
-(defn success-handler [response]
+(defn check-code-success-handler [response]
   (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals"))
   (reset! error-code nil)
   (rf/dispatch [:set-voter-id (:id response)]))
 
 (defn check-code [code]
   (GET (str "/api/checkcode")
-       {:handler success-handler
+       {:handler check-code-success-handler
         :error-handler error-handler
         :response-format (ajax/json-response-format {:keywords? true})
         :format :raw
         :params {:voter-code code}}))
+
+(defn send-code-success-handler [response]
+  (reset! error-code nil)
+  (prn "sent code"))
+
+(defn send-code [phone-number]
+  (POST (str "/api/votercode/" phone-number)
+       {:handler send-code-success-handler
+        :error-handler error-handler}))
 
 (defn voting-code-view [election-slug]
        (let [now (js/Date.)
@@ -58,7 +67,7 @@
                    (when-not (nil? additionalIdLabel)
                      [:div.input-group.flexrow-wrap
                       [:div.input-group-prepend
-                       [:select {:id "campus" :name "campus" :placeholder "Campus"}
+                       [:select {:id "campus" :class "form-control" :name "campus" :placeholder "Campus"}
                         [:option {:default-value :disabled} "Campus"]
                         [:option {:value "cudenver"} "CU Denver"]
                         [:option {:value "ccd"} "CCD"]
@@ -80,12 +89,12 @@
                      :on-change (fn [e]
                                   (let [input (-> e .-target .-value)]
                                     (reset! phone-number input)))}]
-                   [:h4 "A text message with an 8-digit voting code will be sent to this phone number."]
-                   [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
-                   [:a {:on-click #(check-code @phone-number)}
+                   [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
+                   [:p [:small "Your phone number is NEVER shared and will be deleted automatically after this election."]]
+                   [:a {:on-click #(send-code @phone-number)}
                     [:input#send-code
                      {:type "submit"
-                      :value "SEND CODE"
+                      :value "SEND MY CODE"
                       :disabled (or (< (count @phone-number) 10)
                                     (nil? @(rf/subscribe [:captcha-passed])))}]]
                    [captcha-component]
