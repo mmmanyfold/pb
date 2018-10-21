@@ -46,7 +46,8 @@
                                                :election election})]
     (let [code (:code voter)
           voting-code (subs (string/replace (string/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)]
-      (response/ok {:ok (send-code phone-number voting-code)}))
+      (send-code phone-number voting-code)
+      (response/ok))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
@@ -55,7 +56,8 @@
                                :is_active true
                                :code code
                                :election election})
-      (response/ok {:ok (send-code phone-number voting-code)}))))
+      (send-code phone-number voting-code)
+      (response/ok))))
 
 (defn handle-voter-code-from-ui
   [req]

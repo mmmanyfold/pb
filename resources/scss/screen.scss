@@ -191,7 +191,7 @@ header {
   p {
     line-height: 1em;
   }
-  #voter-auth-form {
+  .voter-auth-form {
     width: 292px;
     margin: 0 auto;
   }
@@ -220,7 +220,7 @@ header {
     border-width: 1.5px;
     margin-bottom: 10px;
   }
-  input[type="submit"] {
+  input[type="button"] {
     background-color: $green;
     border-color: $green;
     letter-spacing: 1px;
