@@ -4,7 +4,8 @@
             [cljsjs.moment]
             [pb.components.loading :refer [loading-component]]
             [pb.components.captcha :refer [captcha-component]]
-            [ajax.core :as ajax :refer [GET POST]]))
+            [ajax.core :as ajax :refer [GET POST]]
+            [pb.config :as config]))
 
 (def phone-number (rg/atom nil))
 
@@ -100,12 +101,13 @@
                    [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
                    [:p [:small "Your phone number is NEVER shared and will be deleted automatically after this election."]]
                    [:a {:on-click #(send-code @additionalId @phone-number id)}
-                    [:input#send-code
-                     {:type "submit"
-                      :value "SEND MY CODE"
+                    [:input#send-code.submit
+                     {:value "SEND MY CODE"
                       :disabled (or (< (count @phone-number) 10)
-                                    (nil? @(rf/subscribe [:captcha-passed])))}]]
-                   [captcha-component]
+                                    (when-not config/debug?
+                                      (nil? @(rf/subscribe [:captcha-passed]))))}]]
+                   (when-not config/debug?
+                     [captcha-component])
                    [:div.flex-row-wrap
                     [:input.form-control
                      {:type "text"
@@ -116,9 +118,8 @@
                                    (let [input (-> e .-target .-value)]
                                      (reset! code input)))}]
                     [:a {:on-click #(check-code @code id)}
-                     [:input#submit-code
-                      {:type "submit"
-                       :value "CONTINUE"
+                     [:input#submit-code.submit
+                      {:value "CONTINUE"
                        :disabled (< (count @code) 8)}]]
                     (when-not (nil? @error-code)
                       (if (= @error-code 404)

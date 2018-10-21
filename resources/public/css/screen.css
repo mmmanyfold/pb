@@ -10,18 +10,18 @@ h1 {
 a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0; }
 
-input[type="submit"], button {
+input.submit, button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
   border-radius: 0.25rem;
   color: white;
   padding: 0.5em 0.6em;
   cursor: pointer; }
-  input[type="submit"]:disabled, button:disabled {
+  input.submit:disabled, button:disabled {
     background-color: #AAA;
     border-color: #AAA;
     cursor: not-allowed; }
-  input[type="submit"]:active, button:active {
+  input.submit:active, button:active {
     border: none; }
 
 .flexrow-wrap {
@@ -57,7 +57,7 @@ header {
     border-color: #739F3E; }
   header .nav-item {
     padding-top: 0.3em;
-    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent;
     text-decoration: none;
     font-weight: 700;
     color: inherit; }
