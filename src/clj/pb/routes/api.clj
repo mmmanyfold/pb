@@ -45,7 +45,7 @@
   (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number
                                                :election election})]
     (let [code (:code voter)
-          voting-code (subs (string/replace (string/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)]
+          voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (send-code phone-number voting-code)
       (response/ok))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
