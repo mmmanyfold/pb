@@ -22,22 +22,26 @@
   (reset! error-code nil)
   (rf/dispatch [:set-voter-id (:id response)]))
 
-(defn check-code [code]
-  (GET (str "/api/checkcode")
+(defn check-code [code election]
+  (GET "/api/checkcode"
        {:handler check-code-success-handler
         :error-handler error-handler
         :response-format (ajax/json-response-format {:keywords? true})
         :format :raw
-        :params {:voter-code code}}))
+        :params {:voter-code code
+                 :election election}}))
 
 (defn send-code-success-handler [response]
-  (reset! error-code nil)
-  (prn "sent code"))
+  (reset! error-code nil))
 
-(defn send-code [phone-number]
-  (POST (str "/api/votercode/" phone-number)
+(defn send-code [additional-id phone-number election]
+  (POST "/api/votercode"
        {:handler send-code-success-handler
-        :error-handler error-handler}))
+        :error-handler error-handler
+        :format (ajax/json-request-format)
+        :params {:additional-id additional-id
+                 :election election
+                 :phone-number phone-number}}))
 
 (defn voting-code-view [election-slug]
        (let [now (js/Date.)
@@ -48,12 +52,16 @@
                           startOnline
                           endOnline
                           maxSelection
+                          sys { id }
                           proposalRefs {
                             sys { id }}
                         }}")]
          (rf/dispatch [:get-contentful-data :election-in-view query :election])
          (fn []
-           (if-let [{:keys [additionalIdLabel startOnline endOnline]} @(rf/subscribe [:election-in-view])]
+           (if-let [{additionalIdLabel :additionalIdLabel
+                     startOnline :startOnline
+                     endOnline :endOnline
+                     {id :id} :sys} @(rf/subscribe [:election-in-view])]
              (if (> (js/Date. endOnline) now)
                (if (> (js/Date. startOnline) now)
                  ;; if online voting hasn't started
@@ -91,7 +99,7 @@
                                     (reset! phone-number input)))}]
                    [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
                    [:p [:small "Your phone number is NEVER shared and will be deleted automatically after this election."]]
-                   [:a {:on-click #(send-code @phone-number)}
+                   [:a {:on-click #(send-code @additionalId @phone-number id)}
                     [:input#send-code
                      {:type "submit"
                       :value "SEND MY CODE"
@@ -107,7 +115,7 @@
                       :on-change (fn [e]
                                    (let [input (-> e .-target .-value)]
                                      (reset! code input)))}]
-                    [:a {:on-click #(check-code @code)}
+                    [:a {:on-click #(check-code @code id)}
                      [:input#submit-code
                       {:type "submit"
                        :value "CONTINUE"
