@@ -150,7 +150,7 @@ header {
     margin-top: 2em; }
   .voting-code-view p {
     line-height: 1em; }
-  .voting-code-view #voter-auth-form {
+  .voting-code-view .voter-auth-form {
     width: 292px;
     margin: 0 auto; }
   .voting-code-view select#campus {
@@ -173,16 +173,16 @@ header {
     border-color: #739F3E;
     border-width: 1.5px;
     margin-bottom: 10px; }
-  .voting-code-view input[type="submit"] {
+  .voting-code-view input[type="button"] {
     background-color: #739F3E;
     border-color: #739F3E;
     letter-spacing: 1px;
     margin-bottom: 10px; }
-    .voting-code-view input[type="submit"]:disabled {
+    .voting-code-view input[type="button"]:disabled {
       background-color: #AAA;
       border-color: #AAA;
       cursor: not-allowed; }
-    .voting-code-view input[type="submit"]:active {
+    .voting-code-view input[type="button"]:active {
       margin: 1px 1px 11px; }
 
 .proposals-view p {
