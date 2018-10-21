@@ -7,6 +7,7 @@
             [ajax.core :as ajax :refer [GET POST]]
             [pb.config :as config]))
 
+(def phone-number0 (rg/atom nil))
 (def phone-number (rg/atom nil))
 (def code (rg/atom nil))
 (def additionalId (rg/atom nil))
@@ -92,12 +93,22 @@
                       [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid student ID will not be counted."]]
                       [:input.form-control
                        {:type "text"
-                        :placeholder "Phone Number"
+                        :placeholder "Enter Phone Number"
+                        :maxLength 10
+                        :value @phone-number0
+                        :on-change (fn [e]
+                                     (let [input (-> e .-target .-value)]
+                                       (reset! phone-number0 input)))}]
+
+                      [:input.form-control
+                       {:type "text"
+                        :placeholder "Verify Phone Number"
                         :maxLength 10
                         :value @phone-number
                         :on-change (fn [e]
                                      (let [input (-> e .-target .-value)]
                                        (reset! phone-number input)))}]
+
                       [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
                       [:p [:small "Your phone number is NEVER shared and will be deleted automatically after this election."]]
                       (when-not config/debug?
@@ -110,7 +121,8 @@
                                        (when-not config/debug?
                                          (nil? @(rf/subscribe [:captcha-passed])))
                                        (< (count @additionalId) 9))}]]]]
-                    
+                                       (not= @phone-number0 @phone-number))}]]]]
+
                     ;; if voting code has been sent
                     [:div
                      [:h1 "Enter your code:"]

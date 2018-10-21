@@ -19,7 +19,7 @@ a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0;
 }
 
-input.submit, button {
+input[type="submit"], input[type="button"], button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
   border-radius: 0.25rem;
