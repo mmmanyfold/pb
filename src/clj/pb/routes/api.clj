@@ -1,17 +1,17 @@
 (ns pb.routes.api
   (:require [pb.db.core :refer [*db*] :as db])
-  (:require [pb.layout :as layout]
-            [compojure.core :refer [context defroutes GET POST]]
+  (:require [compojure.core :refer [context defroutes GET POST]]
             [compojure.coercions :refer [as-int]]
             [ring.util.http-response :as response]
-            [clojure.java.io :as io]
             [buddy.hashers :as hashers]
             [clojure.java.jdbc :as jdbc]
-            [clojure.string :as str]
-            [twilio.core :as twilio]))
+            [clojure.string :as string]
+            [pb.twilio :as twilio]))
 
 (defonce PB_TWILIO_AUTH_TOKEN (System/getenv "PB_TWILIO_AUTH_TOKEN"))
+
 (defonce PB_TWILIO_ACCOUNT_SID (System/getenv "PB_TWILIO_ACCOUNT_SID"))
+
 (defonce PB_TWILIO_PHONE_NUMBER (System/getenv "PB_TWILIO_PHONE_NUMBER"))
 
 (defn db-tx [f & [args]]
@@ -32,7 +32,7 @@
   "Checks if voter code is valid and has not already voted"
   [req]
   (let [{:keys [voter-code election]} (:params req)]
-    (if-let [voter (db-tx db/get-voter-by-code {:code (str/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
+    (if-let [voter (db-tx db/get-voter-by-code {:code (string/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
                                                 :election election})]
       (if (nil? (db-tx db/get-voter-vote {:id (:id voter)}))
         (response/ok {:id (:id voter)})
@@ -45,10 +45,10 @@
   (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number
                                                :election election})]
     (let [code (:code voter)
-          voting-code (subs (str/replace (str/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)]
+          voting-code (subs (string/replace (string/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)]
       (response/ok {:ok (send-code phone-number voting-code)}))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
-          voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
+          voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
                                :phone phone-number
                                :admin false
@@ -75,7 +75,6 @@
                                       :election election})
         (response/ok {:vote vote}))
       (response/conflict))))
-
 
 (defroutes api-routes
   (context "/api" []

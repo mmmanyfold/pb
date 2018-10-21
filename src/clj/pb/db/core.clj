@@ -10,9 +10,7 @@
            java.sql.Array
            clojure.lang.IPersistentMap
            clojure.lang.IPersistentVector
-           [java.sql
-            BatchUpdateException
-            PreparedStatement]))
+           [java.sql BatchUpdateException PreparedStatement]))
 
 (defstate ^:dynamic *db*
   :start (conman/connect! {:jdbc-url (env :database-url)})
