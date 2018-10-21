@@ -71,7 +71,7 @@
                          :on-change (fn [e]
                                       (let [input (-> e .-target .-value)]
                                         (reset! additionalId input)))}]]])
-                   [:br]
+                   [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid student ID will not be counted."]]
                    [:input.form-control
                     {:type "text"
                      :placeholder "Phone Number"
@@ -81,7 +81,7 @@
                                   (let [input (-> e .-target .-value)]
                                     (reset! phone-number input)))}]
                    [:h4 "A text message with an 8-digit voting code will be sent to this phone number."]
-                   [:p [:small "Your phone number will NEVER be shared and will automatically get deleted after this election."]]
+                   [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
                    [:a {:on-click #(check-code @phone-number)}
                     [:input#send-code
                      {:type "submit"
