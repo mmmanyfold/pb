@@ -1,6 +1,6 @@
 (ns pb.routes.api
   (:require [pb.db.core :refer [*db*] :as db])
-            [compojure.core :refer [context defroutes GET POST]]
+  (:require [compojure.core :refer [context defroutes GET POST]]
             [compojure.coercions :refer [as-int]]
             [ring.util.http-response :as response]
             [buddy.hashers :as hashers]
@@ -44,10 +44,10 @@
   [additional-id phone-number election]
   (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number
                                                :election election})]
-    (let [code (:code voter)])))
-          voting-code (subs (string/replace (string/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)
+    (let [code (:code voter)
+          voting-code (subs (string/replace (string/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)]
       (send-code phone-number voting-code)
-      (response/ok)
+      (response/ok))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
@@ -57,7 +57,7 @@
                                :code code
                                :election election})
       (send-code phone-number voting-code)
-      (response/ok))
+      (response/ok))))
 
 (defn handle-voter-code-from-ui
   [req]
