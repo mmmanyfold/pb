@@ -148,15 +148,20 @@ header {
     color: #FCB733; }
   .voting-code-view .input-group {
     margin-top: 2em; }
+  .voting-code-view p {
+    line-height: 1em; }
   .voting-code-view #voter-auth-form {
-    width: 350px;
+    width: 292px;
     margin: 0 auto; }
   .voting-code-view select#campus {
     margin-right: 0.5em;
     margin-bottom: 10px;
-    width: 140px; }
+    width: 140px;
+    height: inherit;
+    border-color: #739F3E;
+    border-width: 1.5px; }
   .voting-code-view .form-control {
-    width: inherit; }
+    width: 100%; }
   .voting-code-view .form-control:focus {
     box-shadow: 0; }
   .voting-code-view input[type="text"]::-webkit-outer-spin-button, .voting-code-view input[type="text"]::-webkit-inner-spin-button {
@@ -164,8 +169,9 @@ header {
     margin: 0; }
   .voting-code-view input[type="text"] {
     -moz-appearance: textfield;
-    font-size: 2em;
+    font-size: 1.5em;
     border-color: #739F3E;
+    border-width: 1.5px;
     margin-bottom: 10px; }
   .voting-code-view input[type="submit"] {
     background-color: #739F3E;
