@@ -40,9 +40,7 @@
 (rf/reg-event-db
   :clear
   (fn [db [_ db-key]]
-    (cond
-      (instance? Keyword db-key) (assoc db db-key nil)
-      (instance? PersistentVector db-key) (assoc-in db db-key nil))))
+    (dissoc db db-key)))
 
 (rf/reg-event-db
   :set-active-view
