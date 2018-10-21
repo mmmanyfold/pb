@@ -7,6 +7,7 @@
             [ajax.core :as ajax :refer [GET]]))
 
 (def code (rg/atom nil))
+
 (def error-code (rg/atom nil))
 
 (defn error-handler [response]
@@ -14,25 +15,18 @@
 
 (defn success-handler [response]
   (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals"))
+  (reset! error-code nil)
   (rf/dispatch [:set-voter-id (:id response)]))
 
 (defn check-code [code]
-  (GET (str "/api/checkcode") {:handler success-handler
-                               :error-handler error-handler
-                               :response-format (ajax/json-response-format {:keywords? true})
-                               :format :raw
-                               :params {:voter-code code}}))
-
-
+  (GET (str "/api/checkcode")
+       {:handler success-handler
+        :error-handler error-handler
+        :response-format (ajax/json-response-format {:keywords? true})
+        :format :raw
+        :params {:voter-code code}}))
 
 (defn voting-code-view [election-slug]
-  (rg/create-class
-    {:component-will-unmount
-     (fn []
-       (reset! error-code nil)
-       (reset! code nil))
-     :reagent-render
-     (fn []
        (let [now (js/Date.)
              query (str "{ elections(q: \"fields.shortTitle=" election-slug
                         "\") {
@@ -86,4 +80,4 @@
                [:div.voting-code-view
                 [:h1 (str "Voting ended on "
                           (.format (js/moment endOnline) "dddd, MMMM Do YYYY [at] h:mm a."))]])
-             [loading-component]))))}))
+             [loading-component]))))

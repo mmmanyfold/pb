@@ -17,18 +17,19 @@
                          timeline
                          images { url }
                        }"))]
-      (str "{" (string/join queries) "}")))
+    (str "{" (string/join queries) "}")))
 
 (defn submit-vote []
-  (POST "/api/vote" {:response-format (ajax/json-response-format {:keywords? true})
-                     :format :raw
-                     :params {:voter-id @(rf/subscribe [:voter-id])
-                              :vote @(rf/subscribe [:selected-proposals])}}))
+  (POST "/api/vote"
+        {:response-format (ajax/json-response-format {:keywords? true})
+         :format          :raw
+         :params          {:voter-id @(rf/subscribe [:voter-id])
+                           :vote     @(rf/subscribe [:selected-proposals])}}))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs maxSelection]} @(rf/subscribe [:election-in-view])
-          ids (map #(get-in % [:sys :id]) proposalRefs)
+    (let [{:keys [proposalRefs maxSelection]} election-in-view
+          ids (map #(-> % :sys :id) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
@@ -41,10 +42,10 @@
                                                         " project.")]
           [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
          [:div.tc
-          [:input.submit.mt3 {:on-click #(submit-vote)
+          [:input.submit.mt3 {:on-click submit-vote
                               :disabled (nil? @(rf/subscribe [:selected-proposals]))
-                              :type "submit"
-                              :value "Submit My Vote"}]]
+                              :type     "submit"
+                              :value    "Submit My Vote"}]]
          [:div.proposals.row
           (for [proposal proposals]
             ^{:key (gensym "p-")}
