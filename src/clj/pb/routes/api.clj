@@ -1,6 +1,6 @@
 (ns pb.routes.api
   (:require [pb.db.core :refer [*db*] :as db])
-  (:require [compojure.core :refer [context defroutes GET POST]]
+            [compojure.core :refer [context defroutes GET POST]]
             [compojure.coercions :refer [as-int]]
             [ring.util.http-response :as response]
             [buddy.hashers :as hashers]
