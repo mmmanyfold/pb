@@ -14,7 +14,7 @@
 
 (defn proposal-component [proposal]
   (let [{:keys [title
-                objective
+                shortDescription
                 impact
                 budget
                 timeline
@@ -32,7 +32,7 @@
       [:div.proposal-component.pa4.col-xs-12.col-md-6.col-lg-4
        {:style {:background-color (if @selected? "rgba(115,159,62,0.15)" "white")}}
        [:h2.fw7 title]
-       [:p.f4 objective]
+       [:p.f4 shortDescription]
 
        ;; select/remove buttons
        [:div.tc.mt2.mb3
@@ -48,7 +48,7 @@
            "Remove"])]
 
        ;; expandable details
-       [detail show-impact? impact "Community Impact & Supporting Statistics"]
+       [detail show-impact? impact "Community Impact"]
        [detail show-budget? budget "Budget Breakdown"]
        [detail show-timeline? timeline "Timeline"]
 

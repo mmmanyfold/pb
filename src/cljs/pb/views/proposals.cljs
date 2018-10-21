@@ -11,7 +11,8 @@
                        id
                        "\") {
                          title
-                         objective
+                         shortDescription
+                         longDescription
                          impact
                          budget
                          timeline
@@ -27,7 +28,7 @@
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs maxSelection]} @(rf/subscribe [:election-in-view])
+    (let [{:keys [proposalRefs maxSelection]} election-in-view
           ids (map #(get-in % [:sys :id]) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
