@@ -11,7 +11,8 @@
                        id
                        "\") {
                          title
-                         objective
+                         shortDescription
+                         longDescription
                          impact
                          budget
                          timeline

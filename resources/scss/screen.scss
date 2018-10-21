@@ -188,6 +188,18 @@ header {
   .input-group {
     margin-top: 2em;
   }
+  #voter-auth-form {
+    width: 350px;
+    margin: 0 auto;
+  }
+  select#campus {
+    margin-right: 0.5em;
+    margin-bottom: 10px;
+    width: 140px;
+  }
+  .form-control {
+    width: inherit;
+  }
   .form-control:focus {
     box-shadow: 0;
   }
@@ -199,7 +211,6 @@ header {
     -moz-appearance: textfield;
     font-size: 2em;
     border-color: $green;
-    margin-right: 0.25em;
     margin-bottom: 10px;
   }
   input[type="submit"] {
