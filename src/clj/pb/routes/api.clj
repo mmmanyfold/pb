@@ -31,8 +31,9 @@
 (defn check-voter-code
   "Checks if voter code is valid and has not already voted"
   [req]
-  (let [{:keys [voter-code]} (:params req)]
-    (if-let [voter (db-tx db/get-voter-by-code {:code (str/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))})]
+  (let [{:keys [voter-code election]} (:params req)]
+    (if-let [voter (db-tx db/get-voter-by-code {:code (str/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
+                                                :election election})]
       (if (nil? (db-tx db/get-voter-vote {:id (:id voter)}))
         (response/ok {:id (:id voter)})
         (response/conflict))
@@ -40,39 +41,38 @@
 
 (defn handle-voter-code
   "Creates voter code for a new phone number, or returns existing voter ID"
-  [phone-number & [body]]
-  (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number})]
+  [additional-id phone-number election]
+  (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number
+                                               :election election})]
     (let [code (:code voter)
-          voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
+          voting-code (subs (str/replace (str/replace code "pbkdf.2+sha3_256" "") "$" "") 0 8)]
       (response/ok {:ok (send-code phone-number voting-code)}))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (str/replace (str/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-      (db-tx db/create-voter! {:phone phone-number
+      (db-tx db/create-voter! {:additional_id additional-id
+                               :phone phone-number
                                :admin false
                                :is_active true
-                               :code code})
+                               :code code
+                               :election election})
       (response/ok {:ok (send-code phone-number voting-code)}))))
 
 (defn handle-voter-code-from-ui
   [req]
-  (let [phone-number (get-in req [:params :phone-number])]
-    (handle-voter-code phone-number)))
-
-(defn handle-voter-code-from-sms
-  [req]
-  (let [{:keys [From Body]} (:params req)]
-    ;TODO: use election name from Body ?
-    (handle-voter-code From)))
+  (let [{:keys [additional-id phone-number election]} (:body req)]
+    (handle-voter-code additional-id phone-number election)))
 
 (defn handle-vote
   "Creates voter-vote from voter id and selection"
   [req]
-  (let [{:keys [voter-id vote]} (:params req)
+  (let [{:keys [voter-id vote election]} (:params req)
         voter-id (int (as-int voter-id))]
     (if (nil? (db-tx db/get-voter-vote {:id voter-id}))
-      (let [vote-id (:id (db-tx db/create-vote! {:vote vote}))]
+      (let [vote-id (:id (db-tx db/create-vote! {:vote vote
+                                                 :election election}))]
         (db-tx db/create-voter-vote! {:voter_id voter-id
-                                      :vote_id vote-id})
+                                      :vote_id vote-id
+                                      :election election})
         (response/ok {:vote vote}))
       (response/conflict))))
 
@@ -80,6 +80,5 @@
 (defroutes api-routes
   (context "/api" []
     (GET "/checkcode" [] check-voter-code)
-    (POST "/votercode/:phone-number" [] handle-voter-code-from-ui)
-    (POST "/votercode" [] handle-voter-code-from-sms)
+    (POST "/votercode" [] handle-voter-code-from-ui)
     (POST "/vote" [] handle-vote)))

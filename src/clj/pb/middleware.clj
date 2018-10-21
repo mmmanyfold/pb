@@ -13,7 +13,7 @@
             [pb.config :refer [env]]
             [ring-ttl-session.core :refer [ttl-memory-store]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
-            [ring.middleware.json :refer [wrap-json-response]]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [buddy.auth.accessrules :refer [restrict]]
             [buddy.auth :refer [authenticated?]]
@@ -122,6 +122,7 @@
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
       wrap-json-response
+      (wrap-json-body {:keywords? true})
       wrap-auth
       wrap-webjars
       (wrap-defaults

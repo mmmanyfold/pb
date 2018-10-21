@@ -24,13 +24,17 @@
       (jdbc/db-set-rollback-only! t-conn)
       (let [code (hashers/derive "1234567890" {:alg :pbkdf2+sha3_256})]
         (is (= 1 (db/create-voter!
-                   {:phone      "1234567890"
+                   {:additional_id nil
+                    :phone      "1234567890"
                     :admin      false
                     :is_active  true
-                    :code code})))
+                    :code code
+                    :election "fakeelection"})))
         (is (= "1234567890"
-               (:phone (db/get-voter-by-code {:code (str "pbkdf2+sha3_256$" (subs (str/replace code "pbkdf2+sha3_256$" "") 0 8) "%")}))))
+               (:phone (db/get-voter-by-code {:code (str "pbkdf2+sha3_256$" (subs (str/replace code "pbkdf2+sha3_256$" "") 0 8) "%")
+                                              :election "fakeelection"}))))
         (is (= "1234567890"
-               (:phone (db/get-voter-by-phone {:phone "1234567890"}))))
+               (:phone (db/get-voter-by-phone {:phone "1234567890"
+                                               :election "fakeelection"}))))
         (is (= "1234567890"
                (:phone (db/get-voter-by-id {:id 1})))))))
