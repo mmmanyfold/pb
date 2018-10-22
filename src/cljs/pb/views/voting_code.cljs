@@ -56,6 +56,7 @@
                        sys { id }}
                    }}")]
     (rf/dispatch [:get-contentful-data :election-in-view query :election])
+    (reset! code-sent? false)
     (fn []
       (if-let [{additionalIdLabel :additionalIdLabel
                startOnline :startOnline
@@ -90,7 +91,7 @@
         campus (rg/atom "Campus:")]
     (fn []
       [:div
-       [:h1 "Generate your unique voting code"]
+       [:h1 "Create your unique voting code"]
        [:form.voter-auth-form
         (when-not (nil? additionalIdLabel)
           [:div.input-group.flexrow-wrap
@@ -110,8 +111,8 @@
               :value @additionalId
               :on-change (fn [e]
                            (let [input (-> e .-target .-value)]
-                             (reset! additionalId input)))}]]])
-        [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid student ID will not be counted."]]
+                             (reset! additionalId input)))}]]
+           [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid student ID will not be counted."]]])
         [:input.form-control
          {:type "text"
           :placeholder "Enter Phone Number"
@@ -139,15 +140,18 @@
           {:type "button"
            :value "SEND MY CODE"
            :disabled (or (< (count @phone-number-match) 10)
+                         (not= @phone-number @phone-number-match)
                          (when-not config/debug?
                            (nil? @(rf/subscribe [:captcha-passed])))
-                         (< (count @additionalId) 9)
-                         (= @campus "Campus:")
-                         (not= @phone-number @phone-number-match))}]]]])))
+                         (when-not (nil? additionalIdLabel)
+                           (< (count @additionalId) 9)
+                           (= @campus "Campus:")))}]]]])))
 
 (defn check-code-component [id]
   [:div
-   [:h1 "Enter your code:"]
+   [:br]
+   [:h2 "Check your text messages!"]
+   [:h1 "Enter the 8-digit code:"]
    [:form.voter-auth-form
     [:div.flex-row-wrap
      [:input.form-control
