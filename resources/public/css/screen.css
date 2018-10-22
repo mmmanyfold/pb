@@ -10,18 +10,21 @@ h1 {
 a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0; }
 
-input.submit, button {
+button, input, optgroup, select, textarea {
+  font-family: 'Roboto Condensed'; }
+
+input[type="submit"], input[type="button"], button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
   border-radius: 0.25rem;
   color: white;
   padding: 0.5em 0.6em;
   cursor: pointer; }
-  input.submit:disabled, button:disabled {
+  input[type="submit"]:disabled, input[type="button"]:disabled, button:disabled {
     background-color: #AAA;
     border-color: #AAA;
     cursor: not-allowed; }
-  input.submit:active, button:active {
+  input[type="submit"]:active, input[type="button"]:active, button:active {
     border: none; }
 
 .flexrow-wrap {
@@ -57,7 +60,7 @@ header {
     border-color: #739F3E; }
   header .nav-item {
     padding-top: 0.3em;
-    border-color: transparent;
+    border-color: rgba(0, 0, 0, 0);
     text-decoration: none;
     font-weight: 700;
     color: inherit; }
@@ -173,6 +176,9 @@ header {
     border-color: #739F3E;
     border-width: 1.5px;
     margin-bottom: 10px; }
+  .voting-code-view select {
+    font-size: 1em;
+    font-weight: bold; }
   .voting-code-view input[type="button"] {
     background-color: #739F3E;
     border-color: #739F3E;
