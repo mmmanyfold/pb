@@ -7,15 +7,12 @@
             [ajax.core :as ajax :refer [GET POST]]
             [pb.config :as config]))
 
-(def phone-number0 (rg/atom nil))
-(def phone-number (rg/atom nil))
 (def code (rg/atom nil))
-(def additionalId (rg/atom nil))
 (def error-code (rg/atom nil))
 (def code-sent? (rg/atom false))
+
 (declare send-code-component)
 (declare check-code-component)
-
 
 (defn error-handler [response]
   (reset! error-code (:status response)))
@@ -87,57 +84,66 @@
 
 
 (defn send-code-component [additionalIdLabel id]
-  [:div
-   [:h1 "Generate your unique voting code:"]
-   [:form.voter-auth-form
-    (when-not (nil? additionalIdLabel)
-      [:div.input-group.flexrow-wrap
-       [:div.input-group-prepend
-        [:select {:id "campus" :class "form-control" :name "campus" :placeholder "Campus"}
-         [:option {:default-value :disabled} "Campus"]
-         [:option {:value "cudenver"} "CU Denver"]
-         [:option {:value "ccd"} "CCD"]
-         [:option {:value "msu"} "MSU"]]
+  (let [phone-number (rg/atom "")
+        phone-number-match (rg/atom "")
+        additionalId (rg/atom "")
+        campus (rg/atom "Campus:")]
+    (fn []
+      [:div
+       [:h1 "Generate your unique voting code"]
+       [:form.voter-auth-form
+        (when-not (nil? additionalIdLabel)
+          [:div.input-group.flexrow-wrap
+           [:div.input-group-prepend
+            [:select {:id "campus" :class "form-control" :name "campus"
+                      :on-change (fn [e]
+                                   (let [input (-> e .-target .-value)]
+                                     (reset! campus input)))}
+             [:option {:default-value :disabled} "Campus:"]
+             [:option {:value "cudenver"} "CU Denver"]
+             [:option {:value "ccd"} "CCD"]
+             [:option {:value "msu"} "MSU"]]
+            [:input.form-control
+             {:type "text"
+              :placeholder "Student ID"
+              :maxLength 10
+              :value @additionalId
+              :on-change (fn [e]
+                           (let [input (-> e .-target .-value)]
+                             (reset! additionalId input)))}]]])
+        [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid student ID will not be counted."]]
         [:input.form-control
          {:type "text"
-          :placeholder "Student ID"
+          :placeholder "Enter Phone Number"
           :maxLength 10
-          :value @additionalId
+          :value @phone-number
           :on-change (fn [e]
                        (let [input (-> e .-target .-value)]
-                         (reset! additionalId input)))}]]])
-    [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid student ID will not be counted."]]
-    [:input.form-control
-     {:type "text"
-      :placeholder "Enter Phone Number"
-      :maxLength 10
-      :value @phone-number0
-      :on-change (fn [e]
-                   (let [input (-> e .-target .-value)]
-                     (reset! phone-number0 input)))}]
+                         (reset! phone-number input)))}]
 
-    [:input.form-control
-     {:type "text"
-      :placeholder "Verify Phone Number"
-      :maxLength 10
-      :value @phone-number
-      :on-change (fn [e]
-                   (let [input (-> e .-target .-value)]
-                     (reset! phone-number input)))}]
+        [:input.form-control
+         {:type "text"
+          :placeholder "Verify Phone Number"
+          :maxLength 10
+          :value @phone-number-match
+          :on-change (fn [e]
+                       (let [input (-> e .-target .-value)]
+                         (reset! phone-number-match input)))}]
 
-    [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
-    [:p [:small "Your phone number is NEVER shared and will be deleted automatically after this election."]]
-    (when-not config/debug?
-      [captcha-component])
-    [:a {:on-click #(send-code @additionalId @phone-number id)}
-     [:input#send-code
-      {:type "button"
-       :value "SEND MY CODE"
-       :disabled (or (< (count @phone-number) 10)
-                     (when-not config/debug?
-                       (nil? @(rf/subscribe [:captcha-passed])))
-                     (< (count @additionalId) 9)
-                     (not= @phone-number0 @phone-number))}]]]])
+        [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
+        [:p [:small "Your phone number is NEVER shared and will be deleted automatically after this election."]]
+        (when-not config/debug?
+          [captcha-component])
+        [:a {:on-click #(send-code @additionalId @phone-number-match id)}
+         [:input#send-code
+          {:type "button"
+           :value "SEND MY CODE"
+           :disabled (or (< (count @phone-number-match) 10)
+                         (when-not config/debug?
+                           (nil? @(rf/subscribe [:captcha-passed])))
+                         (< (count @additionalId) 9)
+                         (= @campus "Campus:")
+                         (not= @phone-number @phone-number-match))}]]]])))
 
 (defn check-code-component [id]
   [:div

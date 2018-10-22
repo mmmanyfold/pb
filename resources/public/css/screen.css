@@ -10,6 +10,9 @@ h1 {
 a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0; }
 
+button, input, optgroup, select, textarea {
+  font-family: 'Roboto Condensed'; }
+
 input[type="submit"], input[type="button"], button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
@@ -173,6 +176,9 @@ header {
     border-color: #739F3E;
     border-width: 1.5px;
     margin-bottom: 10px; }
+  .voting-code-view select {
+    font-size: 1em;
+    font-weight: bold; }
   .voting-code-view input[type="button"] {
     background-color: #739F3E;
     border-color: #739F3E;
