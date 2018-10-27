@@ -65,12 +65,14 @@
 (defn handle-voter-code
   "Creates voter code for a new phone number, or returns existing voter ID"
   [additional-id phone-number election]
-  (if-let [voter (db-tx db/get-voter-by-phone {:phone phone-number
+  (if-let [voter (db-tx db/get-voter-by-phone {:phone    phone-number
                                                :election election})]
-    (let [code (:code voter)
-          voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
-      (send-code phone-number voting-code)
-      (response/ok {:message "Voting code sent"}))
+    (if (db-tx db/get-voter-vote {:id (:id voter)})
+      (response/conflict {:message "Already voted"})
+      (let [code (:code voter)
+            voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
+        (send-code phone-number voting-code)
+        (response/ok {:message "Voting code sent"})))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
