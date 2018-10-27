@@ -34,8 +34,8 @@
 
   (defroute "/:election/proposals" {:as params}
             (if @(rf/subscribe [:voter-id])
-              (set! (.. js/window -location -hash) (str "/" (:election params)))
-              (rf/dispatch [:set-active-view :proposals-view (:election params)])))
+              (rf/dispatch [:set-active-view :proposals-view (:election params)])
+              (set! (.. js/window -location -hash) (str "/" (:election params)))))
 
   (defroute "/404" []
             (rf/dispatch [:set-active-view :404]))
