@@ -37,12 +37,22 @@
 (defn send-code [additional-id phone-number election]
   (POST "/api/votercode"
        {:handler send-code-success-handler
+        :error-handler error-handler
         :format (ajax/json-request-format)
         :params {:additional-id additional-id
                  :election election
                  :phone-number phone-number}}))
 
+(defn error-component []
+  (when-not (nil? @error-code)
+    (if (= @error-code 404)
+      [:div.error.not-found
+       "The voting code you entered is not valid. Please ensure the code is entered correctly, or follow the steps above to get your unique code."]
+      [:div.error.already-voted
+       "We already got your vote!"])))
+
 (defn voting-code-view [election-slug]
+  (reset! error-code nil)
   (let [now (js/Date.)
         query (str "{ elections(q: \"fields.shortTitle=" election-slug
                    "\") {
@@ -145,7 +155,8 @@
                            (nil? @(rf/subscribe [:captcha-passed])))
                          (when-not (nil? additionalIdLabel)
                            (< (count @additionalId) 9)
-                           (= @campus "Campus:")))}]]]])))
+                           (= @campus "Campus:")))}]]]
+       [error-component]])))
 
 (defn check-code-component [id]
   [:div
@@ -168,9 +179,4 @@
        {:type "button"
         :value "CONTINUE"
         :disabled (< (count @code) 8)}]]]]
-   (when-not (nil? @error-code)
-     (if (= @error-code 404)
-       [:div.error.not-found
-        "The voting code you entered is not valid. Please ensure the code is entered correctly, or follow the steps above to get your unique code."]
-       [:div.error.already-voted
-        "We already got your vote!"]))])
+   [error-component]])
