@@ -84,7 +84,7 @@
 (defn handle-voter-code-from-ui
   [req]
   (try
-    (let [{:keys [additional-id phone-number election]} (check-and-throw ::handle-voter-code (:body req))]
+    (let [{:keys [additional-id phone-number election]} (check-and-throw ::handle-code (:body req))]
       (handle-voter-code additional-id phone-number election))
     (catch Exception e
       (prn (.getMessage e))
