@@ -26,7 +26,8 @@
                            :election some?))
 
 (s/def ::handle-code (s/cat :phone-number some?
-                            :election some?))
+                            :election some?
+                            :additional-id some?))
 
 (s/def ::handle-vote (s/cat :voter-id some?
                             :vote some?
@@ -95,7 +96,7 @@
   [req]
   (try
     (let [{:keys [voter-id vote election]} (check-and-throw ::handle-vote (:params req))
-          voter-id (int (as-int voter-id))]
+          voter-id (as-int voter-id)]
       (if (nil? (db-tx db/get-voter-vote {:id voter-id}))
         (let [vote-id (:id (db-tx db/create-vote! {:vote vote
                                                    :election election}))]
