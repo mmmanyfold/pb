@@ -11,12 +11,11 @@
   (fn [_ _]
     db/default-db))
 
-
 (rf/reg-event-fx
   :get-contentful-data
   (fn [{db :db} [_ db-key query space]]
     (when-not (db-key db)
-      (let [endpoint "http://45.55.175.107:5000/graphql/"]
+      (let [endpoint "https://mmmanyfold.tech/graphql/"]
         {:db         db
          :http-xhrio {:method          :get
                       :format          (ajax/json-request-format)
