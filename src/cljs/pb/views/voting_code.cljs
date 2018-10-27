@@ -18,9 +18,9 @@
   (reset! error-code (:status response)))
 
 (defn check-code-success-handler [response]
-  (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals"))
+  (rf/dispatch [:set-voter-id (:id response)])
   (reset! error-code nil)
-  (rf/dispatch [:set-voter-id (:id response)]))
+  (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals")))
 
 (defn check-code [code election]
   (GET "/api/checkcode"
