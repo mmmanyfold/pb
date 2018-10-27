@@ -1,24 +1,18 @@
 -- :name create-voter! :! :n
 -- :doc creates a new voter record
 INSERT INTO voters
-(phone, admin, is_active, code)
-VALUES (:phone, :admin, :is_active, :code)
-
--- :name update-voter! :! :n
--- :doc updates an existing voter record
-UPDATE voters
-SET first_name = :first_name, last_name = :last_name, email = :email
-WHERE id = :id
+(additional_id, phone, admin, is_active, code, election)
+VALUES (:additional_id, :phone, :admin, :is_active, :code, :election)
 
 -- :name get-voter-by-phone :? :1
--- :doc retrieves a voter record given the id
+-- :doc retrieves a voter record given the phone number and election
 SELECT * FROM voters
-WHERE phone = :phone
+WHERE phone = :phone AND election = :election
 
 -- :name get-voter-by-code :? :1
--- :doc retrives a voter record given the voter code
+-- :doc retrives a voter record given the voter code and election
 SELECT * FROM voters
-WHERE code LIKE :code
+WHERE code LIKE :code AND election = :election
 
 -- :name get-voter-by-id :? :1
 -- :doc retrieves a voter record given the id
@@ -33,19 +27,20 @@ WHERE id = :id
 -- :name create-vote! :<! :1
 -- :doc creates a new vote record
 INSERT INTO votes
-(vote)
-VALUES (:vote)
+(vote, election)
+VALUES (:vote, :election)
 RETURNING *
 
 -- :name get-votes :? :1
--- :doc retrieves all votes
+-- :doc retrieves all votes for an election
 SELECT * FROM votes
+WHERE election = :election
 
 -- :name create-voter-vote! :! :n
 -- :doc creates new voter-vote record
 INSERT INTO voter_votes
-(voter_id, vote_id)
-VALUES (:voter_id, :vote_id)
+(voter_id, vote_id, election)
+VALUES (:voter_id, :vote_id, :election)
 
 -- :name get-voter-vote :? :1
 -- :doc gets voter-vote given the voter id

@@ -10,18 +10,21 @@ h1 {
 a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0; }
 
-input[type="submit"], button {
+button, input, optgroup, select, textarea {
+  font-family: 'Roboto Condensed'; }
+
+input[type="submit"], input[type="button"], button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
   border-radius: 0.25rem;
   color: white;
   padding: 0.5em 0.6em;
   cursor: pointer; }
-  input[type="submit"]:disabled, button:disabled {
+  input[type="submit"]:disabled, input[type="button"]:disabled, button:disabled {
     background-color: #AAA;
     border-color: #AAA;
     cursor: not-allowed; }
-  input[type="submit"]:active, button:active {
+  input[type="submit"]:active, input[type="button"]:active, button:active {
     border: none; }
 
 .flexrow-wrap {
@@ -148,15 +151,20 @@ header {
     color: #FCB733; }
   .voting-code-view .input-group {
     margin-top: 2em; }
-  .voting-code-view #voter-auth-form {
-    width: 350px;
+  .voting-code-view p {
+    line-height: 1em; }
+  .voting-code-view .voter-auth-form {
+    width: 292px;
     margin: 0 auto; }
   .voting-code-view select#campus {
     margin-right: 0.5em;
     margin-bottom: 10px;
-    width: 140px; }
+    width: 140px;
+    height: inherit;
+    border-color: #739F3E;
+    border-width: 1.5px; }
   .voting-code-view .form-control {
-    width: inherit; }
+    width: 100%; }
   .voting-code-view .form-control:focus {
     box-shadow: 0; }
   .voting-code-view input[type="text"]::-webkit-outer-spin-button, .voting-code-view input[type="text"]::-webkit-inner-spin-button {
@@ -164,19 +172,23 @@ header {
     margin: 0; }
   .voting-code-view input[type="text"] {
     -moz-appearance: textfield;
-    font-size: 2em;
+    font-size: 1.5em;
     border-color: #739F3E;
+    border-width: 1.5px;
     margin-bottom: 10px; }
-  .voting-code-view input[type="submit"] {
+  .voting-code-view select {
+    font-size: 1em;
+    font-weight: bold; }
+  .voting-code-view input[type="button"] {
     background-color: #739F3E;
     border-color: #739F3E;
     letter-spacing: 1px;
     margin-bottom: 10px; }
-    .voting-code-view input[type="submit"]:disabled {
+    .voting-code-view input[type="button"]:disabled {
       background-color: #AAA;
       border-color: #AAA;
       cursor: not-allowed; }
-    .voting-code-view input[type="submit"]:active {
+    .voting-code-view input[type="button"]:active {
       margin: 1px 1px 11px; }
 
 .proposals-view p {

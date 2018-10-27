@@ -64,7 +64,7 @@
    :auto
    {"sassc" {:file-pattern #"\.(scss|sass)$" :paths ["resources/scss"]}}
 
-  :hooks [leiningen.sassc]
+  ;; :hooks [leiningen.sassc]
   :clean-targets ^{:protect false}
   [:target-path [:cljsbuild :builds :app :compiler :output-dir] [:cljsbuild :builds :app :compiler :output-to]]
   :figwheel
@@ -87,6 +87,7 @@
                  :source-map "target/cljsbuild/public/js/app.js.map"
                  :optimizations :advanced
                  :pretty-print false
+                 :closure-defines {goog.DEBUG false}
                  :closure-warnings
                  {:externs-validation :off :non-standard-jsdoc :off}
                  :externs ["react/externs/react.js"]}}}}
@@ -128,7 +129,7 @@
                       :optimizations :none
                       :pretty-print true
                       :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true
-                                        goog.DEBUG false}
+                                        goog.DEBUG true}
                       :preloads [day8.re-frame-10x.preload]}}}}
 
 

@@ -19,7 +19,11 @@ a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0;
 }
 
-input[type="submit"], button {
+button, input, optgroup, select, textarea {
+  font-family: 'Roboto Condensed';
+}
+
+input[type="submit"], input[type="button"], button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
   border-radius: 0.25rem;
@@ -188,17 +192,23 @@ header {
   .input-group {
     margin-top: 2em;
   }
-  #voter-auth-form {
-    width: 350px;
+  p {
+    line-height: 1em;
+  }
+  .voter-auth-form {
+    width: 292px;
     margin: 0 auto;
   }
   select#campus {
     margin-right: 0.5em;
     margin-bottom: 10px;
     width: 140px;
+    height: inherit;
+    border-color: $green;
+    border-width: 1.5px;
   }
   .form-control {
-    width: inherit;
+    width: 100%;
   }
   .form-control:focus {
     box-shadow: 0;
@@ -209,11 +219,16 @@ header {
   }
   input[type="text"] {
     -moz-appearance: textfield;
-    font-size: 2em;
+    font-size: 1.5em;
     border-color: $green;
+    border-width: 1.5px;
     margin-bottom: 10px;
   }
-  input[type="submit"] {
+  select {
+    font-size: 1em;
+    font-weight: bold;
+  }
+  input[type="button"] {
     background-color: $green;
     border-color: $green;
     letter-spacing: 1px;
