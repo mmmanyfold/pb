@@ -33,7 +33,7 @@
             (rf/dispatch [:clear :captcha-passed]))
 
   (defroute "/:election/proposals" {:as params}
-            (if (nil? @(rf/subscribe [:voter-id]))
+            (if @(rf/subscribe [:voter-id])
               (set! (.. js/window -location -hash) (str "/" (:election params)))
               (rf/dispatch [:set-active-view :proposals-view (:election params)])))
 
