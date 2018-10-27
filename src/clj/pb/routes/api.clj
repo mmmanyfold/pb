@@ -36,8 +36,8 @@
                                                 :election election})]
       (if (nil? (db-tx db/get-voter-vote {:id (:id voter)}))
         (response/ok {:id (:id voter)})
-        (response/conflict))
-      (response/not-found))))
+        (response/conflict {:message "Already voted"}))
+      (response/not-found {:message "Voting code does not exist"}))))
 
 (defn handle-voter-code
   "Creates voter code for a new phone number, or returns existing voter ID"
@@ -47,7 +47,7 @@
     (let [code (:code voter)
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (send-code phone-number voting-code)
-      (response/ok))
+      (response/ok {:message "Voting code sent"}))
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
@@ -57,7 +57,7 @@
                                :code code
                                :election election})
       (send-code phone-number voting-code)
-      (response/ok))))
+      (response/ok {:message "Voting code sent"}))))
 
 (defn handle-voter-code-from-ui
   [req]
@@ -75,8 +75,8 @@
         (db-tx db/create-voter-vote! {:voter_id voter-id
                                       :vote_id vote-id
                                       :election election})
-        (response/ok {:vote vote}))
-      (response/conflict))))
+        (response/ok {:message "Vote registered"}))
+      (response/conflict {:message "Already voted"}))))
 
 (defroutes api-routes
   (context "/api" []

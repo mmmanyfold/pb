@@ -60,7 +60,7 @@ header {
     border-color: #739F3E; }
   header .nav-item {
     padding-top: 0.3em;
-    border-color: rgba(0, 0, 0, 0);
+    border-color: transparent;
     text-decoration: none;
     font-weight: 700;
     color: inherit; }

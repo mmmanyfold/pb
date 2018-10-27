@@ -25,7 +25,8 @@
         {:response-format (ajax/json-response-format {:keywords? true})
          :format          :raw
          :params          {:voter-id @(rf/subscribe [:voter-id])
-                           :vote     @(rf/subscribe [:selected-proposals])}}))
+                           :vote     @(rf/subscribe [:selected-proposals])
+                           :election @(rf/subscribe [:election-slug])}}))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
