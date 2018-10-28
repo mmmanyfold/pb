@@ -1,1 +1,1 @@
-web: java -cp target/uberjar/pb.jar clojure.main -m pb.core
+web: java -jar target/uberjar/pb.jar migrate && java -cp target/uberjar/pb.jar clojure.main -m pb.core
