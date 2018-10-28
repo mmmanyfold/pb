@@ -42,12 +42,12 @@
             [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
                                                           " projects."
                                                           " project.")]
-            [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
+            [:li "Click the \"Submit My Ballot\" button when you're ready to submit."]]
            [:div.tc
             [:input.submit.mt3 {:on-click submit-vote
                                 :disabled (nil? @(rf/subscribe [:selected-proposals]))
                                 :type     "submit"
-                                :value    "Submit My Vote"}]]
+                                :value    "Submit My Ballot"}]]
            [:div.proposals.row
             (for [proposal proposals]
               ^{:key (gensym "p-")}
