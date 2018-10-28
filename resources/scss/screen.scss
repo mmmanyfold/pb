@@ -40,6 +40,15 @@ input[type="submit"], input[type="button"], button {
   }
 }
 
+.flexrow {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row nowrap;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+
 .flexrow-wrap {
   display: -webkit-flex;
   display: flex;
@@ -296,6 +305,45 @@ header {
         &:hover {
           background-color: $lightgray;
         }
+      }
+      .checkbox {
+        //margin: 0 0 1em 1em;
+        //position: absolute;
+        //right: 1.65em;
+        //top: 0;
+        //@media screen and (min-width: 600px) {
+        //  right: 2.6em;
+        //  top: 0.9em;
+        //}
+      }
+      .checkbox input {
+        display: none;
+        margin: 4px 0 0;
+        line-height: normal;
+        box-sizing: border-box;
+        border-radius: 0;
+      }
+      .checkbox label {
+        position: relative;
+        cursor: pointer;
+      }
+      .checkbox label:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: .0625rem solid #CCCCCC;
+        border-radius: .125rem;
+        box-shadow: 0 0rem 0.1563rem rgba(0, 0, 0, 0.5);
+      }
+      .checkbox input:checked + label:before {
+        content: "\2713";
+        font-size: 3.2rem;
+        color: #8e4f78;
+        text-align: center;
+        line-height: 2.7rem;
+        text-shadow: .0625rem .0625rem .0625rem rgba(0, 0, 0, .2);
       }
       .thumbnail-wrapper {
         position: relative;
