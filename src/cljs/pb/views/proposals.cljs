@@ -34,7 +34,8 @@
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
-        (let [many? (> (count proposals) 12)]
+        (let [many? (> (count proposals) 12)
+              selected-proposals @(rf/subscribe [:selected-proposals])]
           [:div.proposals-view.mt5
            [:h2 "Instructions:"]
            [:ol
@@ -45,7 +46,8 @@
             [:li "Click the \"Submit My Ballot\" button when you're ready to submit."]]
            [:div.tc
             [:input.submit.mt3 {:on-click submit-vote
-                                :disabled (nil? @(rf/subscribe [:selected-proposals]))
+                                :disabled (or (nil? selected-proposals)
+                                              (empty? selected-proposals))
                                 :type     "submit"
                                 :value    "Submit My Ballot"}]]
            [:div.proposals.row
