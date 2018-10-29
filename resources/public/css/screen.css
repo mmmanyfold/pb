@@ -27,6 +27,14 @@ input[type="submit"], input[type="button"], button {
   input[type="submit"]:active, input[type="button"]:active, button:active {
     border: none; }
 
+.flexrow {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row nowrap;
+  -webkit-justify-content: space-between;
+  justify-content: space-between; }
+
 .flexrow-wrap {
   display: -webkit-flex;
   display: flex;
@@ -236,6 +244,31 @@ header {
       border: 1px solid #959991; }
       .proposals-view .proposals .proposal-component button.remove:hover {
         background-color: #F2F2F2; }
+    .proposals-view .proposals .proposal-component .checkbox input {
+      display: none;
+      margin: 4px 0 0;
+      line-height: normal;
+      box-sizing: border-box;
+      border-radius: 0; }
+    .proposals-view .proposals .proposal-component .checkbox label {
+      position: relative;
+      cursor: pointer; }
+    .proposals-view .proposals .proposal-component .checkbox label:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: .0625rem solid #CCCCCC;
+      border-radius: .125rem;
+      box-shadow: 0 0rem 0.1563rem rgba(0, 0, 0, 0.5); }
+    .proposals-view .proposals .proposal-component .checkbox input:checked + label:before {
+      content: "\2713";
+      font-size: 3.2rem;
+      color: #8e4f78;
+      text-align: center;
+      line-height: 2.7rem;
+      text-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0, 0, 0, 0.2); }
     .proposals-view .proposals .proposal-component .thumbnail-wrapper {
       position: relative; }
       .proposals-view .proposals .proposal-component .thumbnail-wrapper img {
