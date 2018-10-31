@@ -6,18 +6,10 @@
             [ajax.core :as ajax :refer [POST]]))
 
 (defn query [ids]
-  (let [queries (for [id ids]
-                  (str "p" id ": proposalAS(q: \"sys.id="
-                       id
-                       "\") {
-                         title
-                         shortDescription
-                         longDescription
-                         impact
-                         budget
-                         timeline
-                         images { url }
-                       }"))]
+  (let [queries
+        (for [id ids]
+          (str "p" id ": proposalAS(q: \"sys.id="
+               id "\") { title shortDescription longDescription impact budget timeline images { url }}"))]
     (str "{" (string/join queries) "}")))
 
 (defn submit-vote []
