@@ -7,7 +7,7 @@
     (fn [active-view election-slug count]
       [:header {:class "fixed w-100 pt2 pt3-ns tracked bg-white"}
        [rc/h-box
-        :class "nav-wrapper mh3 mh4-ns bb bw1 pb2 pb3-ns ttu"
+        :class "nav-wrapper mh3 mh4-ns bb bw1 pb2 ttu"
         :justify :between
         :children [[:div {:class "flex"}
                     [:a {:href "/#/"

@@ -23,6 +23,7 @@
     (let [elections @(rf/subscribe [db-key])]
       [:div
        [:h1 "Find Your Election:"]
-       (for [election elections]
-         ^{:key (gensym "election-")}
-         [election-component election])])))
+       [:div.flex-l.justify-between
+        (for [election elections]
+          ^{:key (gensym "election-")}
+          [election-component election])]])))
