@@ -109,6 +109,13 @@ header {
   }
 }
 
+.vote-in-person {
+  img {
+    width: 100%;
+    max-width: 900px;
+  }
+}
+
 .election-component {
   width: 49%;
   border-color: $purple;
@@ -193,7 +200,7 @@ header {
     width: 165px;
     height: inherit;
     border-color: $green;
-    border-width: 1.5px;
+    border-width: 1px;
   }
   .required {
     margin-left: 0.2em;
@@ -211,7 +218,7 @@ header {
     -moz-appearance: textfield;
     font-size: 1.5em;
     border-color: $green;
-    border-width: 1.5px;
+    border-width: 1px;
     margin-bottom: 10px;
   }
   select {
