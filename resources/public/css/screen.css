@@ -85,6 +85,10 @@ header {
     font-weight: 700;
     font-size: 1.2em; }
 
+.vote-in-person img {
+  width: 100%;
+  max-width: 900px; }
+
 .election-component {
   width: 49%;
   border-color: #8e4f78; }
@@ -153,7 +157,7 @@ header {
     width: 165px;
     height: inherit;
     border-color: #739F3E;
-    border-width: 1.5px; }
+    border-width: 1px; }
   .voting-code-view .required {
     margin-left: 0.2em;
     margin-right: 0.75em;
@@ -167,7 +171,7 @@ header {
     -moz-appearance: textfield;
     font-size: 1.5em;
     border-color: #739F3E;
-    border-width: 1.5px;
+    border-width: 1px;
     margin-bottom: 10px; }
   .voting-code-view select {
     font-size: 1em;

@@ -37,6 +37,9 @@
               (rf/dispatch [:set-active-view :proposals-view (:election params)])
               (set! (.. js/window -location -hash) (str "/" (:election params)))))
 
+  (defroute "/:election/vote-in-person" {:as params}
+            (rf/dispatch [:set-active-view :vote-in-person-view (:election params)]))
+
   (defroute "/404" []
             (rf/dispatch [:set-active-view :404]))
 
