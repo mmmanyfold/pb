@@ -36,6 +36,6 @@
             (let [startDay (.format (js/moment startInPerson) "MMM D, YYYY")
                   endDay (.format (js/moment endInPerson) "MMM D, YYYY")]
               (if (= startDay endDay)
-               (str startDay)
+               startDay
                (str startDay " – " endDay)))
             "Dates Vary")]]]]]]))

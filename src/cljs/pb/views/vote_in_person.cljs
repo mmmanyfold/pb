@@ -25,7 +25,7 @@
              (let [startDay (.format (js/moment startInPerson) "MMM D, YYYY")
                    endDay (.format (js/moment endInPerson) "MMM D, YYYY")]
                (if (= startDay endDay)
-                 [:h3.b (str startDay)]
+                 [:h3.b startDay]
                  [:h3.b (str startDay " – " endDay)]))])]
          [render-markdown votingInPerson]]
         [loading-component]))))
