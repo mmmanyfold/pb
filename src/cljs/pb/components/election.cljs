@@ -11,31 +11,30 @@
                 endInPerson
                 eligibility
                 votingInPerson]} election]
-    [:div.election-component.flexrow-reverse-wrap.ba.bw1.mb4
-     [:div.links.flexcolumn-wrap.w-30-m.w-20-l.f3.f2-ns
-      [:div
+    [:div.election-component.ba.bw1.mb4
+     [:div.pv3.ph4
+      [:h2.mt2.pt1.fw7 title]
+      [:h3.b [render-markdown eligibility]]
+      [:div.links.f3.f2-ns
        [:a.pa3 {:href (str "/#/" shortTitle)}
         [:span.tc
-         "online"
+         "Vote now online*"
          [:br]
          [:h5.f5.f4-ns
-          (let [startDay (.format (js/moment startOnline) "M/D/YY")
-                endDay (.format (js/moment endOnline) "M/D/YY")]
+          (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
+                endDay (.format (js/moment endOnline) "MMM D, YYYY")]
             (if (= startDay endDay)
               (str startDay)
               (str startDay " – " endDay)))]]]]
-      [:div
+      [:p.lh-solid.mt3 "*In order to vote online, you will need a mobile phone with SMS (text messaging)"]
+      [:div.links.f3.f2-ns.mb3
        [:a.pa3 {:href (str "/#/" shortTitle "/in-person")}
         [:span.tc
-         "in person"
+         "How to vote in person"
          [:br]
          [:h5.f5.f4-ns
-          (let [startDay (.format (js/moment startInPerson) "M/D/YY")
-                endDay (.format (js/moment endInPerson) "M/D/YY")]
+          (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
+                endDay (.format (js/moment endOnline) "MMM D, YYYY")]
             (if (= startDay endDay)
               (str startDay)
-              (str startDay " – " endDay)))]]]]]
-     [:div.w-70-m.w-80-l.pv3.ph4
-      [:h2.mt2.fw7 title]
-      [:h3.fw7.mt3 "Eligibility:"]
-      [render-markdown eligibility]]]))
+              (str startDay " – " endDay)))]]]]]]))

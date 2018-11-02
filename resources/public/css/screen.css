@@ -68,7 +68,7 @@ header {
     border-color: #739F3E; }
   header .nav-item {
     padding-top: 0.3em;
-    border-color: transparent;
+    border-color: rgba(0, 0, 0, 0);
     text-decoration: none;
     font-weight: 700;
     color: inherit; }
@@ -76,7 +76,7 @@ header {
     height: 31px; }
   @media screen and (min-width: 550px) {
     header {
-      font-size: 1.4rem; } }
+      font-size: 1.5rem; } }
   @media screen and (max-width: 550px) {
     header .nav-right .subtitle {
       display: none; } }
@@ -86,47 +86,29 @@ header {
     font-size: 1.2em; }
 
 .election-component {
-  border-color: #739F3E; }
+  width: 49%;
+  border-color: #8e4f78; }
   .election-component h2 {
     font-size: 1.9em; }
   .election-component h3 {
     font-size: 1.1em; }
   .election-component ul {
     -webkit-padding-start: 20px; }
-  @media screen and (max-width: 700px) {
-    .election-component div:nth-child(2) {
+  @media screen and (max-width: 950px) {
+    .election-component {
       width: 100%; } }
   .election-component .links {
-    border-top: 0;
-    border-right: 1px solid #739F3E;
-    border-bottom: 0;
-    border-left: 0; }
-    .election-component .links div:first-child {
-      border-bottom: 1px solid #739F3E; }
-    @media screen and (max-width: 700px) {
+    border: 2px solid #739F3E;
+    border-radius: 10px;
+    margin-top: 1em;
+    background-color: rgba(115, 159, 62, 0.85);
+    width: 270px; }
+    @media screen and (min-width: 480px) {
       .election-component .links {
-        width: 100%;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-flex-flow: row nowrap;
-        flex-flow: row nowrap;
-        -webkit-align-items: center;
-        align-items: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-        border-top: 1px solid #739F3E;
-        border-right: 0; }
-        .election-component .links div:first-child {
-          border-bottom: 0;
-          border-right: 1px solid #739F3E; } }
-    .election-component .links div {
-      flex: 1;
-      border-color: #739F3E; }
+        width: 350px; } }
     .election-component .links a {
-      width: 100%;
-      height: 100%;
       text-decoration: none;
-      color: #739F3E;
+      color: white;
       font-weight: 700;
       letter-spacing: 1px;
       display: -webkit-flex;
@@ -144,7 +126,7 @@ header {
   .voting-code-view #g-recaptcha {
     display: inline-block; }
   .voting-code-view .error {
-    width: 300px;
+    width: 330px;
     text-align: center;
     border-radius: 10px;
     padding: 10px;
@@ -159,20 +141,23 @@ header {
     color: #FCB733; }
   .voting-code-view .input-group {
     margin-top: 2em; }
+  .voting-code-view .input-group-prepend {
+    margin-left: 1em; }
   .voting-code-view p {
     line-height: 1em; }
   .voting-code-view .voter-auth-form {
     width: 292px;
     margin: 0 auto; }
   .voting-code-view select#campus {
-    margin-right: 0.5em;
     margin-bottom: 10px;
-    width: 140px;
+    width: 165px;
     height: inherit;
     border-color: #739F3E;
     border-width: 1.5px; }
-  .voting-code-view .form-control {
-    width: 100%; }
+  .voting-code-view .required {
+    margin-left: 0.2em;
+    margin-right: 0.75em;
+    color: red; }
   .voting-code-view .form-control:focus {
     box-shadow: 0; }
   .voting-code-view input[type="text"]::-webkit-outer-spin-button, .voting-code-view input[type="text"]::-webkit-inner-spin-button {
