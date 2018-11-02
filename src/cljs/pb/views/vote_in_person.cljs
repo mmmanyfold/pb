@@ -22,11 +22,10 @@
          [:h5.f5.f4-ns
           (when startInPerson
             [:div
-             "Voting Open: "
              (let [startDay (.format (js/moment startInPerson) "MMM D, YYYY")
                    endDay (.format (js/moment endInPerson) "MMM D, YYYY")]
                (if (= startDay endDay)
-                 (str startDay)
-                 (str startDay " – " endDay)))])]
+                 [:h3.b (str startDay)]
+                 [:h3.b (str startDay " – " endDay)]))])]
          [render-markdown votingInPerson]]
         [loading-component]))))
