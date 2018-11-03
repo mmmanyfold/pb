@@ -2,6 +2,7 @@
   (:require [reagent.core :as rg]
             [re-frame.core :as rf]
             [cljsjs.moment]
+            [clojure.string :as string]
             [pb.components.loading :refer [loading-component]]
             [pb.components.captcha :refer [captcha-component]]
             [ajax.core :as ajax :refer [GET POST]]
@@ -47,7 +48,7 @@
   (when-not (nil? @error-code)
     (if (= @error-code 404)
       [:div.error.not-found
-       "The voting code you entered is not valid. Please ensure the code is entered correctly, or follow the steps above to get your unique code."]
+       "The voting code you entered is not valid. Please ensure the code is entered correctly."]
       [:div.error.already-voted
        "We already got your vote!"])))
 
@@ -95,74 +96,82 @@
 
 
 (defn send-code-component [additionalIdLabel id]
-  (let [phone-number (rg/atom "")
-        phone-number-match (rg/atom "")
+  (let [input-phone1 (rg/atom "")
+        input-phone2 (rg/atom "")
         additionalId (rg/atom "")
         campus (rg/atom "Campus:")]
-    (fn []
-      [:div
-       [:h1 "Create unique voting code"]
-       [:form.voter-auth-form
-        (when-not (nil? additionalIdLabel)
-          [:div
+    (rg/create-class
+      {:component-did-mount
+       (fn []
+         (new js/Cleave "#input-phone1" #js {:phone true :phoneRegionCode "US"})
+         (new js/Cleave "#input-phone2" #js {:phone true :phoneRegionCode "US"}))
+       :reagent-render
+       (fn []
+         [:div
+          [:h1 "Create unique voting code"]
+          [:form.voter-auth-form
+           (when-not (nil? additionalIdLabel)
+             [:div
+              [:div.flexrow.input-group-prepend
+               [:select {:id "campus" :class "form-control" :name "campus"
+                         :on-change (fn [e]
+                                      (let [input (-> e .-target .-value)]
+                                        (reset! campus input)))}
+                [:option {:default-value :disabled} "Campus:"]
+                [:option {:value "cudenver"} "CU Denver"]
+                [:option {:value "ccd"} "CCD"]
+                [:option {:value "msu"} "MSU"]]
+               [:div.required "*"]
+               [:input.form-control
+                {:type "text"
+                 :placeholder "Student ID"
+                 :maxLength 10
+                 :value @additionalId
+                 :on-change (fn [e]
+                              (let [input (-> e .-target .-value)]
+                                (reset! additionalId input)))}]
+               [:div.required "*"]]
+              [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted."]]])
            [:div.flexrow.input-group-prepend
-            [:select {:id "campus" :class "form-control" :name "campus"
-                      :on-change (fn [e]
-                                   (let [input (-> e .-target .-value)]
-                                     (reset! campus input)))}
-             [:option {:default-value :disabled} "Campus:"]
-             [:option {:value "cudenver"} "CU Denver"]
-             [:option {:value "ccd"} "CCD"]
-             [:option {:value "msu"} "MSU"]]
-            [:div.required "*"]
             [:input.form-control
-             {:type "text"
-              :placeholder "Student ID"
-              :maxLength 10
-              :value @additionalId
+             {:id "input-phone1"
+              :type "text"
+              :placeholder "Enter Phone Number"
+              :maxLength 12
+              :value @input-phone1
               :on-change (fn [e]
                            (let [input (-> e .-target .-value)]
-                             (reset! additionalId input)))}]
+                             (reset! input-phone1 input)))}]
             [:div.required "*"]]
-           [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted."]]])
-        [:div.flexrow.input-group-prepend
-         [:input.form-control
-          {:type "text"
-           :placeholder "Enter Phone Number"
-           :maxLength 10
-           :value @phone-number
-           :on-change (fn [e]
-                        (let [input (-> e .-target .-value)]
-                          (reset! phone-number input)))}]
-         [:div.required "*"]]
 
-        [:div.flexrow.input-group-prepend
-         [:input.form-control
-          {:type "text"
-           :placeholder "Verify Phone Number"
-           :maxLength 10
-           :value @phone-number-match
-           :on-change (fn [e]
-                        (let [input (-> e .-target .-value)]
-                          (reset! phone-number-match input)))}]
-         [:div.required "*"]]
+           [:div.flexrow.input-group-prepend
+            [:input.form-control
+             {:id "input-phone2"
+              :type "text"
+              :placeholder "Verify Phone Number"
+              :maxLength 12
+              :value @input-phone2
+              :on-change (fn [e]
+                           (let [input (-> e .-target .-value)]
+                             (reset! input-phone2 input)))}]
+            [:div.required "*"]]
 
-        [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
-        [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
-        (when-not config/debug?
-          [captcha-component])
-        [:a {:on-click #(send-code @additionalId @phone-number-match id)}
-         [:input#send-code
-          {:type "button"
-           :value "SEND MY CODE"
-           :disabled (or (< (count @phone-number-match) 10)
-                         (not= @phone-number @phone-number-match)
-                         (when-not config/debug?
-                           (nil? @(rf/subscribe [:captcha-passed])))
-                         (when-not (nil? additionalIdLabel)
-                           (< (count @additionalId) 9)
-                           (= @campus "Campus:")))}]]]
-       [error-component]])))
+           [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
+           [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
+           (when-not config/debug?
+             [captcha-component])
+           [:a {:on-click #(send-code @additionalId (string/replace @input-phone2 #" " "") id)}
+            [:input#send-code
+             {:type "button"
+              :value "SEND MY CODE"
+              :disabled (or (< (count @input-phone2) 12)
+                            (not= @input-phone1 @input-phone2)
+                            (when-not config/debug?
+                              (nil? @(rf/subscribe [:captcha-passed])))
+                            (when-not (nil? additionalIdLabel)
+                              (< (count @additionalId) 9)
+                              (= @campus "Campus:")))}]]]
+          [error-component]])})))
 
 (defn check-code-component [id]
   [:div
@@ -173,7 +182,7 @@
     [:div.flex-row-wrap
      [:input.form-control
       {:type "text"
-       :placeholder "12345678"
+       :placeholder "xxxxxxxx"
        :maxLength 8
        :value @code
        :on-change (fn [e]
