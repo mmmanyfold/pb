@@ -45,9 +45,9 @@
                      :type "checkbox"
                      :checked (if @selected? @selected? false)
                      :on-change #(if @selected?
-                                   (rf/dispatch [:set-selected-proposals id :remove])
+                                   (rf/dispatch [:update-selected-proposals :remove id])
                                    (when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
-                                     (rf/dispatch [:set-selected-proposals id :add])))}]
+                                     (rf/dispatch [:update-selected-proposals :add id])))}]
             [:label {:class "pl6 pl5-ns"
                      :for id}]]]]
 
@@ -66,12 +66,12 @@
          ;; select/remove buttons
          [:div.tc.mt2.mb3
           [:button.mv2 {:on-click #(when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
-                                     (rf/dispatch [:set-selected-proposals id :add]))
+                                     (rf/dispatch [:update-selected-proposals :add id]))
                         :class (if @selected? "selected" "select")}
            (if @selected? "Selected" "Select")]
           (when @selected?
             [:button.remove.mv2.ml3
-             {:on-click #(rf/dispatch [:set-selected-proposals id :remove])}
+             {:on-click #(rf/dispatch [:update-selected-proposals :remove id])}
              "Remove"])]
 
          ;; expandable details

@@ -15,10 +15,13 @@
 (defn submit-vote []
   (POST "/api/vote"
         {:response-format (ajax/json-response-format {:keywords? true})
+         :handler         #(rf/dispatch :update-selected-proposals :reset)
+         :error-handler   #(rf/dispatch :update-selected-proposals :reset)
+
          :format          :raw
          :params          {:voter-id @(rf/subscribe [:voter-id])
                            :vote     @(rf/subscribe [:selected-proposals])
-                           :election (get-in @(rf/subscribe [:election-in-view]) [:sys :id])}}))
+                           :election (-> @(rf/subscribe [:election-in-view]) :sys :id)}}))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]

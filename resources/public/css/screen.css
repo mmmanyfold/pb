@@ -163,7 +163,7 @@ header {
     margin-right: 0.75em;
     color: red; }
   .voting-code-view .form-control:focus {
-    box-shadow: 0; }
+    box-shadow: none; }
   .voting-code-view input[type="text"]::-webkit-outer-spin-button, .voting-code-view input[type="text"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0; }

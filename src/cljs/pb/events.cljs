@@ -51,11 +51,12 @@
 
 
 (rf/reg-event-db
-  :set-selected-proposals
-  (fn [db [_ proposal set]]
-    (case set
-        :add (update db :selected-proposals conj proposal)
-        :remove (update db :selected-proposals #(remove #{proposal} %)))))
+  :update-selected-proposals
+  (fn [db [_ op proposal]]
+    (case op
+      :reset (assoc db :selected-proposals [])
+      :add (update db :selected-proposals conj proposal)
+      :remove (update db :selected-proposals #(remove #{proposal} %)))))
 
 (rf/reg-event-db
   :set-voter-id

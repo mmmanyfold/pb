@@ -54,7 +54,7 @@
     (let [{:keys [voter-code election]} (check-and-throw ::check-code (:params req))]
       (if-let [voter (db-tx db/get-voter-by-code {:code (string/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
                                                   :election election})]
-        (if (nil? (db-tx db/get-voter-vote {:id (:id voter)}))
+        (if (db-tx db/get-voter-vote {:id (:id voter)})
           (response/ok {:id (:id voter)})
           (response/conflict {:message "Already voted"}))
         (response/not-found {:message "Voting code does not exist"})))

@@ -1,0 +1,1 @@
+ALTER TABLE voters ADD COLUMN campus VARCHAR(50);
