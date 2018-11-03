@@ -177,10 +177,12 @@ header {
     font-size: 1em;
     font-weight: bold; }
   .voting-code-view input[type="button"] {
-    background-color: #739F3E;
+    background-color: rgba(115, 159, 62, 0.85);
     border-color: #739F3E;
     letter-spacing: 1px;
     margin-bottom: 10px; }
+    .voting-code-view input[type="button"]:hover {
+      background-color: #739F3E; }
     .voting-code-view input[type="button"]:disabled {
       background-color: #AAA;
       border-color: #AAA;
@@ -192,11 +194,11 @@ header {
   line-height: 1.4em; }
 
 .proposals-view input.submit {
-  background-color: #8e4f78;
+  background-color: rgba(142, 79, 120, 0.95);
   border-color: #8e4f78;
   font-size: 1.5em; }
-  .proposals-view input.submit:active {
-    margin-bottom: 2px; }
+  .proposals-view input.submit:hover {
+    background-color: #8e4f78; }
   .proposals-view input.submit:disabled {
     background-color: #AAA;
     border-color: #AAA;
@@ -206,11 +208,11 @@ header {
   margin: 0 auto;
   margin-top: 2em;
   padding: 0;
-  border-top: 1px solid black;
-  border-left: 1px solid black; }
+  border-top: 1.75px solid #8e4f78;
+  border-left: 1.5px solid #8e4f78; }
   .proposals-view .proposals .proposal-component {
-    border-right: 1px solid black;
-    border-bottom: 1px solid black; }
+    border-right: 1.5px solid #8e4f78;
+    border-bottom: 1.5px solid #8e4f78; }
     .proposals-view .proposals .proposal-component h5 {
       letter-spacing: 1px;
       color: #8e4f78;
@@ -219,18 +221,18 @@ header {
       padding-bottom: 0.4em; }
     .proposals-view .proposals .proposal-component button.select {
       color: #739F3E;
-      border: 1px solid #739F3E;
+      border: 1.5px solid #739F3E;
       padding-bottom: 0.4em; }
       .proposals-view .proposals .proposal-component button.select:hover {
         color: white;
         background-color: #739F3E; }
     .proposals-view .proposals .proposal-component button.selected {
       color: white;
-      border: 1px solid #739F3E;
+      border: 1.5px solid #739F3E;
       background-color: #739F3E; }
     .proposals-view .proposals .proposal-component button.remove {
       color: #959991;
-      border: 1px solid #959991; }
+      border: 1.5px solid #959991; }
       .proposals-view .proposals .proposal-component button.remove:hover {
         background-color: #F2F2F2; }
     .proposals-view .proposals .proposal-component .checkbox input {
