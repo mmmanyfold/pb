@@ -11,7 +11,7 @@
                 endInPerson
                 eligibility]} election]
     [:div.election-component.ba.bw1.mb4
-     [:div.pv3.ph4
+     [:div.pv3.ph4.tc
       [:h2.mt2.pt1.fw7 title]
       [:h3.b [render-markdown eligibility]]
       [:div.links.f3.f2-ns.center
