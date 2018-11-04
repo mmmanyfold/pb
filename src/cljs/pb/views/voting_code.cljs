@@ -8,7 +8,6 @@
             [ajax.core :as ajax :refer [GET POST]]
             [pb.config :as config]))
 
-(def code (rg/atom nil))
 (def error-code (rg/atom nil))
 (def code-sent? (rg/atom false))
 
@@ -174,24 +173,25 @@
           [error-component]])})))
 
 (defn check-code-component [id]
-  [:div
-   [:br]
-   [:h2 "Check your text messages!"]
-   [:h1 "Enter the 8-digit code:"]
-   [:form.voter-auth-form
-    [:div.flex-row-wrap
-     [:input.form-control
-      {:type "text"
-       :placeholder "xxxxxxxx"
-       :maxLength 8
-       :value @code
-       :on-change (fn [e]
-                    (let [input (-> e .-target .-value)]
-                      (reset! code input)))}]
-
-     [:a {:on-click #(check-code @code id)}
-      [:input#submit-code
-       {:type "button"
-        :value "CONTINUE"
-        :disabled (< (count @code) 8)}]]]]
-   [error-component]])
+  (let [code (rg/atom nil)]
+    (fn []
+      [:div
+       [:br]
+       [:h2 "Check your text messages!"]
+       [:h1 "Enter the 8-digit code:"]
+       [:form.voter-auth-form
+        [:div.flex-row-wrap
+         [:input.form-control
+          {:type "text"
+           :placeholder "xxxxxxxx"
+           :maxLength 8
+           :value @code
+           :on-change (fn [e]
+                        (let [input (-> e .-target .-value)]
+                          (reset! code input)))}]
+         [:a {:on-click #(check-code @code id)}
+          [:input#submit-code
+           {:type "button"
+            :value "CONTINUE"
+            :disabled (< (count @code) 8)}]]]]
+       [error-component]])))
