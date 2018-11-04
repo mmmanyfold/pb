@@ -177,6 +177,9 @@
        [:h2 "Check your text messages!"]
        [:h1 "Enter the 8-digit code:"]
        [:form.voter-auth-form
+        {:on-submit (fn [e]
+                      (.preventDefault e)
+                      (.stopPropagation e))}
         [:div.flex-row-wrap
          [:input.form-control
           {:type        "text"
@@ -185,8 +188,8 @@
            :value       @code
            :on-change   #(reset! code (-> % .-target .-value))}]
          [:a {:on-click #(check-code @code id)}
-          [:input#submit-code
-           {:type     "button"
-            :value    "CONTINUE"
-            :disabled (< (count @code) 8)}]]]]
+          [:button#submit-code
+           {:type     "submit"
+            :disabled (< (count @code) 8)}
+           "CONTINUE"]]]]
        [error-component]])))
