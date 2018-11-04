@@ -125,7 +125,7 @@
                [:input.form-control
                 {:type "text"
                  :placeholder "Student ID"
-                 :maxLength 10
+                 :maxLength 9
                  :value @additionalId
                  :on-change (fn [e]
                               (let [input (-> e .-target .-value)]

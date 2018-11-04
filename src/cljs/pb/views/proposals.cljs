@@ -9,6 +9,8 @@
 
 (def show-confirmation? (rg/atom false))
 
+(def survey-link "https://www.google.com")
+
 (defn query [ids]
   (let [queries
         (for [id ids]
@@ -22,7 +24,7 @@
          :handler         (fn []
                             (reset! show-confirmation? true)
                             (rf/dispatch [:update-selected-proposals :reset])
-                            (js/setTimeout #(set! (.. js/window -location) "https://www.google.com") 3000))
+                            (js/setTimeout #(set! (.. js/window -location) survey-link) 3000))
          :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
          :format          :raw
@@ -33,9 +35,10 @@
 (defn confirmation-component []
   (when @show-confirmation?
    [rc/modal-panel
-    :child [:div.confirmation.fw7.f3.f2-m.f1-l.pa2-m.pa3-l
-            [:p "Your ballot has been submitted!"]
-            [:p.mb0 "Redirecting to survey..."]]]))
+    :child [:div.confirmation.f3.f2-m.f1-l.pa2-m.pa3-l.tc
+            [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
+            [:p.mb1 "Redirecting to survey..."]
+            [:small "or " [:a {:href survey-link} "go to survey now"]]]]))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
