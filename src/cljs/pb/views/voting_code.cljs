@@ -40,8 +40,8 @@
         {:handler       send-code-success-handler
          :error-handler error-handler
          :format        (ajax/json-request-format)
-         :params        {:campus campus
-                 :additional-id additional-id
+         :params        {:campus        campus
+                         :additional-id additional-id
                          :election      election
                          :phone-number  phone-number}}))
 
@@ -63,6 +63,7 @@
                      startOnline
                      endOnline
                      maxSelection
+                     surveyUrl
                      sys { id }
                      proposalRefs {
                        sys { id }}
@@ -129,7 +130,7 @@
                [:input.form-control
                 {:type        "text"
                  :placeholder "Student ID"
-                 :maxLength   10
+                 :maxLength   9
                  :value       @additionalId
                  :on-change   #(reset! additionalId (-> % .-target .-value))}]
                [:div.required "*"]]

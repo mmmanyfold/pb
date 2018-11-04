@@ -16,7 +16,7 @@ button, input, optgroup, select, textarea {
 input[type="submit"], input[type="button"], button {
   font-size: 1.5em;
   font-family: 'Roboto Condensed';
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   color: white;
   padding: 0.5em 0.6em;
   cursor: pointer; }
@@ -192,6 +192,9 @@ header {
 
 .proposals-view p {
   line-height: 1.4em; }
+
+.proposals-view .confirmation {
+  color: #8e4f78; }
 
 .proposals-view input.submit {
   background-color: rgba(142, 79, 120, 0.95);

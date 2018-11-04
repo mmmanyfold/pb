@@ -19,7 +19,7 @@
                  [:div {:class "nav-right flex items-center"}
                   [:div {:class "subtitle f7 tr mr3"} "Participatory Budgeting"
                    [:br] "in Denver, CO"]
-                  [:a {:href "http://thismachinehasasoul.com"
+                  [:a {:href "http://thismachinehasasoul.com/#/about"
                        :target "_blank"
                        :rel "noopener noreferrer"}
                    [:img {:src "img/TMHAS_Logo_600.jpg"}]]]]]
