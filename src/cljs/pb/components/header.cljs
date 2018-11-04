@@ -20,7 +20,8 @@
                   [:div {:class "subtitle f7 tr mr3"} "Participatory Budgeting"
                    [:br] "in Denver, CO"]
                   [:a {:href "http://thismachinehasasoul.com"
-                       :target "_blank"}
+                       :target "_blank"
+                       :rel "noopener noreferrer"}
                    [:img {:src "img/TMHAS_Logo_600.jpg"}]]]]]
      (when (= active-view :proposals-view)
        (when-let [{:keys [maxSelection]} @(rf/subscribe [:election-in-view])]

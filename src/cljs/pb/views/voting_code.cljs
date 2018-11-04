@@ -117,7 +117,7 @@
              [:div
               [:div.flexrow.input-group-prepend
                [:select {:id        "campus" :class "form-control" :name "campus"
-                         :on-change #(reset! campus (-> % .-target .-value)put)}
+                         :on-change #(reset! campus (-> % .-target .-value))}
 
                 [:option {:default-value :disabled} "Campus:"]
                 [:option {:value "cudenver"} "CU Denver"]
