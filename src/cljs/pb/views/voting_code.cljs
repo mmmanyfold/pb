@@ -33,6 +33,7 @@
 
 (defn send-code-success-handler []
   (reset! code-sent? true))
+  (reset! error-code nil)
 
 (defn send-code [additional-id phone-number election]
   (POST "/api/votercode"
