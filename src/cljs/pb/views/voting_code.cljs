@@ -102,6 +102,11 @@
   (let [input-phone1 (rg/atom "")
         input-phone2 (rg/atom "")
         additionalId (rg/atom "")
+        empty-campus (rg/atom false)
+        empty-id (rg/atom false)
+        empty-phone1 (rg/atom false)
+        empty-phone2 (rg/atom false)
+        phone-mismatch (rg/atom false)
         campus (rg/atom "")]
     (rg/create-class
       {:component-did-mount
@@ -119,40 +124,66 @@
            (when additionalIdLabel
              [:div
               [:div.flexrow.input-group-prepend
-               [:select {:id        "campus" :class "form-control" :name "campus"
-                         :on-change #(reset! campus (-> % .-target .-value))}
-
-                [:option {:default-value :disabled} "Campus:"]
+               [:select {:id        "campus"
+                         :class (str "form-control" (when @empty-campus " input-error"))
+                         :name "campus"
+                         :on-change (fn [e]
+                                      (reset! campus (-> e .-target .-value))
+                                      (reset! empty-campus (= (count @campus) 0)))}
+                [:option {:default-value :disabled
+                          :value ""} "Campus:"]
                 [:option {:value "cudenver"} "CU Denver"]
                 [:option {:value "ccd"} "CCD"]
                 [:option {:value "msu"} "MSU"]]
                [:div.required "*"]
-               [:input.form-control
+               [:input
                 {:type        "text"
+                 :class       (str "form-control" (when @empty-id " input-error"))
                  :placeholder "Student ID"
                  :maxLength   9
                  :value       @additionalId
-                 :on-change   #(reset! additionalId (-> % .-target .-value))}]
+                 :on-change   (fn [e]
+                                (reset! additionalId (-> e .-target .-value))
+                                (reset! empty-id (not= (count @additionalId) 9)))
+                 :on-blur (fn []
+                            (reset! empty-campus (= (count @campus) 0))
+                            (reset! empty-id (not= (count @additionalId) 9)))}]
                [:div.required "*"]]
               [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted."]]])
            [:div.flexrow.input-group-prepend
-            [:input.form-control
+            [:input
              {:id          "input-phone1"
               :type        "text"
+              :class       (str "form-control" (when (or @phone-mismatch
+                                                         @empty-phone1) " input-error"))
               :placeholder "Enter Phone Number"
               :maxLength   12
               :value       @input-phone1
-              :on-change   #(reset! input-phone1 (-> % .-target .-value))}]
+              :on-change   (fn [e]
+                             (reset! input-phone1 (-> e .-target .-value))
+                             (when (and (= (count @input-phone1) 12)
+                                      (= (count @input-phone2) 12))
+                               (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
+                             (reset! empty-phone1 (not= (count @input-phone1) 12)))
+              :on-blur #(reset! empty-phone1 (not= (count @input-phone1) 12))}]
             [:div.required "*"]]
 
            [:div.flexrow.input-group-prepend
-            [:input.form-control
+            [:input
              {:id          "input-phone2"
               :type        "text"
+              :class       (str "form-control" (when (or @phone-mismatch
+                                                         @empty-phone2) " input-error"))
               :placeholder "Verify Phone Number"
               :maxLength   12
               :value       @input-phone2
-              :on-change   #(reset! input-phone2 (-> % .-target .-value))}]
+              :on-change   (fn [e]
+                             (reset! input-phone2 (-> e .-target .-value))
+                             (when (and (= (count @input-phone1) 12)
+                                      (= (count @input-phone2) 12))
+                               (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
+                             (reset! empty-phone2 (not= (count @input-phone2) 12)))
+              :on-blur #(reset! empty-phone2 (not= (count @input-phone2) 12))}]
             [:div.required "*"]]
 
            [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]

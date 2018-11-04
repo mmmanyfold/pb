@@ -202,6 +202,9 @@ header {
     border-color: $green;
     border-width: 1px;
   }
+  select#campus.input-error, input[type="text"].input-error {
+    border-color: red;
+  }
   .required {
     margin-left: 0.2em;
     margin-right: 0.75em;

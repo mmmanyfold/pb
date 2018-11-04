@@ -158,6 +158,8 @@ header {
     height: inherit;
     border-color: #739F3E;
     border-width: 1px; }
+  .voting-code-view select#campus.input-error, .voting-code-view input[type="text"].input-error {
+    border-color: red; }
   .voting-code-view .required {
     margin-left: 0.2em;
     margin-right: 0.75em;
