@@ -33,13 +33,15 @@
 
 (defn send-code-success-handler []
   (reset! code-sent? true))
+  (reset! error-code nil)
 
-(defn send-code [additional-id phone-number election]
+(defn send-code [campus additional-id phone-number election]
   (POST "/api/votercode"
         {:handler       send-code-success-handler
          :error-handler error-handler
          :format        (ajax/json-request-format)
-         :params        {:additional-id additional-id
+         :params        {:campus campus
+                 :additional-id additional-id
                          :election      election
                          :phone-number  phone-number}}))
 
@@ -99,7 +101,7 @@
   (let [input-phone1 (rg/atom "")
         input-phone2 (rg/atom "")
         additionalId (rg/atom "")
-        campus (rg/atom "Campus:")]
+        campus (rg/atom "")]
     (rg/create-class
       {:component-did-mount
        (fn []
@@ -156,7 +158,7 @@
            [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
            (when-not config/debug?
              [captcha-component])
-           [:a {:on-click #(send-code @additionalId (string/replace @input-phone2 #" " "") id)}
+           [:a {:on-click #(send-code  @campus @additionalId (string/replace @input-phone2 #" " "") id)}
             [:button#send-code
              {:type     "submit"
               :disabled (or (< (count @input-phone2) 12)

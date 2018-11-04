@@ -27,7 +27,8 @@
 
 (s/def ::handle-code (s/cat :phone-number some?
                             :election some?
-                            :additional-id some?))
+                            :additional-id some?
+                            :campus some?))
 
 (s/def ::handle-vote (s/cat :voter-id some?
                             :vote some?
@@ -64,7 +65,7 @@
 
 (defn handle-voter-code
   "Creates voter code for a new phone number, or returns existing voter ID"
-  [additional-id phone-number election]
+  [campus additional-id phone-number election]
   (if-let [voter (db-tx db/get-voter-by-phone {:phone    phone-number
                                                :election election})]
     (if (db-tx db/get-voter-vote {:id (:id voter)})
@@ -80,15 +81,16 @@
                                :admin false
                                :is_active true
                                :code code
-                               :election election})
+                               :election election
+                               :campus campus})
       (send-code phone-number voting-code)
       (response/ok {:message "Voting code sent"}))))
 
 (defn handle-voter-code-from-ui
   [req]
   (try
-    (let [{:keys [additional-id phone-number election]} (check-and-throw ::handle-code (:body req))]
-      (handle-voter-code additional-id phone-number election))
+    (let [{:keys [campus additional-id phone-number election]} (check-and-throw ::handle-code (:body req))]
+      (handle-voter-code campus additional-id phone-number election))
     (catch Exception e
       (prn (.getMessage e))
       (response/bad-request {:message "Bad parameters"}))))
