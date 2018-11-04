@@ -1,8 +1,8 @@
 -- :name create-voter! :! :n
 -- :doc creates a new voter record
 INSERT INTO voters
-(additional_id, phone, admin, is_active, code, election)
-VALUES (:additional_id, :phone, :admin, :is_active, :code, :election)
+(additional_id, phone, admin, is_active, code, election, campus)
+VALUES (:additional_id, :phone, :admin, :is_active, :code, :election, :campus)
 
 -- :name get-voter-by-phone :? :1
 -- :doc retrieves a voter record given the phone number and election

@@ -128,7 +128,7 @@ header {
   ul {
     -webkit-padding-start: 20px;
   }
-  @media screen and (max-width: 950px) {
+  @media screen and (max-width: 959px) {
     width: 100%;
   }
   .links {
@@ -225,7 +225,7 @@ header {
     font-size: 1em;
     font-weight: bold;
   }
-  input[type="button"] {
+  input[type="button"], button#send-code, button#submit-code {
     background-color: rgba(115, 159, 62, 0.85);
     border-color: $green;
     letter-spacing: 1px;
