@@ -15,13 +15,10 @@
 (defn submit-vote []
   (POST "/api/vote"
         {:response-format (ajax/json-response-format {:keywords? true})
-         :handler         #(rf/dispatch :update-selected-proposals :reset)
-         :error-handler   #(rf/dispatch :update-selected-proposals :reset)
-
          :format          :raw
          :params          {:voter-id @(rf/subscribe [:voter-id])
                            :vote     @(rf/subscribe [:selected-proposals])
-                           :election (-> @(rf/subscribe [:election-in-view]) :sys :id)}}))
+                           :election (get-in @(rf/subscribe [:election-in-view]) [:sys :id])}}))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
@@ -30,26 +27,23 @@
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
-        (let [many? (> (count proposals) 12)
-              selected-proposals @(rf/subscribe [:selected-proposals])]
-          [:div.proposals-view.mt5
-           [:h2 "Instructions:"]
-           [:ol
-            [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
-            [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
-                                                          " projects."
-                                                          " project.")]
-            [:li "Click the \"Submit My Ballot\" button when you're ready to submit."]]
-           [:div.tc
-            [:input.submit.mt3 {:on-click submit-vote
-                                :disabled (or (nil? selected-proposals)
-                                              (empty? selected-proposals))
-                                :type     "submit"
-                                :value    "Submit My Ballot"}]]
-           [:div.proposals.row
-            (for [proposal proposals]
-              ^{:key (gensym "p-")}
-              [proposal-component proposal many?])]])
+        [:div.proposals-view.mt5
+         [:h2 "Instructions:"]
+         [:ol
+          [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
+          [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
+                                                        " projects."
+                                                        " project.")]
+          [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
+         [:div.tc
+          [:input.submit.mt3 {:on-click submit-vote
+                              :disabled (nil? @(rf/subscribe [:selected-proposals]))
+                              :type     "submit"
+                              :value    "Submit My Vote"}]]
+         [:div.proposals.row
+          (for [proposal proposals]
+            ^{:key (gensym "p-")}
+            [proposal-component proposal])]]
         [loading-component]))
     (do
       (set! (-> js/window .-location .-href) (str "/#/" election-slug))
