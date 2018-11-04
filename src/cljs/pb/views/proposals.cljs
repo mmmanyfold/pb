@@ -27,23 +27,26 @@
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
-        [:div.proposals-view.mt5
-         [:h2 "Instructions:"]
-         [:ol
-          [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
-          [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
-                                                        " projects."
-                                                        " project.")]
-          [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
-         [:div.tc
-          [:input.submit.mt3 {:on-click submit-vote
-                              :disabled (nil? @(rf/subscribe [:selected-proposals]))
-                              :type     "submit"
-                              :value    "Submit My Vote"}]]
-         [:div.proposals.row
-          (for [proposal proposals]
-            ^{:key (gensym "p-")}
-            [proposal-component proposal])]]
+        (let [many? (> (count proposals) 12)
+              selected-proposals @(rf/subscribe [:selected-proposals])]
+          [:div.proposals-view.mt5
+           [:h2 "Instructions:"]
+           [:ol
+            [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
+            [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
+                                                          " projects."
+                                                          " project.")]
+            [:li "Click the \"Submit My Vote\" button when you're ready to submit."]]
+           [:div.tc
+            [:input.submit.mt3 {:on-click submit-vote
+                                :disabled (or (nil? selected-proposals)
+                                              (empty? selected-proposals))
+                                :type     "submit"
+                                :value    "Submit My Vote"}]]
+           [:div.proposals.row
+            (for [proposal proposals]
+              ^{:key (gensym "p-")}
+              [proposal-component proposal many?])]])
         [loading-component]))
     (do
       (set! (-> js/window .-location .-href) (str "/#/" election-slug))

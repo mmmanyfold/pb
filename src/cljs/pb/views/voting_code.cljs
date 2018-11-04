@@ -117,7 +117,7 @@
                          :on-change (fn [e]
                                       (let [input (-> e .-target .-value)]
                                         (reset! campus input)))}
-                [:option {:value ""} "Campus:"]
+                [:option {:default-value :disabled} "Campus:"]
                 [:option {:value "cudenver"} "CU Denver"]
                 [:option {:value "ccd"} "CCD"]
                 [:option {:value "msu"} "MSU"]]
