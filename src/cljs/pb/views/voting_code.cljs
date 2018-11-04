@@ -62,6 +62,7 @@
                      startOnline
                      endOnline
                      maxSelection
+                     surveyUrl
                      sys { id }
                      proposalRefs {
                        sys { id }}

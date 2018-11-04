@@ -9,8 +9,6 @@
 
 (def show-confirmation? (rg/atom false))
 
-(def survey-link "https://www.google.com")
-
 (defn query [ids]
   (let [queries
         (for [id ids]
@@ -22,9 +20,10 @@
   (POST "/api/vote"
         {:response-format (ajax/json-response-format {:keywords? true})
          :handler         (fn []
-                            (reset! show-confirmation? true)
-                            (rf/dispatch [:update-selected-proposals :reset])
-                            (js/setTimeout #(set! (.. js/window -location) survey-link) 3000))
+                            (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
+                              (reset! show-confirmation? true)
+                              (rf/dispatch [:update-selected-proposals :reset])
+                              (js/setTimeout #(set! (.. js/window -location) survey-url) 3000)))
          :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
          :format          :raw
@@ -34,11 +33,12 @@
 
 (defn confirmation-component []
   (when @show-confirmation?
-   [rc/modal-panel
-    :child [:div.confirmation.f3.f2-m.f1-l.pa2-m.pa3-l.tc
-            [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
-            [:p.mb1 "Redirecting to survey..."]
-            [:small "or " [:a {:href survey-link} "go to survey now"]]]]))
+   (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
+    [rc/modal-panel
+     :child [:div.confirmation.f3.f2-m.f1-l.pa2-m.pa3-l.tc
+             [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
+             [:p.mb1 "Redirecting to survey..."]
+             [:small "or " [:a {:href survey-url} "go to survey now"]]]])))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
