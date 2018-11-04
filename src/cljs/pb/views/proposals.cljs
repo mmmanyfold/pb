@@ -1,9 +1,13 @@
 (ns pb.views.proposals
   (:require [re-frame.core :as rf]
+            [reagent.core :as rg]
+            [re-com.core :as rc]
             [pb.components.proposal :refer [proposal-component]]
             [pb.components.loading :refer [loading-component]]
             [clojure.string :as string]
             [ajax.core :as ajax :refer [POST]]))
+
+(def show-confirmation? (rg/atom false))
 
 (defn query [ids]
   (let [queries
@@ -15,13 +19,23 @@
 (defn submit-vote []
   (POST "/api/vote"
         {:response-format (ajax/json-response-format {:keywords? true})
-         :handler         #(rf/dispatch :update-selected-proposals :reset)
-         :error-handler   #(rf/dispatch :update-selected-proposals :reset)
+         :handler         (fn []
+                            (reset! show-confirmation? true)
+                            (rf/dispatch [:update-selected-proposals :reset])
+                            (js/setTimeout #(set! (.. js/window -location) "https://www.google.com") 3000))
+         :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
          :format          :raw
          :params          {:voter-id @(rf/subscribe [:voter-id])
                            :vote     @(rf/subscribe [:selected-proposals])
                            :election (-> @(rf/subscribe [:election-in-view]) :sys :id)}}))
+
+(defn confirmation-component []
+  (when @show-confirmation?
+   [rc/modal-panel
+    :child [:div.confirmation.fw7.f3.f2-m.f1-l.pa2-m.pa3-l
+            [:p "Your ballot has been submitted!"]
+            [:p.mb0 "Redirecting to survey..."]]]))
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
@@ -33,6 +47,7 @@
         (let [many? (> (count proposals) 12)
               selected-proposals @(rf/subscribe [:selected-proposals])]
           [:div.proposals-view.mt5
+           [confirmation-component]
            [:h2 "Instructions:"]
            [:ol
             [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
