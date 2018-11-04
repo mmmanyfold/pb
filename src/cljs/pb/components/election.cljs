@@ -14,7 +14,7 @@
      [:div.pv3.ph4
       [:h2.mt2.pt1.fw7 title]
       [:h3.b [render-markdown eligibility]]
-      [:div.links.f3.f2-ns
+      [:div.links.f3.f2-ns.center
        [:a.pa3 {:href (str "/#/" shortTitle)}
         [:span.tc
          "Vote online now*"
@@ -26,7 +26,7 @@
               (str startDay)
               (str startDay " – " endDay)))]]]]
       [:p.lh-title.mt3 "*In order to vote online, you will need a mobile phone with SMS (text messaging)"]
-      [:div.links.f3.f2-ns.mb3
+      [:div.links.f3.f2-ns.mb3.center
        [:a.pa3 {:href (str "/#/" shortTitle "/vote-in-person")}
         [:span.tc
          "How to vote in person"
