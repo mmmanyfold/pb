@@ -65,5 +65,5 @@
 
 (rf/reg-event-db
   :set-captcha-passed
-  (fn [db [_ code]]
+  (fn [db [_ _]]
     (assoc db :captcha-passed true)))

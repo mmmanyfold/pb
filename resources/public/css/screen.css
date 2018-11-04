@@ -68,7 +68,7 @@ header {
     border-color: #739F3E; }
   header .nav-item {
     padding-top: 0.3em;
-    border-color: transparent;
+    border-color: rgba(0, 0, 0, 0);
     text-decoration: none;
     font-weight: 700;
     color: inherit; }
@@ -176,18 +176,18 @@ header {
   .voting-code-view select {
     font-size: 1em;
     font-weight: bold; }
-  .voting-code-view input[type="button"] {
+  .voting-code-view input[type="button"], .voting-code-view button#send-code {
     background-color: rgba(115, 159, 62, 0.85);
     border-color: #739F3E;
     letter-spacing: 1px;
     margin-bottom: 10px; }
-    .voting-code-view input[type="button"]:hover {
+    .voting-code-view input[type="button"]:hover, .voting-code-view button#send-code:hover {
       background-color: #739F3E; }
-    .voting-code-view input[type="button"]:disabled {
+    .voting-code-view input[type="button"]:disabled, .voting-code-view button#send-code:disabled {
       background-color: #AAA;
       border-color: #AAA;
       cursor: not-allowed; }
-    .voting-code-view input[type="button"]:active {
+    .voting-code-view input[type="button"]:active, .voting-code-view button#send-code:active {
       margin: 1px 1px 11px; }
 
 .proposals-view p {
