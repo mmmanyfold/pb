@@ -33,7 +33,7 @@
 
 (defn send-code-success-handler []
   (reset! code-sent? true))
-  (reset! error-code nil)
+(reset! error-code nil)
 
 (defn send-code [campus additional-id phone-number election]
   (POST "/api/votercode"
@@ -125,13 +125,13 @@
              [:div
               [:div.flexrow.input-group-prepend
                [:select {:id        "campus"
-                         :class (str "form-control" (when @empty-campus " input-error"))
-                         :name "campus"
+                         :class     (str "form-control" (when @empty-campus " input-error"))
+                         :name      "campus"
                          :on-change (fn [e]
                                       (reset! campus (-> e .-target .-value))
                                       (reset! empty-campus (= (count @campus) 0)))}
                 [:option {:default-value :disabled
-                          :value ""} "Campus:"]
+                          :value         ""} "Campus:"]
                 [:option {:value "cudenver"} "CU Denver"]
                 [:option {:value "ccd"} "CCD"]
                 [:option {:value "msu"} "MSU"]]
@@ -145,9 +145,9 @@
                  :on-change   (fn [e]
                                 (reset! additionalId (-> e .-target .-value))
                                 (reset! empty-id (not= (count @additionalId) 9)))
-                 :on-blur (fn []
-                            (reset! empty-campus (= (count @campus) 0))
-                            (reset! empty-id (not= (count @additionalId) 9)))}]
+                 :on-blur     (fn []
+                                (reset! empty-campus (= (count @campus) 0))
+                                (reset! empty-id (not= (count @additionalId) 9)))}]
                [:div.required "*"]]
               [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted."]]])
            [:div.flexrow.input-group-prepend
@@ -162,10 +162,10 @@
               :on-change   (fn [e]
                              (reset! input-phone1 (-> e .-target .-value))
                              (when (and (= (count @input-phone1) 12)
-                                      (= (count @input-phone2) 12))
+                                        (= (count @input-phone2) 12))
                                (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
                              (reset! empty-phone1 (not= (count @input-phone1) 12)))
-              :on-blur #(reset! empty-phone1 (not= (count @input-phone1) 12))}]
+              :on-blur     #(reset! empty-phone1 (not= (count @input-phone1) 12))}]
             [:div.required "*"]]
 
            [:div.flexrow.input-group-prepend
@@ -180,17 +180,17 @@
               :on-change   (fn [e]
                              (reset! input-phone2 (-> e .-target .-value))
                              (when (and (= (count @input-phone1) 12)
-                                      (= (count @input-phone2) 12))
+                                        (= (count @input-phone2) 12))
                                (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
                              (reset! empty-phone2 (not= (count @input-phone2) 12)))
-              :on-blur #(reset! empty-phone2 (not= (count @input-phone2) 12))}]
+              :on-blur     #(reset! empty-phone2 (not= (count @input-phone2) 12))}]
             [:div.required "*"]]
 
            [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
            [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
            (when-not config/debug?
              [captcha-component])
-           [:a {:on-click #(send-code  @campus @additionalId (string/replace @input-phone2 #" " "") id)}
+           [:a {:on-click #(send-code @campus @additionalId (string/replace @input-phone2 #" " "") id)}
             [:button#send-code
              {:type     "submit"
               :disabled (or (< (count @input-phone2) 12)
