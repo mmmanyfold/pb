@@ -42,22 +42,21 @@
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs maxSelection]} election-in-view
+    (let [{:keys [proposalRefs maxSelection displayFormat]} election-in-view
           ids (map #(-> % :sys :id) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
-        (let [many? (> (count proposals) 12)
-              selected-proposals @(rf/subscribe [:selected-proposals])]
+        (let [selected-proposals @(rf/subscribe [:selected-proposals])]
           [:div.proposals-view.mt5
            [confirmation-component]
            [:h2 "Instructions:"]
            [:ol
-            [:li "Choose the projects you want to support by clicking on the 'Select' buttons."]
+            [:li "Choose the projects you want to support by clicking the checkbox."]
             [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
                                                           " projects."
                                                           " project.")]
-            [:li "Click the \"Submit My Ballot\" button when you're ready to submit."]]
+            [:li "Click \"Submit My Ballot\" when you're ready to submit."]]
            [:div.tc
             [:input.submit.mt3 {:on-click submit-vote
                                 :disabled (or (nil? selected-proposals)
@@ -67,7 +66,7 @@
            [:div.proposals.row
             (for [proposal proposals]
               ^{:key (gensym "p-")}
-              [proposal-component proposal many?])]])
+              [proposal-component proposal displayFormat])]])
         [loading-component]))
     (do
       (set! (-> js/window .-location .-href) (str "/#/" election-slug))
