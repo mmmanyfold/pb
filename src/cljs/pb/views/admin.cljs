@@ -10,7 +10,7 @@
 
 (defn- unauthorized-component []
   [:div#admin
-   [:h1 "404: unauthorized"]])
+   [:h1 "401: unauthorized"]])
 
 (defn view []
   (if @(rf/subscribe [:admin])
