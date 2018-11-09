@@ -11,6 +11,7 @@
 ;; Initialize app
 
 (defn mount-root []
+  (rf/dispatch [:get-election-var])
   (rf/clear-subscription-cache!)
   (r/render [view] (.getElementById js/document "app")))
 

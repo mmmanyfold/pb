@@ -12,6 +12,28 @@
     db/default-db))
 
 (rf/reg-event-fx
+  :get-election-var
+  (fn [{db :db} [_]]
+    {:db         db
+     :http-xhrio {:method          :get
+                  :format          (ajax/json-request-format)
+                  :uri             "/api/election"
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-failure      [:get-election-var-failed]
+                  :on-success      [:get-election-var-success]}}))
+
+(rf/reg-event-db
+  :get-election-var-failed
+  (fn [db [_ {{err-msg :error} :response}]]
+    (js/console.error err-msg)
+    db))
+
+(rf/reg-event-db
+  :get-election-var-success
+  (fn [db [_ {election :election}]]
+    (assoc db :admin-election election)))
+
+(rf/reg-event-fx
   :get-contentful-data
   (fn [{db :db} [_ db-key query space]]
     (when-not (db-key db)

@@ -42,3 +42,8 @@
   :voter-id
   (fn [db _]
     (:voter-id db)))
+
+(rf/reg-sub
+  :admin-election
+  (fn [db _]
+    (:admin-election db)))
