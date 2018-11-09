@@ -40,6 +40,9 @@
   (defroute "/:election/vote-in-person" {:as params}
             (rf/dispatch [:set-active-view :vote-in-person-view (:election params)]))
 
+  (defroute "/faq" []
+            (rf/dispatch [:set-active-view :faq-view]))
+
   (defroute "/404" []
             (rf/dispatch [:set-active-view :404]))
 

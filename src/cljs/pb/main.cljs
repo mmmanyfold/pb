@@ -6,6 +6,7 @@
             [pb.views.voting-code :refer [voting-code-view]]
             [pb.views.proposals :refer [proposals-view]]
             [pb.views.vote-in-person :refer [vote-in-person-view]]
+            [pb.views.faq :refer [faq-view]]
             [pb.components.header :refer [header-component]]))
 
 (defn- show-view [view-name election-slug]
@@ -14,6 +15,7 @@
         :voting-code-view [voting-code-view election-slug]
         :proposals-view [proposals-view election-slug]
         :vote-in-person-view [vote-in-person-view election-slug]
+        :faq-view [faq-view]
         :404 [:div "404"]
         [:div]))
 
