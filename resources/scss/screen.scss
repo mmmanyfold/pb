@@ -274,7 +274,7 @@ header {
     .proposal-component {
       border-right: 1.5px solid $purple;
       border-bottom: 1.5px solid $purple;
-      h5 {
+      h4 {
         letter-spacing: 1px;
         color: $purple;
         cursor: pointer;
@@ -290,6 +290,9 @@ header {
           color: white;
           background-color: $green;
         }
+      }
+      .proposal-detail p {
+        margin-bottom: 0.5em;
       }
       button.selected {
         color: white;
