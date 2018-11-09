@@ -47,3 +47,8 @@
   :admin-election
   (fn [db _]
     (:admin-election db)))
+
+(rf/reg-sub
+  :admin
+  (fn [db _]
+    (:admin db)))

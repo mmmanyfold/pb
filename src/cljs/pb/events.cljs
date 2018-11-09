@@ -89,3 +89,8 @@
   :set-captcha-passed
   (fn [db [_ _]]
     (assoc db :captcha-passed true)))
+
+(rf/reg-event-db
+  :set-admin
+  (fn [db [_ state]]
+    (assoc db :admin state)))

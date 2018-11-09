@@ -9,4 +9,5 @@
    :election-in-view nil
    :proposals-in-view nil
    :selected-proposals []
-   :voter-id nil})
+   :voter-id nil
+   :admin false})
