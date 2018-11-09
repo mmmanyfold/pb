@@ -68,7 +68,7 @@ header {
     border-color: #739F3E; }
   header .nav-item {
     padding-top: 0.3em;
-    border-color: transparent;
+    border-color: rgba(0, 0, 0, 0);
     text-decoration: none;
     font-weight: 700;
     color: inherit; }
@@ -218,7 +218,7 @@ header {
   .proposals-view .proposals .proposal-component {
     border-right: 1.5px solid #8e4f78;
     border-bottom: 1.5px solid #8e4f78; }
-    .proposals-view .proposals .proposal-component h5 {
+    .proposals-view .proposals .proposal-component h4 {
       letter-spacing: 1px;
       color: #8e4f78;
       cursor: pointer; }
@@ -231,6 +231,8 @@ header {
       .proposals-view .proposals .proposal-component button.select:hover {
         color: white;
         background-color: #739F3E; }
+    .proposals-view .proposals .proposal-component .proposal-detail p {
+      margin-bottom: 0.5em; }
     .proposals-view .proposals .proposal-component button.selected {
       color: white;
       border: 1.5px solid #739F3E;

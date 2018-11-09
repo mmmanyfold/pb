@@ -6,14 +6,17 @@
             [pb.helpers :refer [render-markdown]]))
 
 (defn detail [show? field title]
-  [:div
-   [:h5 {:on-click #(swap! show? not)
+  [:div.mt1.proposal-detail
+   [:h4 {:on-click #(swap! show? not)
          :class (when @show? "b")}
     (str "+ " title)]
-   (when @show? [render-markdown field])])
+   (when @show?
+     [:div.ml3.mb4
+      [render-markdown field]])])
 
 (defn proposal-component [proposal many?]
   (let [{:keys [title
+                longDescription
                 shortDescription
                 impact
                 budget
@@ -26,6 +29,7 @@
         show-impact? (rg/atom false)
         show-budget? (rg/atom false)
         show-timeline? (rg/atom false)
+        show-long-description? (rg/atom false)
         selected? (rg/atom (some #(= id %) @(rf/subscribe [:selected-proposals])))
         expand-image? (rg/atom false)]
 
@@ -35,9 +39,9 @@
 
         [:div.proposal-component.pa3.pa4-ns.col-12
          {:style {:background-color (if @selected? "rgba(115,159,62,0.15)" "white")}}
-         [:div.flexrow
-          [:div.pr4
-           [:h2.fw7 (str title)]
+         [:div.flexrow.mb3
+          [:div.w-90
+           [:h2.fw7.mr3 (str title)]
            [:p.f4 shortDescription]]
           [:div
            [:span.checkbox
@@ -48,13 +52,14 @@
                                    (rf/dispatch [:update-selected-proposals :remove id])
                                    (when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
                                      (rf/dispatch [:update-selected-proposals :add id])))}]
-            [:label {:class "pl6 pl5-ns"
+            [:label {:class "pl4 mr2 pl5-l mr0-l"
                      :for id}]]]]
 
          ;; expandable details
-         [detail show-impact? impact "Community Impact"]
-         [detail show-budget? budget "Budget Breakdown"]
-         [detail show-timeline? timeline "Timeline"]]
+         [detail show-budget? budget "Budget"]
+         [detail show-timeline? timeline "Timeline"]
+         [detail show-long-description? longDescription "Description"]
+         [detail show-impact? impact "Community Impact"]]
 
         ;; < 12 proposals
 
