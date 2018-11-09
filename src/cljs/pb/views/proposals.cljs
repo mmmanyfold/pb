@@ -42,13 +42,12 @@
 
 (defn proposals-view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs maxSelection]} election-in-view
+    (let [{:keys [proposalRefs maxSelection displayFormat]} election-in-view
           ids (map #(-> % :sys :id) proposalRefs)
           query (query ids)]
       (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
       (if-let [proposals @(rf/subscribe [:proposals-in-view])]
-        (let [many? true
-              selected-proposals @(rf/subscribe [:selected-proposals])]
+        (let [selected-proposals @(rf/subscribe [:selected-proposals])]
           [:div.proposals-view.mt5
            [confirmation-component]
            [:h2 "Instructions:"]
@@ -67,7 +66,7 @@
            [:div.proposals.row
             (for [proposal proposals]
               ^{:key (gensym "p-")}
-              [proposal-component proposal many?])]])
+              [proposal-component proposal displayFormat])]])
         [loading-component]))
     (do
       (set! (-> js/window .-location .-href) (str "/#/" election-slug))

@@ -14,7 +14,7 @@
      [:div.ml3.mb4
       [render-markdown field]])])
 
-(defn proposal-component [proposal many?]
+(defn proposal-component [proposal displayFormat]
   (let [{:keys [title
                 longDescription
                 shortDescription
@@ -34,9 +34,10 @@
         expand-image? (rg/atom false)]
 
     (fn []
-      (if many?
-        ;; > 12 proposals
 
+      ;; display in rows
+
+      (if (= displayFormat "Rows")
         [:div.proposal-component.pa3.pa4-ns.col-12
          {:style {:background-color (if @selected? "rgba(115,159,62,0.15)" "white")}}
          [:div.flexrow.mb3
@@ -55,83 +56,85 @@
             [:label {:class "pl4 mr2 pl5-l mr0-l"
                      :for id}]]]]
 
-         ;; expandable details
+         ; expandable details
          [detail show-budget? budget "Budget"]
          [detail show-timeline? timeline "Timeline"]
          [detail show-long-description? longDescription "Description"]
          [detail show-impact? impact "Community Impact"]]
 
-        ;; < 12 proposals
 
-        [:div.proposal-component.pa4.col-xs-12.col-md-6.col-lg-4
-         {:style {:background-color (if @selected? "rgba(115,159,62,0.15)" "white")}}
-         [:h2.fw7 title]
-         [:p.f4 shortDescription]
+        ;; display in a grid
 
-         ;; select/remove buttons
-         [:div.tc.mt2.mb3
-          [:button.mv2 {:on-click #(when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
-                                     (rf/dispatch [:update-selected-proposals :add id]))
-                        :class (if @selected? "selected" "select")}
-           (if @selected? "Selected" "Select")]
-          (when @selected?
-            [:button.remove.mv2.ml3
-             {:on-click #(rf/dispatch [:update-selected-proposals :remove id])}
-             "Remove"])]
+        (if (= displayFormat "Grid")
+          [:div.proposal-component.pa4.col-xs-12.col-md-6.col-lg-4
+           {:style {:background-color (if @selected? "rgba(115,159,62,0.15)" "white")}}
+           [:h2.fw7 title]
+           [:p.f4 shortDescription]
 
-         ;; expandable details
-         [detail show-impact? impact "Community Impact"]
-         [detail show-budget? budget "Budget Breakdown"]
-         [detail show-timeline? timeline "Timeline"]
+           ; select/remove buttons
+           [:div.tc.mt2.mb3
+            [:button.mv2 {:on-click #(when (< (count @(rf/subscribe [:selected-proposals])) maxSelection)
+                                       (rf/dispatch [:update-selected-proposals :add id]))
+                          :class (if @selected? "selected" "select")}
+             (if @selected? "Selected" "Select")]
+            (when @selected?
+              [:button.remove.mv2.ml3
+               {:on-click #(rf/dispatch [:update-selected-proposals :remove id])}
+               "Remove"])]
 
-         ;; thumbnail image
-         [:div.thumbnail-wrapper
-          {:on-click #(reset! expand-image? true)}
-          [:img.w-100.mt2 {:src thumbnail-image}]
-          (when (< 1 (count images))
-            [:i.more-images-icon {:class "far fa-images"}])]
+           ; expandable details
+           [detail show-impact? impact "Community Impact"]
+           [detail show-budget? budget "Budget Breakdown"]
+           [detail show-timeline? timeline "Timeline"]
 
-         ;; expanded image gallery modal
-         (when @expand-image?
-           [rc/modal-panel
-            :backdrop-on-click #(reset! expand-image? false)
-            :wrap-nicely? false
-            :child
-            [rc/v-box
-             :class "image-gallery-wrapper ph5-m ph6-l"
-             :children
-             [[:div.image-gallery
-               [:i {:class "fa fa-times-circle f3 f2-ns pointer"
-                    :aria-hidden true
-                    :on-click #(reset! expand-image? false)}]
-               [:h2 {:class "mt0 mb3 mh1 f3 f2-ns"}
-                    title]
-               (if (= 1 (count images))
-                 ;; if single image
-                 [:img {:class "mb1 w-100"
-                        :src thumbnail-image}]
-                 ;; if multiple images
-                 [:div {:id "image-gallery" :class "carousel slide" :data-ride "carousel" :data-interval false}
-                  ; indicators
-                  [:ol.carousel-indicators
-                   (map (fn [image]
-                          (let [i (.indexOf images image)]
-                            ^{:key (gensym "indicator-")}
-                            [:li {:data-target "#image-gallery" :data-slide-to (str i) :class (when (= i 0) "active")}]))
-                      images)]
-                  ; wrapper for slides
-                  [:div.carousel-inner
-                   (for [image images
-                         :let [i (.indexOf images image)]]
-                     ^{:key (gensym "image-")}
-                     [:div {:class (str "carousel-item" (when (= i 0) " active"))}
-                      [:img {:src image}]])]
-                  ; left and right controls
-                  [:a.carousel-control-prev
-                   {:href "#image-gallery" :role "button" :data-slide "prev"}
-                   [:span.carousel-control-prev-icon {:aria-hidden "true"}]
-                   [:span.sr-only "Previous"]]
-                  [:a.carousel-control-next
-                   {:href "#image-gallery" :role "button" :data-slide "next"}
-                   [:span.carousel-control-next-icon {:aria-hidden "true"}]
-                   [:span.sr-only "Next"]]])]]]])]))))
+           ; thumbnail image
+           [:div.thumbnail-wrapper
+            {:on-click #(reset! expand-image? true)}
+            [:img.w-100.mt2 {:src thumbnail-image}]
+            (when (< 1 (count images))
+              [:i.more-images-icon {:class "far fa-images"}])]
+
+           ; expanded image gallery modal
+           (when @expand-image?
+             [rc/modal-panel
+              :backdrop-on-click #(reset! expand-image? false)
+              :wrap-nicely? false
+              :child
+              [rc/v-box
+               :class "image-gallery-wrapper ph5-m ph6-l"
+               :children
+               [[:div.image-gallery
+                 [:i {:class "fa fa-times-circle f3 f2-ns pointer"
+                      :aria-hidden true
+                      :on-click #(reset! expand-image? false)}]
+                 [:h2 {:class "mt0 mb3 mh1 f3 f2-ns"}
+                      title]
+                 (if (= 1 (count images))
+                   ; if single image
+                   [:img {:class "mb1 w-100"
+                          :src thumbnail-image}]
+                   ; if multiple images
+                   [:div {:id "image-gallery" :class "carousel slide" :data-ride "carousel" :data-interval false}
+                    ; indicators
+                    [:ol.carousel-indicators
+                     (map (fn [image]
+                            (let [i (.indexOf images image)]
+                              ^{:key (gensym "indicator-")}
+                              [:li {:data-target "#image-gallery" :data-slide-to (str i) :class (when (= i 0) "active")}]))
+                        images)]
+                    ; wrapper for slides
+                    [:div.carousel-inner
+                     (for [image images
+                           :let [i (.indexOf images image)]]
+                       ^{:key (gensym "image-")}
+                       [:div {:class (str "carousel-item" (when (= i 0) " active"))}
+                        [:img {:src image}]])]
+                    ; left and right controls
+                    [:a.carousel-control-prev
+                     {:href "#image-gallery" :role "button" :data-slide "prev"}
+                     [:span.carousel-control-prev-icon {:aria-hidden "true"}]
+                     [:span.sr-only "Previous"]]
+                    [:a.carousel-control-next
+                     {:href "#image-gallery" :role "button" :data-slide "next"}
+                     [:span.carousel-control-next-icon {:aria-hidden "true"}]
+                     [:span.sr-only "Next"]]])]]]])])))))
