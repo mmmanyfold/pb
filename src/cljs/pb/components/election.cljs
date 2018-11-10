@@ -17,7 +17,7 @@
      [:div.links.f3.f2-ns.center
       [:a.pa3 {:href (str "/#/" shortTitle)}
        [:span.tc
-        "Vote online now*"
+        "Vote online now"
         [:br]
         [:h5.f5.f4-ns
          (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
@@ -25,7 +25,12 @@
            (if (= startDay endDay)
              (str startDay)
              (str startDay " – " endDay)))]]]]
-     [:p.lh-title.mt3 "*In order to vote online, you will need a mobile phone with SMS (text messaging)"]
+
+     [:p.lh-title.mt3.tl
+      [:b "NOTE: "]
+      "In order to vote online, you will need a mobile phone with SMS (text messaging). "
+      [:b "Safari browser is currently not supported"]
+      " – but we're working on it! Please use Chrome or Firefox in the meantime."]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
         [:a.pa3 {:href (str "/#/" shortTitle "/vote-in-person")}
