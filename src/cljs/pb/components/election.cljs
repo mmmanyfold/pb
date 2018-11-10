@@ -11,7 +11,7 @@
                 endInPerson
                 votingInPerson
                 eligibility]} election]
-    [:div.election-component.tc.center
+    [:div.election-component.tc.center.mv3.pa1
      [:h1.mt2.pt1.fw7 title]
      [:h3.b [render-markdown eligibility]]
      [:div.links.f3.f2-ns.center

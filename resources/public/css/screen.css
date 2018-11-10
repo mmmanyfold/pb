@@ -90,7 +90,7 @@ header {
   max-width: 900px; }
 
 .election-component {
-  width: 450px; }
+  max-width: 450px; }
   .election-component h1 {
     font-size: 2.5em; }
   .election-component h3 {
