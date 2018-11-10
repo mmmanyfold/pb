@@ -22,10 +22,8 @@
     (rf/dispatch [:get-contentful-data db-key query :election])
     (let [elections @(rf/subscribe [db-key])]
       [:div
-       [:h1 "Find Your Election:"]
-       [:div.flex-l.justify-between
-        (for [election elections
-              :let [shortTitle (:shortTitle election)]
-              :when (= shortTitle admin-election)]
-          ^{:key (gensym "election-")}
-          [election-component election])]])))
+       (for [election elections
+             :let [shortTitle (:shortTitle election)]
+             :when (= shortTitle admin-election)]
+         ^{:key (gensym "election-")}
+         [election-component election])])))
