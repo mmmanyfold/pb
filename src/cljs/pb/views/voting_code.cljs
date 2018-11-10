@@ -20,7 +20,8 @@
 (defn check-code-success-handler [response]
   (rf/dispatch [:set-voter-id (:id response)])
   (reset! error-code nil)
-  (set! (.. js/window -location -href) (str (.. js/window -location -href) "/proposals")))
+  (rf/dispatch [:set-active-view :proposals-view
+                @(rf/subscribe [:election-slug])]))
 
 (defn check-code [code election]
   (GET "/api/checkcode"
@@ -188,7 +189,7 @@
             [:div.required "*"]]
 
            [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
-           [:p [:small "Your phone number will NEVER be shared and will be deleted automatically after this election."]]
+           [:p [:small "Your phone number will NEVER be shared and is automatically deleted after the election."]]
            (when-not config/debug?
              [captcha-component])
            [:a {:on-click #(send-code @campus @additionalId (string/replace @input-phone2 #" " "") id)}
