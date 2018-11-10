@@ -113,8 +113,24 @@
       (prn (.getMessage e))
       (response/bad-request {:message "Bad parameters"}))))
 
+(defn handle-check-admin
+  "Handles checking of admin code stored as env var"
+  [params]
+  (let [admin-secret (System/getenv "PB_ADMIN_SECRET")]
+    (if (and (:secret params) (= admin-secret (:secret params)))
+      (response/ok {:admin true})
+      (response/unauthorized {:admin false}))))
+
+(defn handle-get-election
+  [_]
+  (if-let [election (System/getenv "PB_ADMIN_ELECTION")]
+    (response/ok {:election election})
+    (response/not-found {:error "election sys env var not found"})))
+
 (defroutes api-routes
   (context "/api" []
+    (GET "/election" [] handle-get-election)
+    (GET "/checkadmin" {params :params} (handle-check-admin params))
     (GET "/checkcode" [] check-voter-code)
     (POST "/votercode" [] handle-voter-code-from-ui)
     (POST "/vote" [] handle-vote)))

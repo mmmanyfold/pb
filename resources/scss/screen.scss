@@ -117,19 +117,16 @@ header {
 }
 
 .election-component {
-  width: 49%;
-  border-color: $purple;
-  h2 {
-    font-size: 1.9em;
+  max-width: 450px;
+  h1 {
+    font-size: 2.5em;
   }
   h3 {
     font-size: 1.1em;
+    margin-bottom: 1em;
   }
   ul {
     -webkit-padding-start: 20px;
-  }
-  @media screen and (max-width: 959px) {
-    width: 100%;
   }
   .links {
     border: 2px solid $green;

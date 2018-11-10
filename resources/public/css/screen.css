@@ -90,17 +90,14 @@ header {
   max-width: 900px; }
 
 .election-component {
-  width: 49%;
-  border-color: #8e4f78; }
-  .election-component h2 {
-    font-size: 1.9em; }
+  max-width: 450px; }
+  .election-component h1 {
+    font-size: 2.5em; }
   .election-component h3 {
-    font-size: 1.1em; }
+    font-size: 1.1em;
+    margin-bottom: 1em; }
   .election-component ul {
     -webkit-padding-start: 20px; }
-  @media screen and (max-width: 959px) {
-    .election-component {
-      width: 100%; } }
   .election-component .links {
     border: 2px solid #739F3E;
     border-radius: 10px;

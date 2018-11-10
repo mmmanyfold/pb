@@ -19,7 +19,12 @@
 ;; Routes
 
 (defn app-routes []
+
   (secretary/set-config! :prefix "#")
+
+  (defroute "/admin" []
+            (rf/dispatch [:set-active-view :admin-view]))
+
   (defroute "/" []
             (rf/dispatch [:set-active-view :home-view])
             (rf/dispatch [:clear :election-in-view])
