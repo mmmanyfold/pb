@@ -10,21 +10,28 @@
                 startInPerson
                 endInPerson
                 votingInPerson
-                eligibility]} election]
+                eligibility]} election
+        too-early? (> (js/Date. startOnline) (js/Date.))]
     [:div.election-component.tc.center.mv3.pa1
      [:h1.mt2.pt1.fw7 title]
      [:h3 [render-markdown eligibility]]
      [:div.links.f3.f2-ns.center
-      [:a.pa3 {:href (str "/#/" shortTitle)}
-       [:span.tc
-        "Vote online now*"
-        [:br]
-        [:h5.f5.f4-ns
-         (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
-               endDay (.format (js/moment endOnline) "MMM D, YYYY")]
-           (if (= startDay endDay)
-             (str startDay)
-             (str startDay " – " endDay)))]]]]
+      [:a.pa3 {:href (if too-early?
+                       nil
+                       (str "/#/" shortTitle))
+               :class (when too-early? "disabled")}
+       (if too-early?
+         [:span.tc
+          (str "Voting opens " (.format (js/moment startOnline) "M/D"))]
+         [:span.tc
+          "Vote online now*"
+          [:br]
+          [:h5.f5.f4-ns
+           (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
+                 endDay (.format (js/moment endOnline) "MMM D, YYYY")]
+             (if (= startDay endDay)
+               (str startDay)
+               (str startDay " – " endDay)))]])]]
 
      [:p.lh-title.mt3
       "*You will need your student ID to vote."]

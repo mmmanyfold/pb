@@ -102,7 +102,6 @@ header {
   .election-component ul {
     -webkit-padding-start: 20px; }
   .election-component .links {
-    border: 2px solid #739F3E;
     border-radius: 10px;
     margin-top: 1em;
     background-color: rgba(115, 159, 62, 0.85);
@@ -111,6 +110,8 @@ header {
       .election-component .links {
         width: 350px; } }
     .election-component .links a {
+      border-radius: 10px;
+      border: 2px solid #739F3E;
       text-decoration: none;
       color: white;
       font-weight: 700;
@@ -124,6 +125,10 @@ header {
       .election-component .links a:hover {
         color: white;
         background-color: #739F3E; }
+      .election-component .links a.disabled {
+        background-color: #bbbbbb;
+        cursor: not-allowed;
+        border-color: #999999; }
 
 .voting-code-view {
   text-align: center; }

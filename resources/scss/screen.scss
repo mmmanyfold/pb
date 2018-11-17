@@ -133,7 +133,6 @@ header {
     -webkit-padding-start: 20px;
   }
   .links {
-    border: 2px solid $green;
     border-radius: 10px;
     margin-top: 1em;
     background-color: rgba(115, 159, 62, 0.85);
@@ -142,6 +141,8 @@ header {
       width: 350px;
     }
     a {
+      border-radius: 10px;
+      border: 2px solid $green;
       text-decoration: none;
       color: white;
       font-weight: 700;
@@ -155,6 +156,11 @@ header {
       &:hover {
         color: white;
         background-color: $green;
+      }
+      &.disabled {
+        background-color: #bbbbbb;
+        cursor: not-allowed;
+        border-color: #999999;
       }
     }
   }
