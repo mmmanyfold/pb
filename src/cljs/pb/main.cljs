@@ -4,6 +4,7 @@
             [reagent.core :as rg]
             [pb.views.home :refer [home-view]]
             [pb.views.voting-code :refer [voting-code-view]]
+            [pb.views.student-id :refer [student-id-view]]
             [pb.views.proposals :refer [proposals-view]]
             [pb.views.vote-in-person :refer [vote-in-person-view]]
             [pb.views.admin :as admin]
@@ -17,6 +18,7 @@
         :admin-view [admin/view]
         :home-view [home-view admin-election]
         :voting-code-view [voting-code-view election-slug]
+        :student-id-view [student-id-view election-slug]
         :proposals-view [proposals-view election-slug]
         :vote-in-person-view [vote-in-person-view election-slug]
         :404 not-found-view

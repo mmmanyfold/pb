@@ -32,7 +32,7 @@
             (rf/dispatch [:clear :voter-code]))
 
   (defroute "/:election" {:as params}
-            (rf/dispatch [:set-active-view :voting-code-view (:election params)])
+            (rf/dispatch [:set-active-view :student-id-view (:election params)])
             (rf/dispatch [:clear :selected-proposals])
             (rf/dispatch [:clear :voter-id])
             (rf/dispatch [:clear :captcha-passed]))

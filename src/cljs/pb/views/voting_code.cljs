@@ -200,8 +200,8 @@
                             (when-not config/debug?
                               (nil? @(rf/subscribe [:captcha-passed])))
                             (when-not (nil? additionalIdLabel)
-                              (< (count @additionalId) 9)
-                              (= @campus "Campus:")))}
+                              (or (< (count @additionalId) 9)
+                                  (= @campus "Campus:"))))}
              "SEND MY CODE"]]]
           [error-component]])})))
 
