@@ -34,6 +34,11 @@
                             :vote some?
                             :election some?))
 
+(s/def ::handle-auraria-vote (s/cat :additional-id some?
+                                    :vote some?
+                                    :campus some?
+                                    :election some?))
+
 (defn db-tx [f & [args]]
   (try
     (jdbc/with-db-transaction [t-conn *db*]
@@ -87,7 +92,19 @@
       (response/ok {:message "Voting code sent"}))))
 
 (defn handle-vote-by-additional-id [params]
-  (db-tx db/create-voter! {:additional_id (params :additional-id)}))
+  (try
+    (let [{:keys [campus additional-id election vote]} (check-and-throw ::handle-auraria-vote params)
+          voter (db-tx db/create-voter! {:additional_id additional-id
+                                         :admin false
+                                         :is_active true
+                                         :election election
+                                         :campus campus})]
+      (prn (str prn "voter::" voter))
+      (response/ok {:voter voter}))
+    (catch Exception e
+      (throw e)
+      (response/bad-request {:message "Bad parameters"}))))
+
 
 (defn handle-voter-code-from-ui
   [req]

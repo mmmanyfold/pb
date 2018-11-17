@@ -22,8 +22,8 @@
          :handler         (fn []
                             (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
                               (reset! show-confirmation? true)
-                              (rf/dispatch [:update-selected-proposals :reset])
-                              (js/setTimeout #(set! (.. js/window -location) survey-url) 3000)))
+                              (rf/dispatch [:update-selected-proposals :reset])))
+                              ;(js/setTimeout #(set! (.. js/window -location) survey-url) 3000)))
          :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
          :format          :raw
