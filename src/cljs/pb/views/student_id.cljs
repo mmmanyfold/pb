@@ -141,7 +141,7 @@
                              (reset! empty-campus (= (count @campus) 0))
                              (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))}]
             [:div.required "*"]]
-           [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted."]]
+           [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted. In the case of duplicate IDs, we will contact the student to confirm their vote and delete the others."]]
 
            (when-not config/debug?
              [captcha-component])
