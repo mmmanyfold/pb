@@ -42,23 +42,23 @@
 (defn db-tx [f & [args]]
   (try
     (jdbc/with-db-transaction [t-conn *db*]
-      (jdbc/db-set-rollback-only! t-conn)
-      (f args))
+                              (jdbc/db-set-rollback-only! t-conn)
+                              (f args))
     (catch Exception e (str "caught exception: " (.getMessage e) "\ncaused by: " (.getCause e)))))
 
 (defn send-code [phone-number voting-code]
   (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
-    @(twilio/send-sms
-       {:From PB_TWILIO_PHONE_NUMBER
-        :To phone-number
-        :Body voting-code})))
+                    @(twilio/send-sms
+                       {:From PB_TWILIO_PHONE_NUMBER
+                        :To   phone-number
+                        :Body voting-code})))
 
 (defn check-voter-code
   "Checks if voter code is valid and has not already voted"
   [req]
   (try
     (let [{:keys [voter-code election]} (check-and-throw ::check-code (:params req))]
-      (if-let [voter (db-tx db/get-voter-by-code {:code (string/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
+      (if-let [voter (db-tx db/get-voter-by-code {:code     (string/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
                                                   :election election})]
         (if (db-tx db/get-voter-vote {:id (:id voter)})
           (response/conflict {:message "Already voted"})
@@ -82,12 +82,12 @@
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
-                               :phone phone-number
-                               :admin false
-                               :is_active true
-                               :code code
-                               :election election
-                               :campus campus})
+                               :phone         phone-number
+                               :admin         false
+                               :is_active     true
+                               :code          code
+                               :election      election
+                               :campus        campus})
       (send-code phone-number voting-code)
       (response/ok {:message "Voting code sent"}))))
 
@@ -95,10 +95,10 @@
   (try
     (let [{:keys [campus additional-id election vote]} (check-and-throw ::handle-auraria-vote params)
           voter (db-tx db/create-voter-without-code! {:additional_id additional-id
-                                                      :admin false
-                                                      :is_active true
-                                                      :election election
-                                                      :campus campus})]
+                                                      :admin         false
+                                                      :is_active     true
+                                                      :election      election
+                                                      :campus        campus})]
       (prn (str "voter::" voter))
       (response/ok {:voter voter}))
     (catch Exception e
@@ -122,10 +122,10 @@
     (let [{:keys [voter-id vote election]} (check-and-throw ::handle-vote (:params req))
           voter-id (as-int voter-id)]
       (if (nil? (db-tx db/get-voter-vote {:id voter-id}))
-        (let [vote-id (:id (db-tx db/create-vote! {:vote vote
+        (let [vote-id (:id (db-tx db/create-vote! {:vote     vote
                                                    :election election}))]
           (db-tx db/create-voter-vote! {:voter_id voter-id
-                                        :vote_id vote-id
+                                        :vote_id  vote-id
                                         :election election})
           (response/ok {:message "Vote registered"}))
         (response/conflict {:message "Already voted"})))
@@ -148,10 +148,10 @@
     (response/not-found {:error "election sys env var not found"})))
 
 (defroutes api-routes
-  (context "/api" []
-    (GET "/election" [] handle-get-election)
-    (GET "/checkadmin" {params :params} (handle-check-admin params))
-    (GET "/checkcode" [] check-voter-code)
-    (POST "/votercode" [] handle-voter-code-from-ui)
-    (POST "/vote-by-additional-id" {params :params} (handle-vote-by-additional-id params))
-    (POST "/vote" [] handle-vote)))
+           (context "/api" []
+             (GET "/election" [] handle-get-election)
+             (GET "/checkadmin" {params :params} (handle-check-admin params))
+             (GET "/checkcode" [] check-voter-code)
+             (POST "/votercode" [] handle-voter-code-from-ui)
+             (POST "/vote-by-additional-id" {params :params} (handle-vote-by-additional-id params))
+             (POST "/vote" [] handle-vote)))
