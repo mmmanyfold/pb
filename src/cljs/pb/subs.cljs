@@ -39,9 +39,19 @@
    (:selected-proposals db)))
 
 (rf/reg-sub
-  :voter-id
+    :voter-id
+    (fn [db _]
+      (:voter-id db)))
+
+(rf/reg-sub
+  :campus
   (fn [db _]
-    (:voter-id db)))
+    (:campus db)))
+
+(rf/reg-sub
+  :additional-id
+  (fn [db _]
+    (:additional-id db)))
 
 (rf/reg-sub
   :admin-election

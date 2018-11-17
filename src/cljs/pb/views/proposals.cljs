@@ -17,7 +17,7 @@
     (str "{" (string/join queries) "}")))
 
 (defn submit-vote []
-  (POST "/api/vote"
+  (POST "/api/vote-by-additional-id"
         {:response-format (ajax/json-response-format {:keywords? true})
          :handler         (fn []
                             (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
@@ -27,7 +27,8 @@
          :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
          :format          :raw
-         :params          {:voter-id @(rf/subscribe [:voter-id])
+         :params          {:additional-id @(rf/subscribe [:additional-id])
+                           :campus @(rf/subscribe [:campus])
                            :vote     @(rf/subscribe [:selected-proposals])
                            :election (-> @(rf/subscribe [:election-in-view]) :sys :id)}}))
 

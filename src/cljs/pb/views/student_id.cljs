@@ -146,7 +146,7 @@
            (when-not config/debug?
              [captcha-component])
            [:a {:on-click (fn [_]
-                            (rf/dispatch [:set-additional-id @additionalId])
+                            (rf/dispatch [:set-campus-additional-id @campus @additionalId])
                             (rf/dispatch [:set-active-view :proposals-view @(rf/subscribe [:election-slug])]))}
             [:button#send-code
              {:type     "submit"

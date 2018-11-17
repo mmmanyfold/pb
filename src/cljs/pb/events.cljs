@@ -96,6 +96,7 @@
     (assoc db :admin state)))
 
 (rf/reg-event-db
-  :set-additional-id
-  (fn [db [_ id]]
-    (assoc db :additional-id id)))
+  :set-campus-additional-id
+  (fn [db [_ campus id]]
+    (assoc db :additional-id id
+              :campus campus)))

@@ -94,12 +94,12 @@
 (defn handle-vote-by-additional-id [params]
   (try
     (let [{:keys [campus additional-id election vote]} (check-and-throw ::handle-auraria-vote params)
-          voter (db-tx db/create-voter! {:additional_id additional-id
-                                         :admin false
-                                         :is_active true
-                                         :election election
-                                         :campus campus})]
-      (prn (str prn "voter::" voter))
+          voter (db-tx db/create-voter-without-code! {:additional_id additional-id
+                                                      :admin false
+                                                      :is_active true
+                                                      :election election
+                                                      :campus campus})]
+      (prn (str "voter::" voter))
       (response/ok {:voter voter}))
     (catch Exception e
       (throw e)
