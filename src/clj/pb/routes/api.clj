@@ -94,13 +94,17 @@
 (defn handle-vote-by-additional-id [params]
   (try
     (let [{:keys [campus additional-id election vote]} (check-and-throw ::handle-auraria-vote params)
-          voter (db-tx db/create-voter-without-code! {:additional_id additional-id
-                                                      :admin         false
-                                                      :is_active     true
-                                                      :election      election
-                                                      :campus        campus})]
-      (prn (str "voter::" voter))
-      (response/ok {:voter voter}))
+          {voter-id :id} (db-tx db/create-voter-without-code-returning-id!
+                                {:additional_id additional-id
+                                 :admin         false
+                                 :is_active     true
+                                 :election      election
+                                 :campus        campus})]
+      (let [{vote-id :id} (db-tx db/create-vote! {:vote vote :election election})]
+        (db-tx db/create-voter-vote! {:voter_id voter-id
+                                      :vote_id  vote-id
+                                      :election election})
+        (response/ok {:message "Vote registered"})))
     (catch Exception e
       (throw e)
       (response/bad-request {:message "Bad parameters"}))))

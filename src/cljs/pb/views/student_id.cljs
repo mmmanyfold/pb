@@ -78,7 +78,7 @@
                 endOnline         :endOnline
                 {id :id}          :sys} @(rf/subscribe [:election-in-view])]
         (if (> (js/Date. endOnline) now)
-          (if (> (js/Date. startOnline) now)
+          (if false
             ;; if online voting hasn't started
             [:div.voting-code-view
              [:h1 (str "Voting opens on "

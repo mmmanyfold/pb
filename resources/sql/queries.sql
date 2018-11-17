@@ -4,7 +4,7 @@ INSERT INTO voters
 (additional_id, phone, admin, is_active, code, election, campus)
 VALUES (:additional_id, :phone, :admin, :is_active, :code, :election, :campus)
 
--- :name create-voter-without-code! :! :1
+-- :name create-voter-without-code-returning-id! :<! :1
 -- :doc creates a new voter record
 INSERT INTO voters
 (additional_id, admin, is_active, election, campus)
