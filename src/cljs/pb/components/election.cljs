@@ -13,7 +13,7 @@
                 eligibility]} election]
     [:div.election-component.tc.center.mv3.pa1
      [:h1.mt2.pt1.fw7 title]
-     [:h3.b [render-markdown eligibility]]
+     [:h3 [render-markdown eligibility]]
      [:div.links.f3.f2-ns.center
       [:a.pa3 {:href (str "/#/" shortTitle)}
        [:span.tc
@@ -27,7 +27,7 @@
              (str startDay " – " endDay)))]]]]
 
      [:p.lh-title.mt3
-      "*To vote online, you will need a mobile phone with SMS (text messaging) to receive your unique voting code."]
+      "*You will need your student ID to vote."]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
         [:a.pa3 {:href (str "/#/" shortTitle "/vote-in-person")}
