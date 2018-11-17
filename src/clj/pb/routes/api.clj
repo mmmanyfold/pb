@@ -99,12 +99,12 @@
                                  :admin         false
                                  :is_active     true
                                  :election      election
-                                 :campus        campus})]
-      (let [{vote-id :id} (db-tx db/create-vote! {:vote vote :election election})]
-        (db-tx db/create-voter-vote! {:voter_id voter-id
-                                      :vote_id  vote-id
-                                      :election election})
-        (response/ok {:message "Vote registered"})))
+                                 :campus        campus})
+          {vote-id :id} (db-tx db/create-vote! {:vote vote :election election})]
+      (db-tx db/create-voter-vote! {:voter_id voter-id
+                                    :vote_id  vote-id
+                                    :election election})
+      (response/ok {:message "Vote registered"}))
     (catch Exception e
       (throw e)
       (response/bad-request {:message "Bad parameters"}))))
