@@ -86,6 +86,9 @@
       (send-code phone-number voting-code)
       (response/ok {:message "Voting code sent"}))))
 
+(defn handle-vote-by-additional-id [params]
+  (db-tx db/create-voter! {:additional_id (params :additional-id)}))
+
 (defn handle-voter-code-from-ui
   [req]
   (try
@@ -133,4 +136,5 @@
     (GET "/checkadmin" {params :params} (handle-check-admin params))
     (GET "/checkcode" [] check-voter-code)
     (POST "/votercode" [] handle-voter-code-from-ui)
+    (POST "/vote-by-additional-id" {params :params} (handle-vote-by-additional-id params))
     (POST "/vote" [] handle-vote)))
