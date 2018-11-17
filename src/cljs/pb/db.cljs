@@ -1,7 +1,8 @@
 (ns pb.db)
 
 (def default-db
-  {:admin-election nil
+  {:additional-id nil
+   :admin-election nil
    :active-view nil
    :captcha-passed nil
    :election-slug nil

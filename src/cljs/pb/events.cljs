@@ -94,3 +94,8 @@
   :set-admin
   (fn [db [_ state]]
     (assoc db :admin state)))
+
+(rf/reg-event-db
+  :set-additional-id
+  (fn [db [_ id]]
+    (assoc db :additional-id id)))

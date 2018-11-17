@@ -129,7 +129,7 @@
             [:div.required "*"]
             [:input
              {:type        "text"
-              :pattern     "/^[a-z0-9]+$/i"
+              :pattern     "/^[a-z0-9]{9}/i"
               :class       (str "form-control" (when @wrong-id " input-error"))
               :placeholder "Student ID"
               :maxLength   9
@@ -145,7 +145,9 @@
 
            (when-not config/debug?
              [captcha-component])
-           [:a {:on-click nil}
+           [:a {:on-click (fn [_]
+                            (rf/dispatch [:set-additional-id @additionalId])
+                            (rf/dispatch [:set-active-view :proposals-view @(rf/subscribe [:election-slug])]))}
             [:button#send-code
              {:type     "submit"
               :disabled (or (when-not config/debug?
