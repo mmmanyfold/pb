@@ -16,9 +16,8 @@
         :admin-view [admin/view]
         :home-view [home-view admin-election]
         :voting-code-view [voting-code-view election-slug]
-        :proposals-view [proposals/view election-slug]
+        :proposals-view [proposals/view]
         :vote-in-person-view [vote-in-person-view election-slug]
-        :404 not-found-view
         [:div not-found-view]))
 
 (defn view []

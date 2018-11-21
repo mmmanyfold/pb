@@ -47,34 +47,31 @@
                 [:p.mb1 "Redirecting to survey..."]
                 [:small "or " [:a {:href survey-url} "go to survey now"]]])]])))
 
-(defn view [election-slug]
-  (if-let [election-in-view @(rf/subscribe [:election-in-view])]
-    (let [{:keys [proposalRefs maxSelection displayFormat]} election-in-view
-          ids (map #(-> % :sys :id) proposalRefs)
-          query (query ids)]
-      (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
-      (if-let [proposals @(rf/subscribe [:proposals-in-view])]
-        (let [selected-proposals @(rf/subscribe [:selected-proposals])]
-          [:div.proposals-view.mt5
-           [confirmation-component]
-           [:h2 "Instructions:"]
-           [:ol
-            [:li "Choose the projects you want to support by clicking the checkbox."]
-            [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
-                                                          " projects."
-                                                          " project.")]
-            [:li "Click \"Submit My Ballot\" when you're ready to submit."]]
-           [:div.tc
-            [:input.submit.mt3 {:on-click submit-vote
-                                :disabled (or (nil? selected-proposals)
-                                              (empty? selected-proposals))
-                                :type     "submit"
-                                :value    "Submit My Ballot"}]]
-           [:div.proposals.row
-            (for [proposal proposals]
-              ^{:key (gensym "p-")}
-              [proposal-component proposal displayFormat])]])
-        [loading-component]))
-    (do
-      (set! (-> js/window .-location .-href) (str "/#/" election-slug))
-      [:div.proposals-view "Redirecting..."])))
+(defn view []
+  (let [election-in-view @(rf/subscribe [:election-in-view])
+        {:keys [proposalRefs maxSelection displayFormat]} election-in-view
+        ids (map #(-> % :sys :id) proposalRefs)
+        query (query ids)]
+    (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
+    (if-let [proposals @(rf/subscribe [:proposals-in-view])]
+      (let [selected-proposals @(rf/subscribe [:selected-proposals])]
+        [:div.proposals-view.mt5
+         [confirmation-component]
+         [:h2 "Instructions:"]
+         [:ol
+          [:li "Choose the projects you want to support by clicking the checkbox."]
+          [:li "You can vote for up to " maxSelection (if (> maxSelection 1)
+                                                        " projects."
+                                                        " project.")]
+          [:li "Click \"Submit My Ballot\" when you're ready to submit."]]
+         [:div.tc
+          [:input.submit.mt3 {:on-click submit-vote
+                              :disabled (or (nil? selected-proposals)
+                                            (empty? selected-proposals))
+                              :type     "submit"
+                              :value    "Submit My Ballot"}]]
+         [:div.proposals.row
+          (for [proposal proposals]
+            ^{:key (gensym "p-")}
+            [proposal-component proposal displayFormat])]])
+      [loading-component])))
