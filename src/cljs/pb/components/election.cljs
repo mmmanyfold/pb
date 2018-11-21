@@ -15,7 +15,7 @@
      [:h1.mt2.pt1.fw7 title]
      [:h3.b [render-markdown eligibility]]
      [:div.links.f3.f2-ns.center
-      [:a.pa3 {:href (str "/#/" shortTitle)}
+      [:a.pa3 {:href (str "/#/vote/" shortTitle)}
        [:span.tc
         "Vote online now*"
         [:br]
