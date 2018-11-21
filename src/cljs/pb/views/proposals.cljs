@@ -37,13 +37,15 @@
    (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
     [rc/modal-panel
      :child [:div.confirmation.f3.f2-m.f1-l.pa2-m.pa3-l.tc
-             [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
              (if @(rf/subscribe [:admin])
-               [:small [:button#submit-another
-                        {:type     "button"
-                         :on-click #(swap! show-confirmation? not)}
-                        "submit another one ?"]]
                [:div
+                [:p.fw7 "Ballot recorded!"]
+                [:small [:button#submit-another.f2
+                         {:type     "button"
+                          :on-click #(swap! show-confirmation? not)}
+                         "Enter another one"]]]
+               [:div
+                [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
                 [:p.mb1 "Redirecting to survey..."]
                 [:small "or " [:a {:href survey-url} "go to survey now"]]])]])))
 
