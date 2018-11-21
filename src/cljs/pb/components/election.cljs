@@ -30,7 +30,7 @@
       "*To vote online, you will need a mobile phone with SMS (text messaging) to receive your unique voting code."]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
-        [:a.pa3 {:href (str "/#/" shortTitle "/vote-in-person")}
+        [:a.pa3 {:href (str "/#/" shortTitle "/in-person")}
          [:span.tc
           "How to vote in person"
           [:br]

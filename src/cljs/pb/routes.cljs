@@ -37,7 +37,7 @@
             (rf/dispatch [:clear :captcha-passed])
             (rf/dispatch [:set-active-view :voting-code-view (:election params)]))
 
-  (defroute "/vote/:election/vote-in-person" {:as params}
+  (defroute "/vote/:election/in-person" {:as params}
             (rf/dispatch [:set-active-view :vote-in-person-view (:election params)]))
 
   ;; --------------------
