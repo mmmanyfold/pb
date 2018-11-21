@@ -13,7 +13,7 @@
 
 (defn- show-view [view-name election-slug admin-election]
   (case view-name
-        :admin-view [admin/view election-slug]
+        :admin-view [admin/view admin-election]
         :home-view [home-view admin-election]
         :voting-code-view [voting-code-view election-slug]
         :proposals-view [proposals/view]
