@@ -1,10 +1,9 @@
 (ns pb.main
   (:require [re-frame.core :as rf]
             [re-com.core :as rc]
-            [reagent.core :as rg]
             [pb.views.home :refer [home-view]]
             [pb.views.voting-code :refer [voting-code-view]]
-            [pb.views.proposals :refer [proposals-view]]
+            [pb.views.proposals :as proposals]
             [pb.views.vote-in-person :refer [vote-in-person-view]]
             [pb.views.admin :as admin]
             [pb.components.header :refer [header-component]]))
@@ -17,7 +16,7 @@
         :admin-view [admin/view]
         :home-view [home-view admin-election]
         :voting-code-view [voting-code-view election-slug]
-        :proposals-view [proposals-view election-slug]
+        :proposals-view [proposals/view election-slug]
         :vote-in-person-view [vote-in-person-view election-slug]
         :404 not-found-view
         [:div not-found-view]))

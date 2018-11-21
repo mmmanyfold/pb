@@ -22,14 +22,14 @@
 
   (secretary/set-config! :prefix "#")
 
-  (defroute "/admin" []
-            (rf/dispatch [:set-active-view :admin-view]))
-
   (defroute "/" []
             (rf/dispatch [:set-active-view :home-view])
             (rf/dispatch [:clear :election-in-view])
             (rf/dispatch [:clear :proposals-in-view])
             (rf/dispatch [:clear :voter-code]))
+
+  (defroute "/admin" []
+            (rf/dispatch [:set-active-view :admin-view]))
 
   (defroute "/:election" {:as params}
             (rf/dispatch [:set-active-view :voting-code-view (:election params)])
@@ -40,7 +40,7 @@
   (defroute "/:election/proposals" {:as params}
             (if @(rf/subscribe [:voter-id])
               (rf/dispatch [:set-active-view :proposals-view (:election params)])
-              (set! (.. js/window -location -hash) (str "/" (:election params)))))
+              (rf/dispatch [:set-active-view :home-view])))
 
   (defroute "/:election/vote-in-person" {:as params}
             (rf/dispatch [:set-active-view :vote-in-person-view (:election params)]))

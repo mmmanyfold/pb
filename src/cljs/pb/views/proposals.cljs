@@ -23,7 +23,8 @@
                             (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
                               (reset! show-confirmation? true)
                               (rf/dispatch [:update-selected-proposals :reset])
-                              (js/setTimeout #(set! (.. js/window -location) survey-url) 3000)))
+                              (when-not @(rf/subscribe [:admin])
+                                (js/setTimeout #(set! (.. js/window -location) survey-url) 3000))))
          :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
          :format          :raw
@@ -37,10 +38,16 @@
     [rc/modal-panel
      :child [:div.confirmation.f3.f2-m.f1-l.pa2-m.pa3-l.tc
              [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
-             [:p.mb1 "Redirecting to survey..."]
-             [:small "or " [:a {:href survey-url} "go to survey now"]]]])))
+             (if @(rf/subscribe [:admin])
+               [:small [:button#submit-another
+                        {:type     "button"
+                         :on-click #(swap! show-confirmation? not)}
+                        "submit another one ?"]]
+               [:div
+                [:p.mb1 "Redirecting to survey..."]
+                [:small "or " [:a {:href survey-url} "go to survey now"]]])]])))
 
-(defn proposals-view [election-slug]
+(defn view [election-slug]
   (if-let [election-in-view @(rf/subscribe [:election-in-view])]
     (let [{:keys [proposalRefs maxSelection displayFormat]} election-in-view
           ids (map #(-> % :sys :id) proposalRefs)
