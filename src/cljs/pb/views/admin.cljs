@@ -13,8 +13,8 @@
   [:div#admin
    [:h1 "401: unauthorized"]])
 
-(defn view []
-  (let [query (str "{ elections(q: \"fields.shortTitle=" @(rf/subscribe [:admin-election])
+(defn view [election]
+  (let [query (str "{ elections(q: \"fields.shortTitle=" election
                    "\") {
                      title
                      additionalIdLabel
