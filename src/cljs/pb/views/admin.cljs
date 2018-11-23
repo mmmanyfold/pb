@@ -14,6 +14,7 @@
    [:h1 "401: unauthorized"]])
 
 (defn view [election]
+  ;; TODO: update to rest call
   (let [query (str "{ elections(q: \"fields.shortTitle=" election
                    "\") {
                      title

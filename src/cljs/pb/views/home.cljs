@@ -15,6 +15,7 @@
    }}")
 
 (defn home-view [admin-election]
+  ;; TODO: update to rest call
   ;; 0. declare unique db-key
   ;; 1. register subscriber db-key
   ;; 2. retrieve contentful data & pass key for assoc in db

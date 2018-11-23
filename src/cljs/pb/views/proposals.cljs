@@ -54,6 +54,7 @@
         {:keys [proposalRefs maxSelection displayFormat]} election-in-view
         ids (map #(-> % :sys :id) proposalRefs)
         query (query ids)]
+    ;; TODO: update to rest call
     (rf/dispatch [:get-contentful-data :proposals-in-view query :election])
     (if-let [proposals @(rf/subscribe [:proposals-in-view])]
       (let [selected-proposals @(rf/subscribe [:selected-proposals])]

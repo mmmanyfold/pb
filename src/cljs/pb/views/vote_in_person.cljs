@@ -12,6 +12,7 @@
                      eligibility
                      votingInPerson
                    }}")]
+    ;; TODO: update to rest call
     (rf/dispatch [:get-contentful-data :election-in-view query :election])
     (fn []
       (if-let [{startInPerson :startInPerson

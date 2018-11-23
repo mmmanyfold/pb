@@ -44,7 +44,9 @@
                  [selmer "1.11.7"]
                  [twilio-api "1.0.1"]
                  [cljs-http "0.1.45"]
-                 [org.clojure/core.async "0.4.474"]]
+                 [org.clojure/core.async "0.4.474"]
+                 [metosin/jsonista "0.2.2"]
+                 [funcool/cuerdas "2.0.5"]]
 
   :min-lein-version "2.0.0"
 

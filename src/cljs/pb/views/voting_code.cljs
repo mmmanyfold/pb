@@ -70,6 +70,7 @@
                      proposalRefs {
                        sys { id }}
                    }}")]
+    ;; TODO: update to rest call
     (rf/dispatch [:get-contentful-data :election-in-view query :election])
     (reset! code-sent? false)
     (fn []
