@@ -14,4 +14,5 @@
    ;; new structure for translated content entries
    :entries nil
    ;; options are :en-US and :es-US
-   :language-in-view :en-US})
+   :language-in-view :en-US
+   :election-in-view-2 nil})

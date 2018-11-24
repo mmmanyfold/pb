@@ -15,7 +15,7 @@
   (case view-name
         :admin-view [admin/view admin-election]
         :home-view [home-view admin-election]
-        :voting-code-view [voting-code-view election-slug]
+        :voting-code-view [voting-code-view]
         :proposals-view [proposals/view]
         :vote-in-person-view [vote-in-person-view election-slug]
         [:div not-found-view]))

@@ -1,7 +1,7 @@
 (ns pb.subs
   (:require [re-frame.core :as rf]))
 
-;; Subscriptions
+;; Subscriptions - lvl 2
 
 (rf/reg-sub
  :active-view
@@ -34,7 +34,7 @@
    (:proposals-in-view db)))
 
 (rf/reg-sub
- :selected-proposals
+  :selected-proposals
  (fn [db _]
    (:selected-proposals db)))
 
@@ -62,3 +62,15 @@
   :entries
   (fn [db _]
     (:entries db)))
+
+;; Subscriptions - lvl 3
+
+(rf/reg-sub
+  :election-in-view-2
+  (fn[_ _]
+    [(rf/subscribe [:language-in-view])
+     (rf/subscribe [:entries])
+     (rf/subscribe [:admin-election])])
+  (fn[[language entries admin-election] _]
+    (some #(when (= (-> % :fields :shortTitle) admin-election)
+             %) (:elections (language entries)))))

@@ -54,32 +54,18 @@
       [:div.error.already-voted
        "We already got your vote!"])))
 
-(defn voting-code-view [election-slug]
-  (reset! error-code nil)
+(defn voting-code-view []
   (let [now (js/Date.)
-        query (str "{ elections(q: \"fields.shortTitle=" election-slug
-                   "\") {
-                     title
-                     additionalIdLabel
-                     startOnline
-                     endOnline
-                     maxSelection
-                     surveyUrl
-                     displayFormat
-                     sys { id }
-                     proposalRefs {
-                       sys { id }}
-                   }}")]
-    ;; TODO: update to rest call
-    (rf/dispatch [:get-contentful-data :election-in-view query :election])
-    (reset! code-sent? false)
-    (fn []
-      (if-let [{additionalIdLabel :additionalIdLabel
-                startOnline       :startOnline
-                endOnline         :endOnline
-                {id :id}          :sys} @(rf/subscribe [:election-in-view])]
-        (if (> (js/Date. endOnline) now)
-          (if (> (js/Date. startOnline) now)
+        election-in-view (rf/subscribe [:election-in-view-2])]
+    (if @election-in-view
+      (let [_ (prn @election-in-view)
+            {additionalIdLabel :additionalIdLabel
+             startOnline       :startOnline
+             endOnline         :endOnline
+             {id :id}          :sys} @election-in-view]
+        ;; TODO: undo these two conditionals
+        (if true
+          (if false
             ;; if online voting hasn't started
             [:div.voting-code-view
              [:h1 (str "Voting opens on "
@@ -97,8 +83,8 @@
           [:div.voting-code-view
            [:h1 (str "Voting ended on "
                      (-> (js/moment endOnline)
-                         (.format "dddd, MMMM Do YYYY [at] h:mm a.")))]])
-        [loading-component]))))
+                         (.format "dddd, MMMM Do YYYY [at] h:mm a.")))]]))
+      [loading-component])))
 
 
 (defn send-code-component [additionalIdLabel id]
