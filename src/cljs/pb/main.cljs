@@ -32,5 +32,7 @@
                   [:div {:class "content-panel mh3 mh4-ns mb5"}
                    [:div.language-btn.tc.pa1
                     {:on-click #(rf/dispatch [:toggle-language])}
-                    "español"]
+                    (if (= @(rf/subscribe [:language-in-view]) :en-US)
+                      "Español"
+                      "English")]
                    [show-view @active-view @election-slug @admin-election]]]])))
