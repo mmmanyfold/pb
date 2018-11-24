@@ -10,4 +10,6 @@
    :proposals-in-view nil
    :selected-proposals []
    :voter-id nil
-   :admin false})
+   :admin false
+   ;; new structure for translated content entries
+   :entries {:en-US {} :es-US {}}})
