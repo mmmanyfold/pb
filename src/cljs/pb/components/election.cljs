@@ -12,7 +12,7 @@
                 votingInPerson
                 eligibility
                 voteOnlineButtonText
-                instructions]} election]
+                voteOnlineButtonLabel]} election]
     [:div.election-component.tc.center.mv3.pa1
      [:h1.mt2.pt1.fw7 title]
      [:h3.b [render-markdown eligibility]]
@@ -28,7 +28,7 @@
              (str startDay)
              (str startDay " – " endDay)))]]]]
 
-     [:p.lh-title.mt3 instructions]
+     [:p.lh-title.mt3 voteOnlineButtonLabel]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
         [:a.pa3 {:href (str "/#/" shortTitle "/in-person")}

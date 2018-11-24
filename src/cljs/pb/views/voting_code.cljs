@@ -134,7 +134,7 @@
                                       (reset! campus (-> e .-target .-value))
                                       (reset! empty-campus (= (count @campus) 0)))}
                 [:option {:default-value :disabled
-                          :value         ""} "Campus:"]
+                          :value         ""} "School:"]
                 [:option {:value "cudenver"} "CU Denver"]
                 [:option {:value "ccd"} "CCD"]
                 [:option {:value "msu"} "MSU"]]
@@ -142,7 +142,7 @@
                [:input
                 {:type        "text"
                  :class       (str "form-control" (when @empty-id " input-error"))
-                 :placeholder "Student ID"
+                 :placeholder "xxxxxxxxx"
                  :maxLength   9
                  :value       @additionalId
                  :on-change   (fn [e]
@@ -203,7 +203,7 @@
                             (when-not (nil? additionalIdLabel)
                               (< (count @additionalId) 9)
                               (= @campus "Campus:")))}
-             "SEND MY CODE"]]]
+             "CONTINUE"]]]
           [error-component]])})))
 
 (defn check-code-component [id]
