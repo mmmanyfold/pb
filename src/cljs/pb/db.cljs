@@ -12,4 +12,5 @@
    :voter-id nil
    :admin false
    ;; new structure for translated content entries
-   :entries {:en-US {} :es-US {}}})
+   :entries nil
+   :language-in-view :es-US})

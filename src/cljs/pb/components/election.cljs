@@ -10,14 +10,16 @@
                 startInPerson
                 endInPerson
                 votingInPerson
-                eligibility]} election]
+                eligibility
+                voteOnlineButtonText
+                instructions]} election]
     [:div.election-component.tc.center.mv3.pa1
      [:h1.mt2.pt1.fw7 title]
      [:h3.b [render-markdown eligibility]]
      [:div.links.f3.f2-ns.center
       [:a.pa3 {:href (str "/#/vote/" shortTitle)}
        [:span.tc
-        "Vote online now*"
+        voteOnlineButtonText
         [:br]
         [:h5.f5.f4-ns
          (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
@@ -26,8 +28,7 @@
              (str startDay)
              (str startDay " – " endDay)))]]]]
 
-     [:p.lh-title.mt3
-      "*To vote online, you will need a mobile phone with SMS (text messaging) to receive your unique voting code."]
+     [:p.lh-title.mt3 instructions]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
         [:a.pa3 {:href (str "/#/" shortTitle "/in-person")}

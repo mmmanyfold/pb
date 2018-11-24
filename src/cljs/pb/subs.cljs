@@ -52,3 +52,13 @@
   :admin
   (fn [db _]
     (:admin db)))
+
+(rf/reg-sub
+  :language-in-view
+  (fn [db _]
+    (:language-in-view db)))
+
+(rf/reg-sub
+  :entries
+  (fn [db _]
+    (:entries db)))

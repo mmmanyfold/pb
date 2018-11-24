@@ -116,3 +116,8 @@
   :set-admin
   (fn [db [_ state]]
     (assoc db :admin state)))
+
+(rf/reg-event-db
+  :update-language
+  (fn [db [_ lang]]
+    (assoc db :language-in-view lang)))
