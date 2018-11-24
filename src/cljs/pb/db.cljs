@@ -13,4 +13,5 @@
    :admin false
    ;; new structure for translated content entries
    :entries nil
-   :language-in-view :es-US})
+   ;; options are :en-US and :es-US
+   :language-in-view :en-US})

@@ -118,6 +118,8 @@
     (assoc db :admin state)))
 
 (rf/reg-event-db
-  :update-language
-  (fn [db [_ lang]]
-    (assoc db :language-in-view lang)))
+  :toggle-language
+  (fn [db [_ _]]
+    (if (= (:language-in-view db) :en-US)
+      (assoc db :language-in-view :es-US)
+      (assoc db :language-in-view :en-US))))

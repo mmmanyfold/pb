@@ -30,5 +30,7 @@
        :class "w-100 h-100 mb0"
        :children [[header-component @active-view @election-slug (count @selected-proposals)]
                   [:div {:class "content-panel mh3 mh4-ns mb5"}
-                   [:div.language-btn.tc.pa1 "espanol"]
+                   [:div.language-btn.tc.pa1
+                    {:on-click #(rf/dispatch [:toggle-language])}
+                    "español"]
                    [show-view @active-view @election-slug @admin-election]]]])))
