@@ -10,6 +10,30 @@ body {
   width: 100%;
 }
 
+.language-btn {
+  margin-left: auto;
+  width: 70px;
+  background-color: $lightgray;
+  border-radius: 0 0 5px 5px;
+  color: $purple;
+  border: 1px solid $yellow;
+  cursor: pointer;
+  &:hover {
+    background-color: $yellow;
+  }
+}
+
+.content-panel {
+  z-index: 10;
+  margin-top: 3.4rem;
+  @media screen and (min-width: 480px) {
+    margin-top: 3.9rem;
+  }
+  @media screen and (min-width: 550px) {
+    margin-top: 4.5rem;
+  }
+}
+
 h1 {
   color: $purple;
   font-weight: 700;
@@ -17,6 +41,10 @@ h1 {
 
 a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0;
+}
+
+a {
+  color: $green;
 }
 
 button, input, optgroup, select, textarea {
@@ -91,7 +119,7 @@ input[type="submit"], input[type="button"], button {
 header {
   z-index: 20;
   .nav-wrapper {
-    border-color: $green;
+    border-color: $yellow;
   }
   .nav-item {
     padding-top: 0.3em;
