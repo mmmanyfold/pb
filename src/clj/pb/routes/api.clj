@@ -7,7 +7,8 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.string :as string]
             [pb.twilio :as twilio]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [pb.contentful :as contentful]))
 
 (defonce PB_TWILIO_AUTH_TOKEN (System/getenv "PB_TWILIO_AUTH_TOKEN"))
 
@@ -129,6 +130,8 @@
 
 (defroutes api-routes
   (context "/api" []
+    (context "/contentful" []
+             (GET "/entries" [] (contentful/get-entries)))
     (GET "/election" [] handle-get-election)
     (GET "/checkadmin" {params :params} (handle-check-admin params))
     (GET "/checkcode" [] check-voter-code)
