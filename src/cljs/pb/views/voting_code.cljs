@@ -110,6 +110,7 @@
            {:on-submit (fn [e]
                          (.preventDefault e)
                          (.stopPropagation e))}
+           ;; TODO: refactor into own component
            (when additionalIdLabel
              [:div
               [:div.flexrow.input-group-prepend
