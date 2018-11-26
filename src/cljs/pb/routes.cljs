@@ -24,15 +24,12 @@
 
   (defroute "/" []
             (rf/dispatch [:set-active-view :home-view])
-            (rf/dispatch [:clear :election-in-view])
-            (rf/dispatch [:clear :proposals-in-view])
             (rf/dispatch [:clear :voter-code]))
 
   (defroute "/admin" []
             (rf/dispatch [:set-active-view :admin-view]))
 
   (defroute "/vote/:election" {:as params}
-            (rf/dispatch [:clear :selected-proposals])
             (rf/dispatch [:clear :voter-id])
             (rf/dispatch [:clear :captcha-passed])
             (rf/dispatch [:set-active-view :voting-code-view (:election params)]))

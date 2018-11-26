@@ -92,8 +92,7 @@
   (let [now (js/Date.)
         election-in-view (rf/subscribe [:election-in-view-2])]
     (if @election-in-view
-      (let [_ (prn @election-in-view)
-            {startOnline :startOnline
+      (let [{startOnline :startOnline
              endOnline   :endOnline
              {id :id}    :sys} @election-in-view]
         ;; TODO: undo these two conditionals

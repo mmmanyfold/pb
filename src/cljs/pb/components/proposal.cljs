@@ -21,9 +21,9 @@
                 impact
                 budget
                 timeline
-                images]} (first (val proposal))
-        id (name (first proposal))
-        maxSelection (:maxSelection @(rf/subscribe [:election-in-view]))
+                images]} (:fields proposal)
+        id (-> proposal :sys :id)
+        {maxSelection :maxSelection} (:fields @(rf/subscribe [:election-in-view-2]))
         images (map #(:url %) images)
         thumbnail-image (first images)
         show-impact? (rg/atom false)
