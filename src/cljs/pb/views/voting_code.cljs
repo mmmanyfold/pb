@@ -200,7 +200,7 @@
                                     (= @campus "Campus:"))
                                 (or (< (count @input-phone2) 12)
                                     (not= @input-phone1 @input-phone2))))}
-               (if (= @(rf/subscribe [:language-in-view]) :en-US)
+               (if @(rf/subscribe [:if-english?])
                  "CONTINUE"
                  "CONTINUAR")]]]
             [error-component]]))})))

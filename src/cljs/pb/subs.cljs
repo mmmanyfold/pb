@@ -74,3 +74,10 @@
   (fn[[language entries admin-election] _]
     (some #(when (= (-> % :fields :shortTitle) admin-election)
              %) (:elections (language entries)))))
+
+(rf/reg-sub
+  :if-english?
+  (fn[_ _]
+    [(rf/subscribe [:language-in-view])])
+  (fn[[language] _]
+    (= language :en-US)))
