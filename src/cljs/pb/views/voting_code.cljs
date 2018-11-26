@@ -66,34 +66,36 @@
 (defn student-id-component []
   (let [empty-campus (rg/atom false)
         wrong-id (rg/atom false)]
-    [:div
-     [:div.flexrow.input-group-prepend
-      [:select {:id        "campus"
-                :class     (str "form-control" (when @empty-campus " input-error"))
-                :name      "campus"
-                :on-change (fn [e]
-                             (reset! campus (-> e .-target .-value))
-                             (reset! empty-campus (= (count @campus) 0)))}
-       [:option {:default-value :disabled
-                 :value         ""} "School:"]
-       [:option {:value "cudenver"} "CU Denver"]
-       [:option {:value "ccd"} "CCD"]
-       [:option {:value "msu"} "MSU"]]
-      [:div.required "*"]
-      [:input
-       {:type        "text"
-        :pattern     "/^[a-z0-9]{9}/i"
-        :class       (str "form-control" (when @wrong-id " input-error"))
-        :placeholder "xxxxxxxxx"
-        :maxLength   9
-        :value       @additionalId
-        :on-change   (fn [e]
-                       (reset! additionalId (-> e .-target .-value))
-                       (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))
-        :on-blur     (fn []
-                       (reset! empty-campus (= (count @campus) 0))
-                       (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))}]
-      [:div.required "*"]]]))
+    (reset! additionalId "")
+    (fn []
+      [:div
+       [:div.flexrow.input-group-prepend
+        [:select {:id        "campus"
+                  :class     (str "form-control" (when @empty-campus " input-error"))
+                  :name      "campus"
+                  :on-change (fn [e]
+                               (reset! campus (-> e .-target .-value))
+                               (reset! empty-campus (= (count @campus) 0)))}
+         [:option {:default-value :disabled
+                   :value         ""} "School:"]
+         [:option {:value "cudenver"} "CU Denver"]
+         [:option {:value "ccd"} "CCD"]
+         [:option {:value "msu"} "MSU"]]
+        [:div.required "*"]
+        [:input
+         {:type        "text"
+          :pattern     "/^[a-z0-9]{9}/i"
+          :class       (str "form-control" (when @wrong-id " input-error"))
+          :placeholder "xxxxxxxxx"
+          :maxLength   9
+          :value       @additionalId
+          :on-change   (fn [e]
+                         (reset! additionalId (-> e .-target .-value))
+                         (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))
+          :on-blur     (fn []
+                         (reset! empty-campus (= (count @campus) 0))
+                         (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))}]
+        [:div.required "*"]]])))
 
 
 (defn voting-code-view []
