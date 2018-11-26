@@ -11,13 +11,13 @@
 (def not-found-view
   [:div [:h1 "404: Page not found"]])
 
-(defn- show-view [view-name election-slug admin-election]
+(defn- show-view [view-name admin-election]
   (case view-name
         :admin-view [admin/view admin-election]
         :home-view [home-view admin-election]
         :voting-code-view [voting-code-view]
         :proposals-view [proposals/view]
-        :vote-in-person-view [vote-in-person-view election-slug]
+        :vote-in-person-view [vote-in-person-view]
         [:div not-found-view]))
 
 (defn view []
@@ -35,4 +35,4 @@
                     (if @(rf/subscribe [:if-english?])
                       "Español"
                       "English")]
-                   [show-view @active-view @election-slug @admin-election]]]])))
+                   [show-view @active-view @admin-election]]]])))

@@ -15,7 +15,7 @@ body {
     background-color: #FCB733; }
 
 .content-panel {
-  z-index: 10;
+  z-index: 100;
   margin-top: 3.4rem; }
   @media screen and (min-width: 480px) {
     .content-panel {

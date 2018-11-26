@@ -24,11 +24,6 @@
     (:elections elections)))
 
 (rf/reg-sub
-  :election-in-view
-  (fn [db _]
-    (first (:elections (:election-in-view db)))))
-
-(rf/reg-sub
   :selected-proposals
   (fn [db _]
     (:selected-proposals db)))
