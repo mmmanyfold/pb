@@ -1,14 +1,15 @@
 (ns pb.views.admin
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [re-frame.core :as rf]
+            [pb.views.proposals :as proposals]
             [cljs-http.client :as http]))
 
-(defn- admin-voting-component []
+(defn admin-voting-component []
   [:div#admin
-   [:h1 "admin view"]
-   [:p "..."]])
+   [:h1.ttu "Admin: Enter votes manually"]
+   [proposals/view]])
 
-(defn- unauthorized-component []
+(defn unauthorized-component []
   [:div#admin
    [:h1 "401: unauthorized"]])
 
@@ -18,8 +19,8 @@
     (let [admin-secret (js/prompt "admin password")]
       (go
         (let [resp-chann (http/get "/api/checkadmin" {:query-params {"secret" admin-secret}})
-              {{admin? :admin} :body} (<! resp-chann)]
-          (rf/dispatch [:set-admin admin?])))
+              {{admin :admin} :body} (<! resp-chann)]
+          (rf/dispatch-sync [:set-admin admin])))
       (if @(rf/subscribe [:admin])
         [admin-voting-component]
         [unauthorized-component]))))

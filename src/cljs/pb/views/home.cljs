@@ -2,28 +2,14 @@
   (:require [re-frame.core :as rf]
             [pb.components.election :refer [election-component]]))
 
-(def query
-  "{ elections {
-     title
-     shortTitle
-     startOnline
-     endOnline
-     startInPerson
-     endInPerson
-     eligibility
-     votingInPerson
-   }}")
-
 (defn home-view [admin-election]
-  ;; 0. declare unique db-key
-  ;; 1. register subscriber db-key
-  ;; 2. retrieve contentful data & pass key for assoc in db
-  (let [db-key :elections]
-    (rf/dispatch [:get-contentful-data db-key query :election])
-    (let [elections @(rf/subscribe [db-key])]
-      [:div
-       (for [election elections
-             :let [shortTitle (:shortTitle election)]
-             :when (= shortTitle admin-election)]
-         ^{:key (gensym "election-")}
-         [election-component election])])))
+  (let [lang (rf/subscribe [:language-in-view])
+        entries (rf/subscribe [:entries])]
+    (when @entries
+      (doall
+        [:div
+         (for [election (:elections (get @entries @lang))
+               :let [shortTitle (-> election :fields :shortTitle)]
+               :when (= shortTitle admin-election)]
+           ^{:key (gensym "election-")}
+           [election-component (:fields election)])]))))
