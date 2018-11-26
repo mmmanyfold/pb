@@ -52,13 +52,13 @@
     :es-US "¡Boleta registrada!"}
    :thanks-for-voting
    {:en-US "Thanks for voting!"
-    :es-US "¡Gracias por votar!\n"}
+    :es-US "¡Gracias por votar!"}
    :your-ballot-has-been-recorded
    {:en-US "Your ballot has been submitted."
     :es-US "Su boleta ha sido enviada."}
    :redirecting-to-survey
    {:en-US "Redirecting to survey..."
-    :es-US "Redirigiendo a la encuesta ..."}
+    :es-US "Redirigiendo a la encuesta..."}
    :or-goto-surver-now
    {:en-US "or go to survey now"
-    :es-US "O visite la encuesta haciendo clic aquí."}})
+    :es-US "o visite la encuesta haciendo clic aquí."}})
