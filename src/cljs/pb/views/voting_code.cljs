@@ -96,12 +96,11 @@
   (let [now (js/Date.)
         election-in-view (rf/subscribe [:election-in-view-2])]
     (if @election-in-view
-      (let [{startOnline :startOnline
-             endOnline   :endOnline
-             {id :id}    :sys} @election-in-view]
-        ;; TODO: undo these two conditionals
-        (if true
-          (if false
+      (let [{{startOnline :startOnline
+              endOnline   :endOnline} :fields
+             {id :id}                 :sys} @election-in-view]
+        (if (> (js/Date. endOnline) now)
+          (if (> (js/Date. startOnline) now)
             ;; if online voting hasn't started
             [:div.voting-code-view
              [:h1 (str "Voting opens on "
