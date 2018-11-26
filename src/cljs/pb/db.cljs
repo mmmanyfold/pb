@@ -29,4 +29,16 @@
     :es-US "¡Revisa tus mensajes de texto!"}
    :text-message
    {:en-US "A text message with an 8-digit voting code will be sent to this phone number."
-    :es-US "Se le enviará un mensaje de texto con su un código de votación de 8 dígitos a este número de teléfono."}})
+    :es-US "Se le enviará un mensaje de texto con su un código de votación de 8 dígitos a este número de teléfono."}
+   :budget
+   {:en-US "Budget"
+    :es-US "Presupuesto"}
+   :timeline
+   {:en-US "Timeline"
+    :es-US "Línea de tiempo"}
+   :description
+   {:en-US "Description"
+    :es-US "Descripción"}
+   :community-impact
+   {:en-US "Community Impact"
+    :es-US "Impacto comunitario"}})
