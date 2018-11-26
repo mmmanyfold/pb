@@ -7,7 +7,8 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.string :as string]
             [pb.twilio :as twilio]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [pb.contentful :as contentful]))
 
 (defonce PB_TWILIO_AUTH_TOKEN (System/getenv "PB_TWILIO_AUTH_TOKEN"))
 
@@ -34,25 +35,30 @@
                             :vote some?
                             :election some?))
 
+(s/def ::handle-auraria-vote (s/cat :additional-id some?
+                                    :vote some?
+                                    :campus some?
+                                    :election some?))
+
 (defn db-tx [f & [args]]
   (try
     (jdbc/with-db-transaction [t-conn *db*]
-      (jdbc/db-set-rollback-only! t-conn)
-      (f args))
+                              (jdbc/db-set-rollback-only! t-conn)
+                              (f args))
     (catch Exception e (str "caught exception: " (.getMessage e) "\ncaused by: " (.getCause e)))))
 
 (defn send-code [phone-number voting-code]
   (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
-    @(twilio/send-sms
-       {:From PB_TWILIO_PHONE_NUMBER
-        :To phone-number
-        :Body voting-code})))
+                    @(twilio/send-sms
+                       {:From PB_TWILIO_PHONE_NUMBER
+                        :To   phone-number
+                        :Body voting-code})))
 
 (defn check-voter-code
   "Checks if voter code is valid and has not already voted"
-  [req]
+  [params]
   (try
-    (let [{:keys [voter-code election]} (check-and-throw ::check-code (:params req))]
+    (let [{:keys [voter-code election]} (check-and-throw ::check-code params)]
       (if-let [voter (db-tx db/get-voter-by-code {:code (string/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
                                                   :election election})]
         (if (db-tx db/get-voter-vote {:id (:id voter)})
@@ -77,14 +83,33 @@
     (let [code (hashers/derive phone-number {:alg :pbkdf2+sha3_256})
           voting-code (subs (string/replace (string/replace code "pbkdf2+sha3_256" "") "$" "") 0 8)]
       (db-tx db/create-voter! {:additional_id additional-id
-                               :phone phone-number
-                               :admin false
-                               :is_active true
-                               :code code
-                               :election election
-                               :campus campus})
+                               :phone         phone-number
+                               :admin         false
+                               :is_active     true
+                               :code          code
+                               :election      election
+                               :campus        campus})
       (send-code phone-number voting-code)
       (response/ok {:message "Voting code sent"}))))
+
+(defn handle-vote-by-additional-id [params]
+  (try
+    (let [{:keys [campus additional-id election vote]} (check-and-throw ::handle-auraria-vote params)
+          {voter-id :id} (db-tx db/create-voter-without-code-returning-id!
+                                {:additional_id additional-id
+                                 :admin         false
+                                 :is_active     true
+                                 :election      election
+                                 :campus        campus})
+          {vote-id :id} (db-tx db/create-vote! {:vote vote :election election})]
+      (db-tx db/create-voter-vote! {:voter_id voter-id
+                                    :vote_id  vote-id
+                                    :election election})
+      (response/ok {:message "Vote registered"}))
+    (catch Exception e
+      (throw e)
+      (response/bad-request {:message "Bad parameters"}))))
+
 
 (defn handle-voter-code-from-ui
   [req]
@@ -102,10 +127,10 @@
     (let [{:keys [voter-id vote election]} (check-and-throw ::handle-vote (:params req))
           voter-id (as-int voter-id)]
       (if (nil? (db-tx db/get-voter-vote {:id voter-id}))
-        (let [vote-id (:id (db-tx db/create-vote! {:vote vote
+        (let [vote-id (:id (db-tx db/create-vote! {:vote     vote
                                                    :election election}))]
           (db-tx db/create-voter-vote! {:voter_id voter-id
-                                        :vote_id vote-id
+                                        :vote_id  vote-id
                                         :election election})
           (response/ok {:message "Vote registered"}))
         (response/conflict {:message "Already voted"})))
@@ -129,8 +154,11 @@
 
 (defroutes api-routes
   (context "/api" []
+    (context "/contentful" []
+             (GET "/entries" [] (contentful/get-entries)))
     (GET "/election" [] handle-get-election)
     (GET "/checkadmin" {params :params} (handle-check-admin params))
-    (GET "/checkcode" [] check-voter-code)
+    (GET "/checkcode" {params :params} (check-voter-code params))
     (POST "/votercode" [] handle-voter-code-from-ui)
+    (POST "/vote-by-additional-id" {params :params} (handle-vote-by-additional-id params))
     (POST "/vote" [] handle-vote)))

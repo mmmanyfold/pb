@@ -6,7 +6,7 @@
   :dependencies [[buddy "2.0.0"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clj-time "0.14.3"]
-                 [cljs-ajax "0.7.3"]
+                 [cljs-ajax "0.8.0"]
                  [cljsjs/moment "2.22.0-0"]
                  [cljsjs/showdown "1.4.2-0"]
                  [com.walmartlabs/lacinia "0.25.0"]
@@ -25,7 +25,7 @@
                  [metosin/ring-http-response "0.9.0"]
                  [mount "0.1.12"]
                  [org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.10.238" :scope "provided"]
+                 [org.clojure/clojurescript "1.10.439" :scope "provided"]
                  [org.clojure/tools.cli "0.3.6"]
                  [org.clojure/tools.logging "0.4.0"]
                  [org.postgresql/postgresql "42.2.2"]
@@ -40,11 +40,13 @@
                  [ring-webjars "0.2.0"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-defaults "0.3.1"]
-                 [secretary "1.2.3"]
+                 [clj-commons/secretary "1.2.4"]
                  [selmer "1.11.7"]
                  [twilio-api "1.0.1"]
                  [cljs-http "0.1.45"]
-                 [org.clojure/core.async "0.4.474"]]
+                 [org.clojure/core.async "0.4.474"]
+                 [metosin/jsonista "0.2.2"]
+                 [funcool/cuerdas "2.0.5"]]
 
   :min-lein-version "2.0.0"
 
@@ -108,15 +110,15 @@
                                  [com.cemerick/piggieback "0.2.2"]
                                  [day8.re-frame/re-frame-10x "0.3.2"]
                                  [doo "0.1.10"]
-                                 [figwheel-sidecar "0.5.15"]
+                                 [figwheel-sidecar "0.5.17"]
                                  [pjstadig/humane-test-output "0.8.3"]
                                  [prone "1.5.1"]
                                  [ring/ring-devel "1.6.3"]
                                  [ring/ring-mock "0.3.2"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]
                                  [lein-doo "0.1.10"]
-                                 [lein-figwheel "0.5.15"]
-                                 [org.clojure/clojurescript "1.10.238"]]
+                                 [lein-figwheel "0.5.17"]
+                                 [org.clojure/clojurescript "1.10.439"]]
                   :cljsbuild
                   {:builds
                    {:app

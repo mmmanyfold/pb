@@ -10,7 +10,9 @@
                 startInPerson
                 endInPerson
                 votingInPerson
-                eligibility]} election
+                eligibility
+                voteOnlineButtonText
+                voteOnlineButtonLabel]} election
         too-early? (> (js/Date. startOnline) (js/Date.))]
     [:div.election-component.tc.center.mv3.pa1
      [:h1.mt2.pt1.fw7 title]
@@ -18,13 +20,13 @@
      [:div.links.f3.f2-ns.center
       [:a.pa3 {:href (if too-early?
                        nil
-                       (str "/#/" shortTitle))
+                       (str "/#/vote/" shortTitle))
                :class (when too-early? "disabled")}
        (if too-early?
          [:span.tc
           (str "Voting opens " (.format (js/moment startOnline) "M/D"))]
          [:span.tc
-          "Vote online now*"
+          voteOnlineButtonText
           [:br]
           [:h5.f5.f4-ns
            (let [startDay (.format (js/moment startOnline) "MMM D, YYYY")
@@ -33,11 +35,10 @@
                (str startDay)
                (str startDay " – " endDay)))]])]]
 
-     [:p.lh-title.mt3
-      "*You will need your student ID to vote."]
+     [:p.lh-title.mt3 voteOnlineButtonLabel]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
-        [:a.pa3 {:href (str "/#/" shortTitle "/vote-in-person")}
+        [:a.pa3 {:href (str "/#/vote/" shortTitle "/in-person")}
          [:span.tc
           "How to vote in person"
           [:br]

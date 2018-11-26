@@ -3,16 +3,19 @@
             [re-frame.core :as rf]
             [re-com.core :as rc]
             [re-com.modal-panel :refer [modal-panel-args-desc]]
-            [pb.helpers :refer [render-markdown]]))
+            [pb.helpers :refer [render-markdown]]
+            [pb.db :refer [translations-db]]))
 
-(defn detail [show? field title]
-  [:div.mt1.proposal-detail
-   [:h4 {:on-click #(swap! show? not)
-         :class (when @show? "b")}
-    (str "+ " title)]
-   (when @show?
-     [:div.ml3.mb4
-      [render-markdown field]])])
+(defn detail [title content]
+  (let [show? (rg/atom false)]
+    (fn []
+      [:div.mt1.proposal-detail
+       [:h4 {:on-click #(swap! show? not)
+             :class (when @show? "b")}
+        (str "+ " title)]
+       (when @show?
+         [:div.ml3.mb4
+          [render-markdown content]])])))
 
 (defn proposal-component [proposal displayFormat]
   (let [{:keys [title
@@ -21,17 +24,14 @@
                 impact
                 budget
                 timeline
-                images]} (first (val proposal))
-        id (name (first proposal))
-        maxSelection (:maxSelection @(rf/subscribe [:election-in-view]))
+                images]} (:fields proposal)
+        id (-> proposal :sys :id)
+        {maxSelection :maxSelection} (:fields @(rf/subscribe [:election-in-view-2]))
         images (map #(:url %) images)
         thumbnail-image (first images)
-        show-impact? (rg/atom false)
-        show-budget? (rg/atom false)
-        show-timeline? (rg/atom false)
-        show-long-description? (rg/atom false)
         selected? (rg/atom (some #(= id %) @(rf/subscribe [:selected-proposals])))
-        expand-image? (rg/atom false)]
+        expand-image? (rg/atom false)
+        lang @(rf/subscribe [:language-in-view])]
 
     (fn []
 
@@ -57,11 +57,8 @@
                      :for id}]]]]
 
          ; expandable details
-         [detail show-budget? budget "Budget"]
-         [detail show-timeline? timeline "Timeline"]
-         [detail show-long-description? longDescription "Description"]
-         [detail show-impact? impact "Community Impact"]]
-
+         [detail (-> translations-db :budget lang) budget]
+         [detail (-> translations-db :description lang) longDescription]]
 
         ;; display in a grid
 
@@ -83,9 +80,9 @@
                "Remove"])]
 
            ; expandable details
-           [detail show-impact? impact "Community Impact"]
-           [detail show-budget? budget "Budget Breakdown"]
-           [detail show-timeline? timeline "Timeline"]
+           [detail "Community Impact" impact]
+           [detail "Budget Breakdown" budget]
+           [detail "Timeline" timeline]
 
            ; thumbnail image
            [:div.thumbnail-wrapper

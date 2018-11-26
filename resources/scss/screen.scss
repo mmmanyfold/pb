@@ -10,6 +10,26 @@ body {
   width: 100%;
 }
 
+.language-btn {
+  position: absolute;
+  right: 14px;
+  font-size: 17px;
+  width: 70px;
+  letter-spacing: 0;
+  background-color: $lightgray;
+  border-radius: 0 0 5px 5px;
+  color: $purple;
+  border: 1px solid $yellow;
+  border-top: 0;
+  cursor: pointer;
+  &:hover {
+    background-color: $yellow;
+  }
+  @media screen and (min-width: 480px) {
+    right: 28px;
+  }
+}
+
 h1 {
   color: $purple;
   font-weight: 700;
@@ -19,8 +39,21 @@ a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0;
 }
 
+a {
+  color: $green;
+}
+
 button, input, optgroup, select, textarea {
   font-family: 'Roboto Condensed';
+}
+
+button#submit-another {
+  color: white;
+  background-color: rgba(115, 159, 62, 0.85);
+  border: 1px solid $green;
+  &:hover {
+    background-color: $green;
+  }
 }
 
 input[type="submit"], input[type="button"], button {
@@ -82,7 +115,7 @@ input[type="submit"], input[type="button"], button {
 header {
   z-index: 20;
   .nav-wrapper {
-    border-color: $green;
+    border-color: $yellow;
   }
   .nav-item {
     padding-top: 0.3em;
@@ -172,7 +205,7 @@ header {
     display: inline-block;
   }
   .error {
-    width: 330px;
+    width: 280px;
     text-align: center;
     border-radius: 10px;
     padding: 10px;
