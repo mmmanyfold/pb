@@ -105,9 +105,8 @@
       (let [{{startOnline :startOnline
               endOnline   :endOnline} :fields
              {id :id}                 :sys} @election-in-view]
-        ;; TODO: revert guards
-        (if true
-          (if false
+        (if (> (js/Date. endOnline) now)
+          (if (> (js/Date. startOnline) now)
             ;; if online voting hasn't started
             [:div.voting-code-view
              [:h1 (str "Voting opens on "
