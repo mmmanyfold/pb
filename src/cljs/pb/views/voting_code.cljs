@@ -6,7 +6,8 @@
             [pb.components.loading :refer [loading-component]]
             [pb.components.captcha :refer [captcha-component]]
             [ajax.core :as ajax :refer [GET POST]]
-            [pb.config :as config]))
+            [pb.config :as config]
+            [pb.db :refer [translations-db]]))
 
 (def error-code (rg/atom nil))
 (def code-sent? (rg/atom false))
@@ -183,8 +184,9 @@
                                   (reset! empty-phone2 (not= (count @input-phone2) 12)))
                    :on-blur     #(reset! empty-phone2 (not= (count @input-phone2) 12))}]
                  [:div.required "*"]]
-
-                [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]])
+                [:h4 [:b (if @(rf/subscribe [:if-english?])
+                           (-> translations-db :text-message :en-US)
+                           (-> translations-db :text-message :es-US))]]])
              [:p [:small votingCodeFieldLabel]]
              (when-not config/debug?
                [captcha-component])

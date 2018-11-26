@@ -16,3 +16,8 @@
    ;; options are :en-US and :es-US
    :language-in-view :en-US
    :election-in-view-2 nil})
+
+(def translations-db
+  {:text-message
+   {:en-US "A text message with an 8-digit voting code will be sent to this phone number."
+    :es-US "Se le enviará un mensaje de texto con su un código de votación de 8 dígitos a este número de teléfono."}})
