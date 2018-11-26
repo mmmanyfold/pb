@@ -99,8 +99,9 @@
       (let [{{startOnline :startOnline
               endOnline   :endOnline} :fields
              {id :id}                 :sys} @election-in-view]
-        (if (> (js/Date. endOnline) now)
-          (if (> (js/Date. startOnline) now)
+        ;; TODO: revert guards
+        (if true
+          (if false
             ;; if online voting hasn't started
             [:div.voting-code-view
              [:h1 (str "Voting opens on "
@@ -133,8 +134,9 @@
     (rg/create-class
       {:component-did-mount
        (fn []
-         (new js/Cleave "#input-phone1" #js {:phone true :phoneRegionCode "US"})
-         (new js/Cleave "#input-phone2" #js {:phone true :phoneRegionCode "US"}))
+         (when (= "cole" @(rf/subscribe [:admin-election]))
+           (new js/Cleave "#input-phone1" #js {:phone true :phoneRegionCode "US"})
+           (new js/Cleave "#input-phone2" #js {:phone true :phoneRegionCode "US"})))
        :reagent-render
        (fn [election]
          (let [{{additionalIdLabel    :additionalIdLabel
