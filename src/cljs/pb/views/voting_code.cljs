@@ -51,9 +51,13 @@
   (when-not (nil? @error-code)
     (if (= @error-code 404)
       [:div.error.not-found
-       "The voting code you entered is not valid. Please ensure the code is entered correctly."]
+       (if @(rf/subscribe [:if-english?])
+         (-> translations-db :error-not-found :en-US)
+         (-> translations-db :error-not-found :es-US))]
       [:div.error.already-voted
-       "We already got your vote!"])))
+       (if @(rf/subscribe [:if-english?])
+         (-> translations-db :error-already-voted :en-US)
+         (-> translations-db :error-already-voted :es-US))])))
 
 
 (defn student-id-component [campus additionalId]

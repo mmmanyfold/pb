@@ -40,4 +40,10 @@
     :es-US "Descripción"}
    :community-impact
    {:en-US "Community Impact"
-    :es-US "Impacto comunitario"}})
+    :es-US "Impacto comunitario"}
+   :error-not-found
+   {:en-US "The voting code you entered is not valid. Please ensure the code is entered correctly."
+    :es-US "El código no es válido. Por favor, asegúrese de que el código se ha ingresado correctamente."}
+   :error-already-voted
+   {:en-US "We already got your vote!"
+    :es-US "Ya tenemos tu voto, gracias."}})
