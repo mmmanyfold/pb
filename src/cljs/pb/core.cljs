@@ -12,6 +12,7 @@
 
 (defn mount-root []
   (rf/dispatch [:get-election-var])
+  (rf/dispatch [:get-contentful-entries])
   (rf/clear-subscription-cache!)
   (r/render [view] (.getElementById js/document "app")))
 

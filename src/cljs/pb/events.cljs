@@ -12,6 +12,28 @@
     db/default-db))
 
 (rf/reg-event-fx
+  :get-contentful-entries
+  (fn [{db :db} [_]]
+    {:db         db
+     :http-xhrio {:method          :get
+                  :format          (ajax/json-request-format)
+                  :uri             "api/contentful/entries"
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-failure      [:get-contentful-entries-failed]
+                  :on-success      [:get-contentful-entries-success]}}))
+
+(rf/reg-event-db
+  :get-contentful-entries-failed
+  (fn [db [_ {{err-msg :error} :response}]]
+    (js/console.error err-msg)
+    db))
+
+(rf/reg-event-db
+  :get-contentful-entries-success
+  (fn [db [_ entries]]
+    (assoc db :entries entries)))
+
+(rf/reg-event-fx
   :get-election-var
   (fn [{db :db} [_]]
     {:db         db
@@ -94,3 +116,10 @@
   :set-admin
   (fn [db [_ state]]
     (assoc db :admin state)))
+
+(rf/reg-event-db
+  :toggle-language
+  (fn [db [_ _]]
+    (if (= (:language-in-view db) :en-US)
+      (assoc db :language-in-view :es-US)
+      (assoc db :language-in-view :en-US))))

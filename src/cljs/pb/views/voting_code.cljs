@@ -6,7 +6,8 @@
             [pb.components.loading :refer [loading-component]]
             [pb.components.captcha :refer [captcha-component]]
             [ajax.core :as ajax :refer [GET POST]]
-            [pb.config :as config]))
+            [pb.config :as config]
+            [pb.db :refer [translations-db]]))
 
 (def error-code (rg/atom nil))
 (def code-sent? (rg/atom false))
@@ -50,33 +51,54 @@
   (when-not (nil? @error-code)
     (if (= @error-code 404)
       [:div.error.not-found
-       "The voting code you entered is not valid. Please ensure the code is entered correctly."]
+       (if @(rf/subscribe [:if-english?])
+         (-> translations-db :error-not-found :en-US)
+         (-> translations-db :error-not-found :es-US))]
       [:div.error.already-voted
-       "We already got your vote!"])))
+       (if @(rf/subscribe [:if-english?])
+         (-> translations-db :error-already-voted :en-US)
+         (-> translations-db :error-already-voted :es-US))])))
 
-(defn voting-code-view [election-slug]
-  (reset! error-code nil)
+
+(defn student-id-component [campus additionalId]
+  (let [empty-campus (rg/atom false)
+        empty-id (rg/atom false)]
+    [:div
+     [:div.flexrow.input-group-prepend
+      [:select {:id        "campus"
+                :class     (str "form-control" (when @empty-campus " input-error"))
+                :name      "campus"
+                :on-change (fn [e]
+                             (reset! campus (-> e .-target .-value))
+                             (reset! empty-campus (= (count @campus) 0)))}
+       [:option {:default-value :disabled
+                 :value         ""} "School:"]
+       [:option {:value "cudenver"} "CU Denver"]
+       [:option {:value "ccd"} "CCD"]
+       [:option {:value "msu"} "MSU"]]
+      [:div.required "*"]
+      [:input
+       {:type        "text"
+        :class       (str "form-control" (when @empty-id " input-error"))
+        :placeholder "xxxxxxxxx"
+        :maxLength   9
+        :value       @additionalId
+        :on-change   (fn [e]
+                       (reset! additionalId (-> e .-target .-value))
+                       (reset! empty-id (not= (count @additionalId) 9)))
+        :on-blur     (fn []
+                       (reset! empty-campus (= (count @campus) 0))
+                       (reset! empty-id (not= (count @additionalId) 9)))}]
+      [:div.required "*"]]]))
+
+
+(defn voting-code-view []
   (let [now (js/Date.)
-        query (str "{ elections(q: \"fields.shortTitle=" election-slug
-                   "\") {
-                     title
-                     additionalIdLabel
-                     startOnline
-                     endOnline
-                     maxSelection
-                     surveyUrl
-                     displayFormat
-                     sys { id }
-                     proposalRefs {
-                       sys { id }}
-                   }}")]
-    (rf/dispatch [:get-contentful-data :election-in-view query :election])
-    (reset! code-sent? false)
-    (fn []
-      (if-let [{additionalIdLabel :additionalIdLabel
-                startOnline       :startOnline
-                endOnline         :endOnline
-                {id :id}          :sys} @(rf/subscribe [:election-in-view])]
+        election-in-view (rf/subscribe [:election-in-view-2])]
+    (if @election-in-view
+      (let [{{startOnline :startOnline
+              endOnline   :endOnline} :fields
+             {id :id}                 :sys} @election-in-view]
         (if (> (js/Date. endOnline) now)
           (if (> (js/Date. startOnline) now)
             ;; if online voting hasn't started
@@ -88,7 +110,7 @@
             [:div.voting-code-view
              (if (= @code-sent? false)
                ;; if voting code hasn't been sent
-               [send-code-component additionalIdLabel id]
+               [send-code-component @election-in-view]
                ;; if voting code has been sent
                [check-code-component id])])
 
@@ -96,16 +118,14 @@
           [:div.voting-code-view
            [:h1 (str "Voting ended on "
                      (-> (js/moment endOnline)
-                         (.format "dddd, MMMM Do YYYY [at] h:mm a.")))]])
-        [loading-component]))))
+                         (.format "dddd, MMMM Do YYYY [at] h:mm a.")))]]))
+      [loading-component])))
 
 
-(defn send-code-component [additionalIdLabel id]
+(defn send-code-component [election]
   (let [input-phone1 (rg/atom "")
         input-phone2 (rg/atom "")
         additionalId (rg/atom "")
-        empty-campus (rg/atom false)
-        empty-id (rg/atom false)
         empty-phone1 (rg/atom false)
         empty-phone2 (rg/atom false)
         phone-mismatch (rg/atom false)
@@ -116,102 +136,93 @@
          (new js/Cleave "#input-phone1" #js {:phone true :phoneRegionCode "US"})
          (new js/Cleave "#input-phone2" #js {:phone true :phoneRegionCode "US"}))
        :reagent-render
-       (fn []
-         [:div
-          [:h1 "Create unique voting code"]
-          [:form.voter-auth-form
-           {:on-submit (fn [e]
-                         (.preventDefault e)
-                         (.stopPropagation e))}
-           (when additionalIdLabel
-             [:div
-              [:div.flexrow.input-group-prepend
-               [:select {:id        "campus"
-                         :class     (str "form-control" (when @empty-campus " input-error"))
-                         :name      "campus"
-                         :on-change (fn [e]
-                                      (reset! campus (-> e .-target .-value))
-                                      (reset! empty-campus (= (count @campus) 0)))}
-                [:option {:default-value :disabled
-                          :value         ""} "Campus:"]
-                [:option {:value "cudenver"} "CU Denver"]
-                [:option {:value "ccd"} "CCD"]
-                [:option {:value "msu"} "MSU"]]
-               [:div.required "*"]
-               [:input
-                {:type        "text"
-                 :class       (str "form-control" (when @empty-id " input-error"))
-                 :placeholder "Student ID"
-                 :maxLength   9
-                 :value       @additionalId
-                 :on-change   (fn [e]
-                                (reset! additionalId (-> e .-target .-value))
-                                (reset! empty-id (not= (count @additionalId) 9)))
-                 :on-blur     (fn []
-                                (reset! empty-campus (= (count @campus) 0))
-                                (reset! empty-id (not= (count @additionalId) 9)))}]
-               [:div.required "*"]]
-              [:p [:small "Student IDs will be verified by each campus after the election, before the final vote count. Any votes associated with an invalid ID will not be counted."]]])
-           [:div.flexrow.input-group-prepend
-            [:input
-             {:id          "input-phone1"
-              :type        "text"
-              :class       (str "form-control" (when (or @phone-mismatch
-                                                         @empty-phone1) " input-error"))
-              :placeholder "Enter Phone Number"
-              :maxLength   12
-              :value       @input-phone1
-              :on-change   (fn [e]
-                             (reset! input-phone1 (-> e .-target .-value))
-                             (when (and (= (count @input-phone1) 12)
-                                        (= (count @input-phone2) 12))
-                               (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
-                             (reset! empty-phone1 (not= (count @input-phone1) 12)))
-              :on-blur     #(reset! empty-phone1 (not= (count @input-phone1) 12))}]
-            [:div.required "*"]]
+       (fn [election]
+         (let [{{additionalIdLabel    :additionalIdLabel
+                 phonePlaceholder1    :phonePlaceholder1
+                 phonePlaceholder2    :phonePlaceholder2
+                 votingCodeFieldLabel :votingCodeFieldLabel
+                 votingCodePageTitle  :votingCodePageTitle} :fields
+                {id :id}                                    :sys} election
+               is-auraria? (boolean additionalIdLabel)]
+           [:div
+            [:h1 votingCodePageTitle]
+            [:form.voter-auth-form
+             {:on-submit (fn [e]
+                           (.preventDefault e)
+                           (.stopPropagation e))}
+             (if is-auraria?
+               [student-id-component campus additionalId]
+               [:div
+                [:div.flexrow.input-group-prepend
+                 [:input
+                  {:id          "input-phone1"
+                   :type        "text"
+                   :class       (str "form-control" (when (or @phone-mismatch
+                                                              @empty-phone1) " input-error"))
+                   :placeholder phonePlaceholder1
+                   :maxLength   12
+                   :value       @input-phone1
+                   :on-change   (fn [e]
+                                  (reset! input-phone1 (-> e .-target .-value))
+                                  (when (and (= (count @input-phone1) 12)
+                                             (= (count @input-phone2) 12))
+                                    (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
+                                  (reset! empty-phone1 (not= (count @input-phone1) 12)))
+                   :on-blur     #(reset! empty-phone1 (not= (count @input-phone1) 12))}]
+                 [:div.required "*"]]
 
-           [:div.flexrow.input-group-prepend
-            [:input
-             {:id          "input-phone2"
-              :type        "text"
-              :class       (str "form-control" (when (or @phone-mismatch
-                                                         @empty-phone2) " input-error"))
-              :placeholder "Verify Phone Number"
-              :maxLength   12
-              :value       @input-phone2
-              :on-change   (fn [e]
-                             (reset! input-phone2 (-> e .-target .-value))
-                             (when (and (= (count @input-phone1) 12)
-                                        (= (count @input-phone2) 12))
-                               (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
-                             (reset! empty-phone2 (not= (count @input-phone2) 12)))
-              :on-blur     #(reset! empty-phone2 (not= (count @input-phone2) 12))}]
-            [:div.required "*"]]
+                [:div.flexrow.input-group-prepend
+                 [:input
+                  {:id          "input-phone2"
+                   :type        "text"
+                   :class       (str "form-control" (when (or @phone-mismatch
+                                                              @empty-phone2) " input-error"))
+                   :placeholder phonePlaceholder2
+                   :maxLength   12
+                   :value       @input-phone2
+                   :on-change   (fn [e]
+                                  (reset! input-phone2 (-> e .-target .-value))
+                                  (when (and (= (count @input-phone1) 12)
+                                             (= (count @input-phone2) 12))
+                                    (reset! phone-mismatch (not= @input-phone1 @input-phone2)))
+                                  (reset! empty-phone2 (not= (count @input-phone2) 12)))
+                   :on-blur     #(reset! empty-phone2 (not= (count @input-phone2) 12))}]
+                 [:div.required "*"]]
+                [:h4 [:b (if @(rf/subscribe [:if-english?])
+                           (-> translations-db :text-message :en-US)
+                           (-> translations-db :text-message :es-US))]]])
+             [:p [:small votingCodeFieldLabel]]
+             (when-not config/debug?
+               [captcha-component])
+             [:a {:on-click #(if is-auraria?
+                               (prn "TODO: see auraria branch for how to handle student ID submit")
+                               (send-code @campus @additionalId (string/replace @input-phone2 #" " "") id))}
+              [:button#send-code
+               {:type     "submit"
+                :disabled (or (when-not config/debug?
+                                (nil? @(rf/subscribe [:captcha-passed])))
+                              (if is-auraria?
+                                (or (< (count @additionalId) 9)
+                                    (= @campus "Campus:"))
+                                (or (< (count @input-phone2) 12)
+                                    (not= @input-phone1 @input-phone2))))}
+               (if @(rf/subscribe [:if-english?])
+                 "CONTINUE"
+                 "CONTINUAR")]]]
+            [error-component]]))})))
 
-           [:h4 [:b "A text message with an 8-digit voting code will be sent to this phone number."]]
-           [:p [:small "Your phone number will NEVER be shared and is automatically deleted after the election."]]
-           (when-not config/debug?
-             [captcha-component])
-           [:a {:on-click #(send-code @campus @additionalId (string/replace @input-phone2 #" " "") id)}
-            [:button#send-code
-             {:type     "submit"
-              :disabled (or (< (count @input-phone2) 12)
-                            (not= @input-phone1 @input-phone2)
-                            (when-not config/debug?
-                              (nil? @(rf/subscribe [:captcha-passed])))
-                            (when-not (nil? additionalIdLabel)
-                              (< (count @additionalId) 9)
-                              (= @campus "Campus:")))}
-             "SEND MY CODE"]]]
-          [error-component]])})))
 
 (defn check-code-component [id]
   (let [code (rg/atom nil)]
     (fn []
       [:div
        [:br]
-       [:h2 "Check your text messages!"]
-       [:h1 "Enter the 8-digit code:"]
+       [:h2 (if @(rf/subscribe [:if-english?])
+              (-> translations-db :check-your-text-msgs :en-US)
+              (-> translations-db :check-your-text-msgs :es-US))]
+       [:h1 (if @(rf/subscribe [:if-english?])
+              (-> translations-db :enter-8-digit-code :en-US)
+              (-> translations-db :enter-8-digit-code :es-US))]
        [:form.voter-auth-form
         {:on-submit (fn [e]
                       (.preventDefault e)
@@ -227,5 +238,7 @@
           [:button#submit-code
            {:type     "submit"
             :disabled (< (count @code) 8)}
-           "CONTINUE"]]]]
+           (if @(rf/subscribe [:if-english?])
+             (-> translations-db :continue :en-US)
+             (-> translations-db :continue :es-US))]]]]
        [error-component]])))

@@ -3,12 +3,33 @@ body {
   font-size: 1.2em;
   width: 100%; }
 
+.language-btn {
+  position: absolute;
+  right: 14px;
+  font-size: 17px;
+  width: 70px;
+  letter-spacing: 0;
+  background-color: #F2F2F2;
+  border-radius: 0 0 5px 5px;
+  color: #8e4f78;
+  border: 1px solid #FCB733;
+  border-top: 0;
+  cursor: pointer; }
+  .language-btn:hover {
+    background-color: #FCB733; }
+  @media screen and (min-width: 480px) {
+    .language-btn {
+      right: 28px; } }
+
 h1 {
   color: #8e4f78;
   font-weight: 700; }
 
 a, a:focus, a:hover, a:active, input:focus, button:focus {
   outline: 0; }
+
+a {
+  color: #739F3E; }
 
 button, input, optgroup, select, textarea {
   font-family: 'Roboto Condensed'; }
@@ -72,7 +93,7 @@ input[type="submit"], input[type="button"], button {
 header {
   z-index: 20; }
   header .nav-wrapper {
-    border-color: #739F3E; }
+    border-color: #FCB733; }
   header .nav-item {
     padding-top: 0.3em;
     border-color: rgba(0, 0, 0, 0);
@@ -134,7 +155,7 @@ header {
   .voting-code-view #g-recaptcha {
     display: inline-block; }
   .voting-code-view .error {
-    width: 330px;
+    width: 280px;
     text-align: center;
     border-radius: 10px;
     padding: 10px;

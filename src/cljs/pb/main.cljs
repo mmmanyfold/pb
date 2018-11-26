@@ -11,13 +11,13 @@
 (def not-found-view
   [:div [:h1 "404: Page not found"]])
 
-(defn- show-view [view-name election-slug admin-election]
+(defn- show-view [view-name admin-election]
   (case view-name
-        :admin-view [admin/view admin-election]
+        :admin-view [admin/view]
         :home-view [home-view admin-election]
-        :voting-code-view [voting-code-view election-slug]
+        :voting-code-view [voting-code-view]
         :proposals-view [proposals/view]
-        :vote-in-person-view [vote-in-person-view election-slug]
+        :vote-in-person-view [vote-in-person-view]
         [:div not-found-view]))
 
 (defn view []
@@ -30,4 +30,4 @@
        :class "w-100 h-100 mb0"
        :children [[header-component @active-view @election-slug (count @selected-proposals)]
                   [:div {:class "content-panel mh3 mh4-ns mv5 pt3 pt4-ns"}
-                   [show-view @active-view @election-slug @admin-election]]]])))
+                   [show-view @active-view @admin-election]]]])))
