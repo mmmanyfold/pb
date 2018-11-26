@@ -5,17 +5,10 @@
             [pb.helpers :refer [render-markdown]]
             [pb.components.proposal :refer [proposal-component]]
             [pb.components.loading :refer [loading-component]]
-            [clojure.string :as string]
-            [ajax.core :as ajax :refer [POST]]))
+            [ajax.core :as ajax :refer [POST]]
+            [pb.db :refer [translations-db]]))
 
 (def show-confirmation? (rg/atom false))
-
-(defn query [ids]
-  (let [queries
-        (for [id ids]
-          (str "p" id ": proposalAS(q: \"sys.id="
-               id "\") { title shortDescription longDescription impact budget timeline images { url }}"))]
-    (str "{" (string/join queries) "}")))
 
 (defn submit-vote []
   (POST "/api/vote"
@@ -35,20 +28,22 @@
 
 (defn confirmation-component []
   (when @show-confirmation?
-   (let [{{survey-url :surveyUrl} :fields} @(rf/subscribe [:election-in-view-2])]
+   (let [{{survey-url :surveyUrl} :fields} @(rf/subscribe [:election-in-view-2])
+         lang @(rf/subscribe [:language-in-view])]
     [rc/modal-panel
      :child [:div.confirmation.f3.f2-m.f1-l.pa2-m.pa3-l.tc
              (if @(rf/subscribe [:admin])
                [:div
-                [:p.fw7 "Ballot recorded!"]
+                [:p.fw7 (-> translations-db :ballot-recorded lang)]
                 [:small [:button#submit-another.f2
                          {:type     "button"
                           :on-click #(swap! show-confirmation? not)}
                          "Enter another one"]]]
                [:div
-                [:p.fw7 "Thanks for voting!" [:br] "Your ballot has been submitted."]
-                [:p.mb1 "Redirecting to survey..."]
-                [:small "or " [:a {:href survey-url} "go to survey now"]]])]])))
+                [:p.fw7 (-> translations-db :thanks-for-voting lang)
+                 [:br] (-> translations-db :your-ballot-has-been-recorded lang)]
+                [:p.mb1 (-> translations-db :redirecting-to-survey lang)]
+                [:small [:a {:href survey-url} (-> translations-db :or-goto-surver-now lang)]]])]])))
 
 (defn view []
   (let [{:keys [displayFormat
