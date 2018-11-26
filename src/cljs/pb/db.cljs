@@ -46,4 +46,19 @@
     :es-US "El código no es válido. Por favor, asegúrese de que el código se ha ingresado correctamente."}
    :error-already-voted
    {:en-US "We already got your vote!"
-    :es-US "Ya tenemos tu voto, gracias."}})
+    :es-US "Ya tenemos tu voto, gracias."}
+   :ballot-recorded
+   {:en-US "Ballot recorded!"
+    :es-US "¡Boleta registrada!"}
+   :thanks-for-voting
+   {:en-US "Thanks for voting!"
+    :es-US "¡Gracias por votar!\n"}
+   :your-ballot-has-been-recorded
+   {:en-US "Your ballot has been submitted."
+    :es-US "Su boleta ha sido enviada."}
+   :redirecting-to-survey
+   {:en-US "Redirecting to survey..."
+    :es-US "Redirigiendo a la encuesta ..."}
+   :or-goto-surver-now
+   {:en-US "or go to survey now"
+    :es-US "O visite la encuesta haciendo clic aquí."}})

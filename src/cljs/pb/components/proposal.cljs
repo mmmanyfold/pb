@@ -31,7 +31,7 @@
         thumbnail-image (first images)
         selected? (rg/atom (some #(= id %) @(rf/subscribe [:selected-proposals])))
         expand-image? (rg/atom false)
-        lang (if @(rf/subscribe [:if-english?]) :en-US :es-US)]
+        lang @(rf/subscribe [:language-in-view])]
 
     (fn []
 
