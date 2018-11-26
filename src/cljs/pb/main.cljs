@@ -29,10 +29,5 @@
       [rc/v-box
        :class "w-100 h-100 mb0"
        :children [[header-component @active-view @election-slug (count @selected-proposals)]
-                  [:div {:class "content-panel mh3 mh4-ns mb5"}
-                   [:div.language-btn.tc.pa1
-                    {:on-click #(rf/dispatch [:toggle-language])}
-                    (if @(rf/subscribe [:if-english?])
-                      "Español"
-                      "English")]
+                  [:div {:class "content-panel mh3 mh4-ns mv5 pt3 pt4-ns"}
                    [show-view @active-view @admin-election]]]])))

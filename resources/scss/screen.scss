@@ -11,26 +11,22 @@ body {
 }
 
 .language-btn {
-  margin-left: auto;
+  position: absolute;
+  right: 14px;
+  font-size: 17px;
   width: 70px;
+  letter-spacing: 0;
   background-color: $lightgray;
   border-radius: 0 0 5px 5px;
   color: $purple;
   border: 1px solid $yellow;
+  border-top: 0;
   cursor: pointer;
   &:hover {
     background-color: $yellow;
   }
-}
-
-.content-panel {
-  z-index: 100;
-  margin-top: 3.4rem;
   @media screen and (min-width: 480px) {
-    margin-top: 3.9rem;
-  }
-  @media screen and (min-width: 550px) {
-    margin-top: 4.5rem;
+    right: 28px;
   }
 }
 

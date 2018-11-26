@@ -23,6 +23,11 @@
                        :target "_blank"
                        :rel "noopener noreferrer"}
                    [:img {:src "img/TMHAS_Logo_600.jpg"}]]]]]
+     [:div.language-btn.tc.pa1
+      {:on-click #(rf/dispatch [:toggle-language])}
+      (if @(rf/subscribe [:if-english?])
+        "Español"
+        "English")]
      (when (= active-view :proposals-view)
        (when-let [{maxSelection :maxSelection} (:fields @(rf/subscribe [:election-in-view-2]))]
          [:div.count-component.tc.mh3.mh4-ns.pa2

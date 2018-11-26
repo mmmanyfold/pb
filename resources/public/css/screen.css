@@ -4,25 +4,22 @@ body {
   width: 100%; }
 
 .language-btn {
-  margin-left: auto;
+  position: absolute;
+  right: 14px;
+  font-size: 17px;
   width: 70px;
+  letter-spacing: 0;
   background-color: #F2F2F2;
   border-radius: 0 0 5px 5px;
   color: #8e4f78;
   border: 1px solid #FCB733;
+  border-top: 0;
   cursor: pointer; }
   .language-btn:hover {
     background-color: #FCB733; }
-
-.content-panel {
-  z-index: 100;
-  margin-top: 3.4rem; }
   @media screen and (min-width: 480px) {
-    .content-panel {
-      margin-top: 3.9rem; } }
-  @media screen and (min-width: 550px) {
-    .content-panel {
-      margin-top: 4.5rem; } }
+    .language-btn {
+      right: 28px; } }
 
 h1 {
   color: #8e4f78;
