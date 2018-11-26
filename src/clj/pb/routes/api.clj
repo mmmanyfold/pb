@@ -51,9 +51,9 @@
 
 (defn check-voter-code
   "Checks if voter code is valid and has not already voted"
-  [req]
+  [params]
   (try
-    (let [{:keys [voter-code election]} (check-and-throw ::check-code (:params req))]
+    (let [{:keys [voter-code election]} (check-and-throw ::check-code params)]
       (if-let [voter (db-tx db/get-voter-by-code {:code (string/lower-case (str "pbkdf2+sha3_256$" voter-code "%"))
                                                   :election election})]
         (if (db-tx db/get-voter-vote {:id (:id voter)})
@@ -134,6 +134,6 @@
              (GET "/entries" [] (contentful/get-entries)))
     (GET "/election" [] handle-get-election)
     (GET "/checkadmin" {params :params} (handle-check-admin params))
-    (GET "/checkcode" [] check-voter-code)
+    (GET "/checkcode" {params :params} (check-voter-code params))
     (POST "/votercode" [] handle-voter-code-from-ui)
     (POST "/vote" [] handle-vote)))

@@ -37,13 +37,15 @@
   (reset! code-sent? true)
   (reset! error-code nil))
 
-(defn send-code [phone-number election]
+(defn send-code [campus additional-id phone-number election]
   (POST "/api/votercode"
         {:handler       send-code-success-handler
          :error-handler error-handler
          :format        (ajax/json-request-format)
-         :params        {:election     election
-                         :phone-number phone-number}}))
+         :params        {:campus        campus
+                         :additional-id additional-id
+                         :election      election
+                         :phone-number  phone-number}}))
 
 (defn error-component []
   (when-not (nil? @error-code)
@@ -192,7 +194,7 @@
                [captcha-component])
              [:a {:on-click #(if is-auraria?
                                (prn "TODO: see auraria branch for how to handle student ID submit")
-                               (send-code (string/replace @input-phone2 #" " "") id))}
+                               (send-code @campus @additionalId (string/replace @input-phone2 #" " "") id))}
               [:button#send-code
                {:type     "submit"
                 :disabled (or (when-not config/debug?
@@ -213,8 +215,12 @@
     (fn []
       [:div
        [:br]
-       [:h2 "Check your text messages!"]
-       [:h1 "Enter the 8-digit code:"]
+       [:h2 (if @(rf/subscribe [:if-english?])
+              (-> translations-db :check-your-text-msgs :en-US)
+              (-> translations-db :check-your-text-msgs :es-US))]
+       [:h1 (if @(rf/subscribe [:if-english?])
+              (-> translations-db :enter-8-digit-code :en-US)
+              (-> translations-db :enter-8-digit-code :es-US))]
        [:form.voter-auth-form
         {:on-submit (fn [e]
                       (.preventDefault e)
@@ -230,5 +236,7 @@
           [:button#submit-code
            {:type     "submit"
             :disabled (< (count @code) 8)}
-           "CONTINUE"]]]]
+           (if @(rf/subscribe [:if-english?])
+             (-> translations-db :continue :en-US)
+             (-> translations-db :continue :es-US))]]]]
        [error-component]])))
