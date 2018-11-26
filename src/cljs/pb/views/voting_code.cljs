@@ -12,6 +12,9 @@
 (def error-code (rg/atom nil))
 (def code-sent? (rg/atom false))
 
+(def campus (rg/atom ""))
+(def additionalId (rg/atom ""))
+
 (declare send-code-component)
 (declare check-code-component)
 
@@ -60,9 +63,9 @@
          (-> translations-db :error-already-voted :es-US))])))
 
 
-(defn student-id-component [campus additionalId]
+(defn student-id-component []
   (let [empty-campus (rg/atom false)
-        empty-id (rg/atom false)]
+        wrong-id (rg/atom false)]
     [:div
      [:div.flexrow.input-group-prepend
       [:select {:id        "campus"
@@ -79,16 +82,17 @@
       [:div.required "*"]
       [:input
        {:type        "text"
-        :class       (str "form-control" (when @empty-id " input-error"))
+        :pattern     "/^[a-z0-9]{9}/i"
+        :class       (str "form-control" (when @wrong-id " input-error"))
         :placeholder "xxxxxxxxx"
         :maxLength   9
         :value       @additionalId
         :on-change   (fn [e]
                        (reset! additionalId (-> e .-target .-value))
-                       (reset! empty-id (not= (count @additionalId) 9)))
+                       (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))
         :on-blur     (fn []
                        (reset! empty-campus (= (count @campus) 0))
-                       (reset! empty-id (not= (count @additionalId) 9)))}]
+                       (reset! wrong-id (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId)))))}]
       [:div.required "*"]]]))
 
 
@@ -126,11 +130,9 @@
 (defn send-code-component [election]
   (let [input-phone1 (rg/atom "")
         input-phone2 (rg/atom "")
-        additionalId (rg/atom "")
         empty-phone1 (rg/atom false)
         empty-phone2 (rg/atom false)
-        phone-mismatch (rg/atom false)
-        campus (rg/atom "")]
+        phone-mismatch (rg/atom false)]
     (rg/create-class
       {:component-did-mount
        (fn []
@@ -153,7 +155,7 @@
                            (.preventDefault e)
                            (.stopPropagation e))}
              (if is-auraria?
-               [student-id-component campus additionalId]
+               [student-id-component]
                [:div
                 [:div.flexrow.input-group-prepend
                  [:input
@@ -197,15 +199,17 @@
              (when-not config/debug?
                [captcha-component])
              [:a {:on-click #(if is-auraria?
-                               (prn "TODO: see auraria branch for how to handle student ID submit")
+                               (do
+                                 (rf/dispatch [:set-campus-additional-id @campus @additionalId])
+                                 (rf/dispatch [:set-active-view :proposals-view @(rf/subscribe [:election-slug])]))
                                (send-code @campus @additionalId (string/replace @input-phone2 #" " "") id))}
               [:button#send-code
                {:type     "submit"
                 :disabled (or (when-not config/debug?
                                 (nil? @(rf/subscribe [:captcha-passed])))
                               (if is-auraria?
-                                (or (< (count @additionalId) 9)
-                                    (= @campus "Campus:"))
+                                (or (not (re-matches #"(?i)[a-z0-9]{9}" @additionalId))
+                                    (= (count @campus) 0))
                                 (or (< (count @input-phone2) 12)
                                     (not= @input-phone1 @input-phone2))))}
                (if @(rf/subscribe [:if-english?])

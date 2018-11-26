@@ -10,21 +10,21 @@
 
 (def show-confirmation? (rg/atom false))
 
-defn submit-auraria-vote []
-(POST "/api/vote-by-additional-id"
-      {:response-format (ajax/json-response-format {:keywords? true})
-       :handler         (fn []
-                          (let [survey-url (:surveyUrl @(rf/subscribe [:election-in-view]))]
-                            (reset! show-confirmation? true)
-                            (rf/dispatch [:update-selected-proposals :reset])
-                            (js/setTimeout #(set! (.. js/window -location) survey-url) 3000)))
-       :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
+(defn submit-auraria-vote []
+  (POST "/api/vote-by-additional-id"
+       {:response-format (ajax/json-response-format {:keywords? true})
+        :handler         (fn []
+                           (let [{{survey-url :surveyUrl} :fields} @(rf/subscribe [:election-in-view-2])]
+                             (reset! show-confirmation? true)
+                             (rf/dispatch [:update-selected-proposals :reset])
+                             (js/setTimeout #(set! (.. js/window -location) survey-url) 3000)))
+        :error-handler   #(rf/dispatch [:update-selected-proposals :reset])
 
-       :format          :raw
-       :params          {:additional-id @(rf/subscribe [:additional-id])
-                         :campus @(rf/subscribe [:campus])
-                         :vote     @(rf/subscribe [:selected-proposals])
-                         :election (-> @(rf/subscribe [:election-in-view]) :sys :id)}})
+        :format          :raw
+        :params          {:additional-id @(rf/subscribe [:additional-id])
+                          :campus @(rf/subscribe [:campus])
+                          :vote     @(rf/subscribe [:selected-proposals])
+                          :election (-> @(rf/subscribe [:election-in-view-2]) :sys :id)}}))
 
 (defn submit-vote []
   (POST "/api/vote"
@@ -71,7 +71,7 @@ defn submit-auraria-vote []
          [confirmation-component]
          [render-markdown instructions]
          [:div.tc
-          [:input.submit.mt3 {:on-click submit-vote
+          [:input.submit.mt3 {:on-click submit-auraria-vote
                               :disabled (or (nil? selected-proposals)
                                             (empty? selected-proposals))
                               :type     "submit"

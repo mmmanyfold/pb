@@ -38,7 +38,7 @@
      [:p.lh-title.mt3 voteOnlineButtonLabel]
      (when votingInPerson
        [:div.links.f3.f2-ns.mb3.center
-        [:a.pa3 {:href (str "/#/" shortTitle "/in-person")}
+        [:a.pa3 {:href (str "/#/vote/" shortTitle "/in-person")}
          [:span.tc
           "How to vote in person"
           [:br]

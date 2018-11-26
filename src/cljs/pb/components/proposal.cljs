@@ -58,10 +58,7 @@
 
          ; expandable details
          [detail (-> translations-db :budget lang) budget]
-         [detail (-> translations-db :timeline lang) timeline]
-         [detail (-> translations-db :description lang) longDescription]
-         [detail (-> translations-db :community-impact lang) impact]]
-
+         [detail (-> translations-db :description lang) longDescription]]
 
         ;; display in a grid
 
