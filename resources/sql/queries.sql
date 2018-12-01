@@ -46,3 +46,7 @@ VALUES (:voter_id, :vote_id, :election)
 -- :doc gets voter-vote given the voter id
 SELECT * FROM voter_votes
 WHERE voter_id = :id
+
+-- :name get-votes :? :*
+-- :doc gets votes in election
+SELECT vote FROM votes;
