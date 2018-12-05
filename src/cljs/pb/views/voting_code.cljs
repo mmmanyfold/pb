@@ -143,14 +143,14 @@
                  votingCodeFieldLabel :votingCodeFieldLabel
                  votingCodePageTitle  :votingCodePageTitle} :fields
                 {id :id}                                    :sys} election
-               is-auraria? (boolean additionalIdLabel)]
+               disable-sms? false]
            [:div
             [:h1 votingCodePageTitle]
             [:form.voter-auth-form
              {:on-submit (fn [e]
                            (.preventDefault e)
                            (.stopPropagation e))}
-             (if is-auraria?
+             (if disable-sms?
                [student-id-component campus additionalId]
                [:div
                 [:div.flexrow.input-group-prepend
@@ -194,14 +194,14 @@
              [:p [:small votingCodeFieldLabel]]
              (when-not config/debug?
                [captcha-component])
-             [:a {:on-click #(if is-auraria?
+             [:a {:on-click #(if disable-sms?
                                (prn "TODO: see auraria branch for how to handle student ID submit")
                                (send-code @campus @additionalId (string/replace @input-phone2 #" " "") id))}
               [:button#send-code
                {:type     "submit"
                 :disabled (or (when-not config/debug?
                                 (nil? @(rf/subscribe [:captcha-passed])))
-                              (if is-auraria?
+                              (if disable-sms?
                                 (or (< (count @additionalId) 9)
                                     (= @campus "Campus:"))
                                 (or (< (count @input-phone2) 12)
