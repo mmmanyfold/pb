@@ -4,11 +4,12 @@
             [compojure.coercions :refer [as-int]]
             [ring.util.http-response :as response]
             [buddy.hashers :as hashers]
-            [clojure.java.jdbc :as jdbc]
             [clojure.string :as string]
             [pb.twilio :as twilio]
             [clojure.spec.alpha :as s]
-            [pb.contentful :as contentful]))
+            [pb.contentful :as contentful]
+            [pb.tally :refer [tally]]
+            [pb.model :refer [db-tx]]))
 
 (defonce PB_TWILIO_AUTH_TOKEN (System/getenv "PB_TWILIO_AUTH_TOKEN"))
 
@@ -40,19 +41,12 @@
                                     :campus some?
                                     :election some?))
 
-(defn db-tx [f & [args]]
-  (try
-    (jdbc/with-db-transaction [t-conn *db*]
-                              (jdbc/db-set-rollback-only! t-conn)
-                              (f args))
-    (catch Exception e (str "caught exception: " (.getMessage e) "\ncaused by: " (.getCause e)))))
-
 (defn send-code [phone-number voting-code]
   (twilio/with-auth PB_TWILIO_ACCOUNT_SID PB_TWILIO_AUTH_TOKEN
-                    @(twilio/send-sms
-                       {:From PB_TWILIO_PHONE_NUMBER
-                        :To   phone-number
-                        :Body voting-code})))
+    @(twilio/send-sms
+       {:From PB_TWILIO_PHONE_NUMBER
+        :To phone-number
+        :Body voting-code})))
 
 (defn check-voter-code
   "Checks if voter code is valid and has not already voted"
@@ -110,7 +104,6 @@
       (throw e)
       (response/bad-request {:message "Bad parameters"}))))
 
-
 (defn handle-voter-code-from-ui
   [req]
   (try
@@ -154,6 +147,9 @@
 
 (defroutes api-routes
   (context "/api" []
+    (GET "/tally/:election" {params :params}
+      (when-let [election (:election params)]
+        (tally election)))
     (context "/contentful" []
              (GET "/entries" [] (contentful/get-entries)))
     (GET "/election" [] handle-get-election)
