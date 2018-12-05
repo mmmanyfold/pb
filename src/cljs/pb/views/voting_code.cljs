@@ -137,18 +137,16 @@
     (rg/create-class
       {:component-did-mount
        (fn []
-         (when (= "cole" @(rf/subscribe [:admin-election]))
-           (new js/Cleave "#input-phone1" #js {:phone true :phoneRegionCode "US"})
-           (new js/Cleave "#input-phone2" #js {:phone true :phoneRegionCode "US"})))
+         (new js/Cleave "#input-phone1" #js {:phone true :phoneRegionCode "US"})
+         (new js/Cleave "#input-phone2" #js {:phone true :phoneRegionCode "US"}))
        :reagent-render
        (fn [election]
-         (let [{{additionalIdLabel    :additionalIdLabel
-                 phonePlaceholder1    :phonePlaceholder1
+         (let [{{phonePlaceholder1    :phonePlaceholder1
                  phonePlaceholder2    :phonePlaceholder2
                  votingCodeFieldLabel :votingCodeFieldLabel
                  votingCodePageTitle  :votingCodePageTitle} :fields
                 {id :id}                                    :sys} election
-               is-auraria? (boolean additionalIdLabel)]
+               is-auraria? false]
            [:div
             [:h1 votingCodePageTitle]
             [:form.voter-auth-form
