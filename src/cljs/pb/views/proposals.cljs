@@ -71,7 +71,7 @@
          [confirmation-component]
          [render-markdown instructions]
          [:div.tc
-          [:input.submit.mt3 {:on-click submit-auraria-vote
+          [:input.submit.mt3 {:on-click submit-vote
                               :disabled (or (nil? selected-proposals)
                                             (empty? selected-proposals))
                               :type     "submit"
